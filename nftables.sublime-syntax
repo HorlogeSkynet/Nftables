@@ -1,0 +1,496 @@
+%YAML 1.2
+---
+
+# NFTABLES syntax definition for Sublime Text 3 (>= 3084).
+
+# `file_extensions` contains `nftables.conf` to match the default packaged file in Debian.
+# `first_line_match` should match (at least) this shebang `#!/usr/sbin/nft -f`.
+
+name: Nftables
+file_extensions: [nft, nftables, nftables.conf]
+first_line_match: ^\#!\s*\/.*\bs?bin\b.*\bnft\b
+scope: source.nftables
+hidden: false
+
+
+variables:
+  integer: (?:[[:digit:]]+)
+  hexadecimal: (?:(?:0x)[[:xdigit:]]+)
+  identifier: (?:[[:alpha:]][[:alnum:]_]*)
+  identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
+  timestring: (?:(?:\d+[wdhms])+)
+  beginning: (?:(?:^|(?<=\{))[[:space:]]*)
+  # From <https://stackoverflow.com/a/17871737>.
+  ipv4: |-
+    (?x)
+    (?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3}
+    (?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+  ipv6: |-
+    (?x)
+    (?:[0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
+    (?:[0-9a-fA-F]{1,4}:){1,7}:|
+    (?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|
+    (?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|
+    (?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|
+    (?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|
+    (?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|
+    [0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|
+    :(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|
+    fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|
+    ::(?:ffff(?::0{1,4}){0,1}:){0,1}
+    (?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+    (?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|
+    (?:[0-9a-fA-F]{1,4}:){1,4}:
+    (?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+    (?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+
+
+contexts:
+  main:
+    - include: statements
+
+  prototype:
+    - include: comments
+    - include: variables
+    - include: escape-char
+    - include: punctuation-separators
+
+  statements:
+    - include: common-blocks
+    - include: base-commands
+    - include: specifications
+
+  force-pop:
+    - match: ''
+      pop: true
+
+  comments:
+    - match: (\#)
+      scope: punctuation.definition.comment.nftables
+      push:
+        - meta_scope: comment.line.nftables
+        - match: (?=$)
+          pop: true
+
+  variables:
+    - match: (\$|@)({{identifier}})
+      captures:
+        1: punctuation.definition.variable.nftables
+        2: variable.other.readwrite.nftables
+
+  statement-separators:
+    # Elements matching below patterns will 'pop' the current context off the stack.
+    - include: semi-colons
+    - include: end-of-line
+
+  semi-colons:
+    - match: (?:;[;[:space:]]*)
+      scope: punctuation.separator.nftables
+      pop: true
+
+  end-of-line:
+    - match: (?:[^\\][[:space:]]*$)
+      pop: true
+
+  punctuation-separators:
+    # `:,;` will be matched as punctuation separators.
+    # `:` & `;` have to be non-consuming (see respectively `ip-addresses` & `semi-colons`).
+    - match: (?:(?:,)|(?=[:;]))
+      scope: punctuation.separator.nftables
+
+  escape-char:
+    - match: (?:(\\.?)[[:space:]]*)
+      captures:
+        1: constant.character.escape.nftables
+
+  end-block:
+    - match: (\})
+      scope: punctuation.section.block.end.nftables
+      pop: true
+  end-braces:
+    - match: (\})
+      scope: punctuation.section.braces.end.nftables
+      pop: true
+
+  values:
+    - include: safe-values
+    - include: unquoted-strings
+
+  safe-values:
+    - include: strings
+    - include: ip-addresses
+    - include: numerics
+    - include: variables
+    - include: structures
+
+  strings:
+    - include: quoted-strings
+    - include: time-strings
+
+  quoted-strings:
+    # Simple and double-quoted strings.
+    # Main `prototype` won't be propagated, but any `escape-char` has to be consumed.
+    - match: (\')
+      scope: punctuation.definition.string.begin.nftables
+      with_prototype:
+        - include: escape-char
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.simple.nftables meta.string.nftables
+        - match: (\')
+          scope: punctuation.definition.string.end.nftables
+          pop: true
+    - match: (\")
+      scope: punctuation.definition.string.begin.nftables
+      with_prototype:
+        - include: escape-char
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.double.nftables meta.string.nftables
+        - match: (\")
+          scope: punctuation.definition.string.end.nftables
+          pop: true
+
+  unquoted-strings:
+    - match: \b({{identifier_extended}})\b
+      scope: string.unquoted.nftables
+
+  time-strings:
+    - match: \b({{timestring}})\b
+      scope: string.unquoted.time-strings.nftables
+
+  numerics:
+    - include: integers-range
+    - include: signed-integers
+    - include: hexadecimal
+
+  integers-range:
+    - match: ({{integer}})(\-)({{integer}})
+      captures:
+        1: constant.numeric.integer.nftables
+        2: punctuation.terminator.nftables
+        3: constant.numeric.integer.nftables
+
+  ip-addresses:
+    - match: ({{ipv4}})
+      scope: constant.numeric.ip4-address.nftables
+    - match: ({{ipv6}})
+      scope: constant.numeric.ip6-address.nftables
+
+  hexadecimal:
+    - match: \b({{hexadecimal}})\b
+      scope: constant.numeric.integer.hexadecimal.nftables
+
+  signed-integers:
+    - match: (\-)?\b({{integer}})\b
+      captures:
+        1: keyword.operator.arithmetic.nftables
+        2: constant.numeric.integer.nftables
+
+  structures:
+    - match: (\{)
+      scope: punctuation.section.brace.begin.nftables
+      push:
+        - meta_scope: meta.struct.set.nftables
+        - match: \b(timeout)\b
+          scope: storage.type.nftables
+          push:
+            - include: time-strings
+            - include: force-pop
+
+        - include: values
+        - include: operators
+        - include: end-block
+
+  common-blocks:
+    - include: defines
+    - include: includes
+    - include: stateful-objects
+
+  defines:
+    - match: \b(define|redefine)\b
+      scope: keyword.control.define.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.constant.nftables
+          set: assignment
+    - match: \b(undefine)\b
+      scope: keyword.control.undefine.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.constant.nftables
+          pop: true
+
+  includes:
+    - match: \b(include)\b
+      scope: keyword.control.import.nftables
+      push:
+        - include: quoted-strings
+        - include: statement-separators
+
+  stateful-objects:
+    - match: \b(set)\b
+      scope: storage.type.set.nftables keyword.declaration.set.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
+          set: set-specifications
+
+    - match: \b(quota)\b
+      scope: storage.type.quota.nftables keyword.declaration.quota.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
+          set:
+            # Either an object...
+            - match: (\{)
+              scope: punctuation.section.braces.begin.nftables
+              set:
+                - include: safe-values
+                - include: end-braces
+
+            # ... or raw elements can be specified.
+            - include: safe-values
+            - include: statement-separators
+
+  set-specifications:
+    - match: (\{)
+      scope: punctuation.section.braces.begin.nftables
+      set:
+        - match: \b(type)\b
+          scope: storage.type.nftables
+          push:
+            - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
+              scope: constant.language.nftables
+            - include: statement-separators
+        - match: \b(timeout)\b
+          scope: storage.type.nftables
+          push:
+            - include: time-strings
+            - include: statement-separators
+        - match: \b(flags)\b
+          scope: storage.type.nftables
+          push:
+            - match: \b(constant|interval|timeout)\b
+              scope: constant.language.nftables
+            - include: statement-separators
+        - match: \b(gc\-interval)\b
+          scope: storage.type.nftables
+          push:
+            - include: time-strings
+            - include: statement-separators
+        - match: \b(elements)\b
+          scope: storage.type.nftables
+          push:
+            - include: assignment
+            - include: statement-separators
+        - match: \b(size)\b
+          scope: storage.type.nftables
+          push:
+            - include: signed-integers
+            - include: statement-separators
+        - match: \b(policy)\b
+          scope: storage.type.nftables
+          push:
+            - match: \b(performance|memory)\b
+              scope: constant.language.nftables
+            - include: statement-separators
+
+        - include: end-braces
+
+  assignment:
+    - match: (=)
+      scope: keyword.operator.assignment.nftables
+      set:
+        - include: values
+        - include: statement-separators
+
+  base-commands:
+    - match: \b(add|replace|create|insert|delete|get|list|reset|flush|rename|import|export|monitor|describe|remove)\b
+      scope: keyword.other.command.nftables
+      push:
+        - meta_scope: meta.command.nftables
+        # - include: specifications
+        - match: \b(table)\b
+          scope: storage.type.table.nftables
+          set:
+            - match: \b({{identifier}})\b
+              scope: variable.other.readwrite.nftables
+              pop: true
+
+        - match: \b(chain)\b
+          scope: storage.type.chain.nftables
+          set:
+            - match: \b({{identifier}})\b
+              scope: variable.other.readwrite.nftables
+              set:
+                - match: \b({{identifier}})\b
+                  scope: variable.other.readwrite.nftables
+                  set: chain-specifications
+
+        - match: \b(flowtable)\b
+          scope: storage.type.chain.nftables
+          set:
+            - match: \b({{identifier}})\b
+              scope: variable.other.readwrite.nftables
+              set:
+                - match: \b({{identifier}})\b
+                  scope: variable.other.readwrite.nftables
+                  set: flowtable-specifications
+
+        - match: \b(rule)\b
+          scope: storage.type.rule.nftables
+          set:
+            - match: \b({{identifier}})\b
+              scope: variable.other.readwrite.nftables
+              set:
+                - match: \b({{identifier}})\b
+                  scope: variable.other.readwrite.nftables
+                  set:
+                    - include: rule-statements
+                    - include: statement-separators
+
+        - match: \b(set)\b
+          scope: storage.type.rule.nftables
+          set:
+            - match: \b(arp|bridge|inet|ip6?|netdev)\b
+              scope: keyword.other.nftables
+              set:
+                - match: \b({{identifier}})\b
+                  scope: variable.other.readwrite.nftables
+                  set:
+                    - match: \b({{identifier}})\b
+                      scope: variable.other.readwrite.nftables
+                      set: set-specifications
+
+        - include: ruleset
+        - include: statement-separators
+
+  ruleset:
+    - match: \b(ruleset)\b
+      scope: keyword.other.ruleset.nftables
+
+  specifications:
+    - include: tables
+    - include: chains
+    - include: flowtables
+    - include: stateful-objects
+
+  tables:
+    - match: \b(table)\b
+      scope: storage.type.table.nftables keyword.declaration.table.nftables
+      push:
+        - match: \b(arp|bridge|inet|ip6?|netdev)\b
+          scope: keyword.other.nftables
+          set:
+            - match: \b({{identifier}})\b
+              scope: variable.other.readwrite.nftables
+              set:
+                - match: (\{)
+                  scope: punctuation.section.block.begin.nftables
+                  set:
+                    - meta_scope: meta.block.table.nftables
+                    - include: common-blocks
+                    - include: chains
+                    - include: flowtables
+                    - include: end-block
+
+  chains:
+    - include: common-blocks
+    - match: \b(chain)\b
+      scope: storage.type.chain.nftables keyword.declaration.chain.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
+          set: chain-specifications
+  chain-specifications:
+    - match: (\{)
+      scope: punctuation.section.block.begin.nftables
+      set:
+        - meta_scope: meta.block.chain.nftables
+        - include: chain-settings
+        - include: chain-policy
+        - include: rule-statements
+        - include: end-block
+  chain-settings:
+    - match: (?:{{beginning}}\b(type)\b)
+      scope: storage.type.nftables
+      push:
+        - match: \b(filter|route|nat)\b
+          scope: constant.language.nftables
+          set:
+            - match: \b(hook)\b
+              scope: storage.type.nftables
+              set:
+                - match: \b(prerouting|input|forward|output|postrouting|ingress)\b
+                  scope: constant.language.nftables
+                  set:
+                    - match: \b(priority)\b
+                      scope: storage.type.nftables
+                      set:
+                        - include: signed-integers
+                        - include: statement-separators
+  chain-policy:
+    - match: \b(policy)\b
+      scope: storage.type.nftables
+      push:
+        - match: \b(accept|drop)\b
+          scope: constant.language.nftables
+        - include: statement-separators
+
+  flowtables:
+    - match: \b(flowtable)\b
+      scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+      push:
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
+          set: flowtable-specifications
+  flowtable-specifications:
+    - match: (\{)
+      scope: punctuation.section.block.begin.nftables
+      set:
+        - meta_scope: meta.block.flowtable.nftables
+        - include: flowtable-settings
+        - include: rule-statements
+        - include: end-block
+  flowtable-settings:
+    - match: (?:{{beginning}}\b(hook)\b)
+      scope: storage.type.nftables
+      push:
+        - match: \b(prerouting|input|forward|output|postrouting|ingress)\b
+          scope: constant.language.nftables
+          set:
+            - match: \b(priority)\b
+              scope: storage.type.nftables
+              set:
+                - include: signed-integers
+                - match: \b(devices)\b
+                  set: assignment
+
+  rule-statements:
+    # Various tokens allowed in rules (additionally to `prototype`).
+    - include: operators
+    - include: safe-values
+
+    - match: \b(v?map)\b
+      scope: storage.type.nftables keyword.declaration.map.nftables
+
+    # Each rules should (may ?) have a (non-)terminal statements.
+    - match: \b(accept|drop|queue|continue|return|jump|goto)\b
+      scope: keyword.control.terminal-statement.nftables
+    # `{s,d}nat` shouldn't be colored when used along `status`.
+    - match: \b(log|reject|counter|limit|(?:(?<!status) +(?:d|s)nat)|masquerade|flow)\b
+      scope: keyword.control.non-terminal-statement.nftables
+
+  operators:
+    - match: (?:[[:space:]]+(\.)[[:space:]]+)
+      captures:
+        1: keyword.operator.concatenation.nftables
+    - match: \b(eq|ne|l[et]|g[et])\b
+      scope: keyword.operator.arithmetic.nftables
+    - match: (&|\||\<\<|\>\>|\^)
+      scope: keyword.operator.bitwise.nftables
+    - match: ([!=]=|[\<\>]=?)
+      scope: keyword.operator.arithmetic.nftables
+    - match: \b(and|or|xor)\b
+      scope: keyword.operator.word.nftables

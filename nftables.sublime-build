@@ -1,0 +1,5 @@
+{
+	"cmd": ["/usr/sbin/nft", "-c", "-f", "$file"],
+	"selector": "source.nftables",
+	"file_regex": "^(.*):(.*):(.*): Error: (.*)"
+}
