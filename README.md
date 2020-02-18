@@ -2,6 +2,8 @@
 
 > A Sublime Text 3 syntax definition for your Nftables rules
 
+![Preview](https://i.imgur.com/14wp8YU.png)
+
 ## Introduction
 
 [Nftables](https://netfilter.org/projects/nftables/) should _now_ be the regular way of handling Netfilter rules, and I was surprised not to find any syntax definition for Sublime Text.  
@@ -66,4 +68,4 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 ### Would this plugin help me building a secure fire-wall ?
 
-> No, but I would advise you [this blog post](https://stosb.com/blog/explaining-my-configs-nftables/) as a well-explained starting point, written by @tasn.
+> No, but I would advise you [this blog post](https://stosb.com/blog/explaining-my-configs-nftables/) as a well-explained starting point, written by [@tasn](https://github.com/tasn).
