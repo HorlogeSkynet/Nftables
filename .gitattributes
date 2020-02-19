@@ -1,0 +1,2 @@
+# Trick to make (GitHub's) Linguist detect plugin sources as "programming" languages
+*.sublime-* linguist-detectable
