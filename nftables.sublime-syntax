@@ -312,7 +312,7 @@ contexts:
       scope: keyword.other.command.nftables
       push:
         - meta_scope: meta.command.nftables
-        # - include: specifications
+
         - match: \b(table)\b
           scope: storage.type.table.nftables
           set:
@@ -365,12 +365,9 @@ contexts:
                       scope: variable.other.readwrite.nftables
                       set: set-specifications
 
-        - include: ruleset
+        - match: \b(ruleset)\b
+          scope: keyword.other.ruleset.nftables
         - include: statement-separators
-
-  ruleset:
-    - match: \b(ruleset)\b
-      scope: keyword.other.ruleset.nftables
 
   specifications:
     - include: tables
@@ -471,8 +468,8 @@ contexts:
 
   rule-statements:
     # Various tokens allowed in rules (additionally to `prototype`).
-    - include: operators
     - include: safe-values
+    - include: operators
 
     - match: \b(v?map)\b
       scope: storage.type.nftables keyword.declaration.map.nftables
