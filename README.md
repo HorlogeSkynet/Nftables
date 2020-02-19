@@ -34,7 +34,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 * Open your command palette and type in : `Set Syntax: Nftables`
 
-* Click on the bottom-left corner : `Nftables`
+* Click on the bottom-right corner : `Nftables`
 
 * `View > Syntax > Nftables`
 
