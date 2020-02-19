@@ -99,9 +99,8 @@ contexts:
       scope: punctuation.separator.nftables
 
   escape-char:
-    - match: (?:(\\.?)[[:space:]]*)
-      captures:
-        1: constant.character.escape.nftables
+    - match: (?:\\.?)
+      scope: constant.character.escape.nftables
 
   end-block:
     - match: (\})
