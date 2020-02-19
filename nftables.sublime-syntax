@@ -58,6 +58,7 @@ contexts:
     - include: common-blocks
     - include: base-commands
     - include: specifications
+    - include: statement-separators
 
   force-pop:
     - match: ''
