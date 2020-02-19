@@ -189,7 +189,7 @@ contexts:
 
   structures:
     - match: (\{)
-      scope: punctuation.section.brace.begin.nftables
+      scope: punctuation.section.braces.begin.nftables
       push:
         - meta_scope: meta.struct.set.nftables
         - match: \b(timeout)\b
@@ -200,7 +200,7 @@ contexts:
 
         - include: values
         - include: operators
-        - include: end-block
+        - include: end-braces
 
   common-blocks:
     - include: defines
