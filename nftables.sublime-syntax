@@ -183,7 +183,7 @@ contexts:
     - match: (\{)
       scope: punctuation.section.braces.begin.nftables
       push:
-        - meta_scope: meta.struct.set.nftables
+        - meta_scope: meta.struct.nftables
         - match: \b(timeout)\b
           scope: storage.type.nftables
           push:
@@ -238,10 +238,13 @@ contexts:
         - match: \b({{identifier}})\b
           scope: variable.other.readwrite.nftables
           set:
+            - meta_content_scope: meta.struct.quota.nftables
+
             # Either an object...
             - match: (\{)
               scope: punctuation.section.braces.begin.nftables
               set:
+                - meta_content_scope: meta.struct.quota.nftables
                 - include: safe-values
                 - include: end-braces
 
@@ -253,6 +256,7 @@ contexts:
     - match: (\{)
       scope: punctuation.section.braces.begin.nftables
       set:
+        - meta_scope: meta.struct.set.nftables
         - match: \b(type)\b
           scope: storage.type.nftables
           push:
