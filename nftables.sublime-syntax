@@ -52,7 +52,7 @@ contexts:
   prototype:
     - include: comments
     - include: variables
-    - include: escape-char
+    - include: line-continuation
 
   statements:
     - include: common-blocks
@@ -89,12 +89,14 @@ contexts:
       pop: true
 
   end-of-line:
-    - match: (?:[^\\][[:space:]]*$)
+    - match: ($)
       pop: true
 
-  escape-char:
-    - match: (?:\\.?)
-      scope: constant.character.escape.nftables
+  line-continuation:
+    - match: (?:(\\)(.*)$)
+      captures:
+        1: punctuation.separator.continuation.nftables
+        2: invalid.illegal.nftables
 
   end-block:
     - match: (\})
@@ -120,13 +122,18 @@ contexts:
     - include: quoted-strings
     - include: time-strings
 
+  escape-char:
+    - match: (?:\\.)
+      scope: constant.character.escape.nftables
+
   quoted-strings:
     # Simple and double-quoted strings.
-    # Main `prototype` won't be propagated, but any `escape-char` has to be consumed.
+    # `prototype` won't be propagated, but `line-continuation` & `escape-char` have to be consumed.
     - match: (\')
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
         - include: escape-char
+        - include: line-continuation
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.simple.nftables meta.string.nftables
@@ -137,6 +144,7 @@ contexts:
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
         - include: escape-char
+        - include: line-continuation
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.double.nftables meta.string.nftables
