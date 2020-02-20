@@ -286,6 +286,7 @@ contexts:
                         - include: unquoted-strings
                         - include: statement-separators
 
+                - include: safe-values
                 - include: semi-colons
                 - include: end-braces
 
