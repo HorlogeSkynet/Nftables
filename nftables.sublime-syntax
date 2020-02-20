@@ -169,7 +169,7 @@ contexts:
     - match: ({{integer}})(\-)({{integer}})
       captures:
         1: constant.numeric.integer.nftables
-        2: punctuation.terminator.nftables
+        2: punctuation.separator.nftables
         3: constant.numeric.integer.nftables
 
   ip-addresses:
