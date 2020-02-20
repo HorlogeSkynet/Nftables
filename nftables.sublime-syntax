@@ -85,6 +85,10 @@ contexts:
     - match: ($)
       pop: true
 
+  commas:
+    - match: (,)
+      scope: punctuation.separator.nftables
+
   semi-colons:
     - match: (;)
       scope: punctuation.terminator.nftables
@@ -196,10 +200,11 @@ contexts:
             - include: time-strings
             - include: force-pop
 
-        # Structures may contain values, operators and specific punctuation.
+        # Structures may contain values, operators, commas and colons.
         - include: values
         - include: operators
-        - match: ([:,])
+        - include: commas
+        - match: (:)
           scope: punctuation.separator.nftables
 
         - include: end-braces
@@ -280,8 +285,7 @@ contexts:
           push:
             - match: \b(constant|interval|timeout)\b
               scope: constant.language.nftables
-            - match: (,)
-              scope: punctuation.separator.nftables
+            - include: commas
             - include: statement-separators
         - match: \b(gc\-interval)\b
           scope: storage.type.nftables
@@ -478,6 +482,7 @@ contexts:
     # Various tokens allowed in rules (additionally to `prototype`).
     - include: safe-values
     - include: operators
+    - include: commas
     - include: semi-colons
 
     - match: \b(v?map)\b
