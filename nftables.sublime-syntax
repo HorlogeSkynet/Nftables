@@ -58,7 +58,6 @@ contexts:
     - include: common-blocks
     - include: base-commands
     - include: specifications
-    - include: statement-separators
 
   force-pop:
     - match: ''
@@ -80,17 +79,15 @@ contexts:
 
   statement-separators:
     # Elements matching below patterns will 'pop' the current context off the stack.
-    - include: semi-colons
-    - include: end-of-line
-
-  semi-colons:
-    - match: (?:;[;[:space:]]*)
-      scope: punctuation.separator.nftables
+    - match: (;)
+      scope: punctuation.terminator.nftables
       pop: true
-
-  end-of-line:
     - match: ($)
       pop: true
+
+  semi-colons:
+    - match: (;)
+      scope: punctuation.terminator.nftables
 
   line-continuation:
     - match: (?:(\\)(.*)$)
@@ -211,6 +208,7 @@ contexts:
     - include: defines
     - include: includes
     - include: stateful-objects
+    - include: semi-colons
 
   defines:
     - match: \b(define|redefine)\b
@@ -307,6 +305,7 @@ contexts:
               scope: constant.language.nftables
             - include: statement-separators
 
+        - include: semi-colons
         - include: end-braces
 
   assignment:
@@ -479,6 +478,7 @@ contexts:
     # Various tokens allowed in rules (additionally to `prototype`).
     - include: safe-values
     - include: operators
+    - include: semi-colons
 
     - match: \b(v?map)\b
       scope: storage.type.nftables keyword.declaration.map.nftables
