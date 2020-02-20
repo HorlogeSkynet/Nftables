@@ -418,18 +418,17 @@ contexts:
       push:
         - match: \b(arp|bridge|inet|ip6?|netdev)\b
           scope: keyword.other.nftables
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
           set:
-            - match: \b({{identifier}})\b
-              scope: variable.other.readwrite.nftables
+            - match: (\{)
+              scope: punctuation.section.block.begin.nftables
               set:
-                - match: (\{)
-                  scope: punctuation.section.block.begin.nftables
-                  set:
-                    - meta_scope: meta.block.table.nftables
-                    - include: common-blocks
-                    - include: chains
-                    - include: flowtables
-                    - include: end-block
+                - meta_scope: meta.block.table.nftables
+                - include: common-blocks
+                - include: chains
+                - include: flowtables
+                - include: end-block
 
   chains:
     - include: common-blocks
