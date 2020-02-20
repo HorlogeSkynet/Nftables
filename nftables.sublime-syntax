@@ -264,6 +264,31 @@ contexts:
             - include: safe-values
             - include: statement-separators
 
+    - match: (?:\b(ct)\b\s+\b(helper)\b)
+      captures:
+        1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
+        2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
+      push:         
+        - match: \b({{identifier}})\b
+          scope: variable.other.readwrite.nftables
+          set:
+            - match: (\{)
+              scope: punctuation.section.braces.begin.nftables
+              set:
+                - meta_scope: meta.struct.ct-helper.nftables
+                - match: \b(type)\b
+                  scope: storage.type.nftables
+                  push:
+                    - include: quoted-strings
+                    - match: \b(protocol)\b
+                      scope: storage.type.nftables
+                      set:
+                        - include: unquoted-strings
+                        - include: statement-separators
+
+                - include: semi-colons
+                - include: end-braces
+
   set-specifications:
     - match: (\{)
       scope: punctuation.section.braces.begin.nftables
@@ -485,14 +510,21 @@ contexts:
     - include: commas
     - include: semi-colons
 
+    # `map` & `vmap`
     - match: \b(v?map)\b
       scope: storage.type.nftables keyword.declaration.map.nftables
+
+    # `ct helper`
+    - match: (?:\b(ct)\b\s+\b(helper)\b)
+      captures:
+        1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
+        2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
 
     # Each rules should (may ?) have a (non-)terminal statements.
     - match: \b(accept|drop|queue|continue|return|jump|goto)\b
       scope: keyword.control.terminal-statement.nftables
     # `{s,d}nat` shouldn't be colored when used along `status`.
-    - match: \b(log|reject|counter|limit|(?:(?<!status) +(?:d|s)nat)|masquerade|flow)\b
+    - match: \b(log|reject|counter|limit|(?:(?<!status) +(?:d|s)nat)|masquerade|flow|notrack)\b
       scope: keyword.control.non-terminal-statement.nftables
 
   operators:
