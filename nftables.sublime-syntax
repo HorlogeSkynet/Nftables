@@ -240,14 +240,14 @@ contexts:
     - match: \b(set)\b
       scope: storage.type.set.nftables keyword.declaration.set.nftables
       push:
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set: set-specifications
 
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
             - meta_content_scope: meta.struct.quota.nftables
@@ -269,7 +269,7 @@ contexts:
         1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
         2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
       push:         
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
             - match: (\{)
@@ -354,37 +354,37 @@ contexts:
         - match: \b(table)\b
           scope: storage.type.table.nftables
           set:
-            - match: \b({{identifier}})\b
+            - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.nftables
               pop: true
 
         - match: \b(chain)\b
           scope: storage.type.chain.nftables
           set:
-            - match: \b({{identifier}})\b
+            - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.nftables
               set:
-                - match: \b({{identifier}})\b
+                - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
                   set: chain-specifications
 
         - match: \b(flowtable)\b
           scope: storage.type.chain.nftables
           set:
-            - match: \b({{identifier}})\b
+            - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.nftables
               set:
-                - match: \b({{identifier}})\b
+                - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
                   set: flowtable-specifications
 
         - match: \b(rule)\b
           scope: storage.type.rule.nftables
           set:
-            - match: \b({{identifier}})\b
+            - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.nftables
               set:
-                - match: \b({{identifier}})\b
+                - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
                   set:
                     - include: rule-statements
@@ -396,10 +396,10 @@ contexts:
             - match: \b(arp|bridge|inet|ip6?|netdev)\b
               scope: keyword.other.nftables
               set:
-                - match: \b({{identifier}})\b
+                - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
                   set:
-                    - match: \b({{identifier}})\b
+                    - match: \b({{identifier_extended}})\b
                       scope: variable.other.readwrite.nftables
                       set: set-specifications
 
@@ -419,7 +419,7 @@ contexts:
       push:
         - match: \b(arp|bridge|inet|ip6?|netdev)\b
           scope: keyword.other.nftables
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
             - match: (\{)
@@ -436,7 +436,7 @@ contexts:
     - match: \b(chain)\b
       scope: storage.type.chain.nftables keyword.declaration.chain.nftables
       push:
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set: chain-specifications
   chain-specifications:
@@ -478,7 +478,7 @@ contexts:
     - match: \b(flowtable)\b
       scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
       push:
-        - match: \b({{identifier}})\b
+        - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set: flowtable-specifications
   flowtable-specifications:
