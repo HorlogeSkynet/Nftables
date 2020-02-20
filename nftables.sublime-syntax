@@ -523,8 +523,15 @@ contexts:
     # Each rules should (may ?) have a (non-)terminal statements.
     - match: \b(accept|drop|queue|continue|return|jump|goto)\b
       scope: keyword.control.terminal-statement.nftables
-    # `{s,d}nat` shouldn't be colored when used along `status`.
-    - match: \b(log|reject|counter|limit|(?:(?<!status) +(?:d|s)nat)|masquerade|flow|notrack)\b
+    - match: |-
+        (?x)
+        \b(
+          log|reject|counter|limit|masquerade|flow|notrack|
+          # `{s,d}nat` shouldn't be colored when used along `status`.
+          (?:(?<!status)[[:space:]]+(?:d|s)nat)|
+          # `mark` should be colored only when followed by `set`.
+          (?:mark[[:space:]]+(?=set))
+        )\b
       scope: keyword.control.non-terminal-statement.nftables
 
   operators:
