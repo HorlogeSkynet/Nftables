@@ -531,11 +531,11 @@ contexts:
     - match: (?:[[:space:]]+(\.)[[:space:]]+)
       captures:
         1: keyword.operator.concatenation.nftables
-    - match: \b(eq|ne|(?:l|g)[et])\b
+    - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
       scope: keyword.operator.arithmetic.nftables
     - match: (&|\||\<\<|\>\>|\^)
       scope: keyword.operator.bitwise.nftables
     - match: ([!=]=|[\<\>]=?)
       scope: keyword.operator.arithmetic.nftables
     - match: \b(and|x?or)\b
-      scope: keyword.operator.word.nftables
+      scope: keyword.operator.arithmetic.nftables
