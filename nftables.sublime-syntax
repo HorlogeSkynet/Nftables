@@ -129,7 +129,7 @@ contexts:
 
   quoted-strings:
     # Simple and double-quoted strings.
-    # `prototype` won't be propagated, but `line-continuation` & `escape-char` have to be consumed.
+    # `prototype` won't be propagated, but `escape-char` & `line-continuation` have to be consumed.
     - match: (\')
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
@@ -200,7 +200,7 @@ contexts:
             - include: time-strings
             - include: force-pop
 
-        # Structures may contain values, operators, commas and colons.
+        # Structures objects may contain values, operators and specific punctuation.
         - include: values
         - include: operators
         - include: commas
@@ -515,7 +515,7 @@ contexts:
                   set: assignment
 
   rule-statements:
-    # Various tokens allowed in rules (additionally to `prototype`).
+    # Allows many various tokens in rules (additionally to `prototype`).
     - include: safe-values
     - include: operators
     - include: commas
@@ -531,7 +531,7 @@ contexts:
         1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
         2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
 
-    # Each rules should (may ?) have a (non-)terminal statements.
+    # Each rules should (might ?) have (non-)terminal statement(s).
     - match: (?:\b(status)\b\s+\b((?:s|d)nat)\b)
       comment: "
           '{s,d}nat' shouldn't be matched when used along with `status`.
