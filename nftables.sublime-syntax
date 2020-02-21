@@ -100,11 +100,11 @@ contexts:
         2: invalid.illegal.nftables
 
   end-block:
-    - match: (\})
+    - match: (})
       scope: punctuation.section.block.end.nftables
       pop: true
   end-braces:
-    - match: (\})
+    - match: (})
       scope: punctuation.section.braces.end.nftables
       pop: true
 
@@ -130,7 +130,7 @@ contexts:
   quoted-strings:
     # Simple and double-quoted strings.
     # `prototype` won't be propagated, but `escape-char` & `line-continuation` have to be consumed.
-    - match: (\')
+    - match: (')
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
         - include: escape-char
@@ -138,10 +138,10 @@ contexts:
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.simple.nftables meta.string.nftables
-        - match: (\')
+        - match: (')
           scope: punctuation.definition.string.end.nftables
           pop: true
-    - match: (\")
+    - match: (")
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
         - include: escape-char
@@ -149,7 +149,7 @@ contexts:
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.double.nftables meta.string.nftables
-        - match: (\")
+        - match: (")
           scope: punctuation.definition.string.end.nftables
           pop: true
 
@@ -190,7 +190,7 @@ contexts:
         2: constant.numeric.integer.nftables
 
   structures:
-    - match: (\{)
+    - match: ({)
       scope: punctuation.section.braces.begin.nftables
       push:
         - meta_scope: meta.struct.nftables
@@ -253,7 +253,7 @@ contexts:
             - meta_content_scope: meta.struct.quota.nftables
 
             # Either an object...
-            - match: (\{)
+            - match: ({)
               scope: punctuation.section.braces.begin.nftables
               set:
                 - meta_content_scope: meta.struct.quota.nftables
@@ -272,7 +272,7 @@ contexts:
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
-            - match: (\{)
+            - match: ({)
               scope: punctuation.section.braces.begin.nftables
               set:
                 - meta_scope: meta.struct.ct-helper.nftables
@@ -291,7 +291,7 @@ contexts:
                 - include: end-braces
 
   set-specifications:
-    - match: (\{)
+    - match: ({)
       scope: punctuation.section.braces.begin.nftables
       set:
         - meta_scope: meta.struct.set.nftables
@@ -433,7 +433,7 @@ contexts:
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
-            - match: (\{)
+            - match: ({)
               scope: punctuation.section.block.begin.nftables
               set:
                 - meta_scope: meta.block.table.nftables
@@ -451,7 +451,7 @@ contexts:
           scope: variable.other.readwrite.nftables
           set: chain-specifications
   chain-specifications:
-    - match: (\{)
+    - match: ({)
       scope: punctuation.section.block.begin.nftables
       set:
         - meta_scope: meta.block.chain.nftables
@@ -493,7 +493,7 @@ contexts:
           scope: variable.other.readwrite.nftables
           set: flowtable-specifications
   flowtable-specifications:
-    - match: (\{)
+    - match: ({)
       scope: punctuation.section.block.begin.nftables
       set:
         - meta_scope: meta.block.flowtable.nftables
