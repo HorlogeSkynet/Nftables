@@ -89,6 +89,10 @@ contexts:
     - match: (,)
       scope: punctuation.separator.nftables
 
+  colons:
+    - match: (:)
+      scope: punctuation.separator.nftables
+
   semi-colons:
     - match: (;)
       scope: punctuation.terminator.nftables
@@ -204,8 +208,7 @@ contexts:
         - include: values
         - include: operators
         - include: commas
-        - match: (:)
-          scope: punctuation.separator.nftables
+        - include: colons
 
         - include: end-braces
 
@@ -519,6 +522,7 @@ contexts:
     - include: safe-values
     - include: operators
     - include: commas
+    - include: colons
     - include: semi-colons
 
     # `map` & `vmap`
