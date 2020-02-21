@@ -8,7 +8,7 @@
 
 name: Nftables
 file_extensions: [nft, nftables, nftables.conf]
-first_line_match: ^\#!\s*\/.*\bs?bin\b.*\bnft\b
+first_line_match: (?:^\#!\s*\/.*\bs?bin\b.*\bnft\b)
 scope: source.nftables
 hidden: false
 
