@@ -532,18 +532,23 @@ contexts:
         2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
 
     # Each rules should (may ?) have a (non-)terminal statements.
-    - match: \b(accept|drop|queue|continue|return|jump|goto)\b
-      scope: keyword.control.terminal-statement.nftables
+    - match: (?:\b(status)\b\s+\b((?:s|d)nat)\b)
+      comment: "
+          '{s,d}nat' shouldn't be matched when used along with `status`.
+           BUT, Python's REGEXP engine does not handle negative look-behind with variable-width expression.
+           SO, we match what we shouldn't without any scoping.
+        "
     - match: |-
         (?x)
         \b(
-          log|reject|counter|limit|masquerade|flow|notrack|
-          # `{s,d}nat` shouldn't be colored when used along `status`.
-          (?:(?<!status)[[:space:]]+(?:d|s)nat)|
-          # `mark` should be colored only when followed by `set`.
+          # Regular "terminal" statements.
+          accept|drop|queue|continue|return|jump|goto|
+          # Regular "non-terminal" statements.
+          log|reject|counter|limit|(?:s|d)nat|masquerade|flow|notrack|
+          # `mark` should be matched only when followed by `set`.
           (?:mark[[:space:]]+(?=set))
         )\b
-      scope: keyword.control.non-terminal-statement.nftables
+      scope: keyword.control.statement.nftables
 
   operators:
     - match: (?:[[:space:]]+(\.)[[:space:]]+)
