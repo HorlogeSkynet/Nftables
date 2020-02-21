@@ -551,7 +551,7 @@ contexts:
       scope: keyword.control.statement.nftables
 
   operators:
-    - match: (?:[[:space:]]+(\.)[[:space:]]+)
+    - match: (\.)
       captures:
         1: keyword.operator.concatenation.nftables
     - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
