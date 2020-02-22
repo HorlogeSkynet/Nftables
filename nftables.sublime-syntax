@@ -198,6 +198,11 @@ contexts:
         1: keyword.operator.arithmetic.nftables
         2: constant.numeric.integer.nftables
 
+  integer:
+    # This context is not included `numerics` because `signed-integer` supersedes it.
+    - match: \b({{integer}})\b
+      scope: constant.numeric.integer.nftables
+
   structure:
     - match: ({)
       scope: punctuation.section.braces.begin.nftables
@@ -257,20 +262,7 @@ contexts:
       push:
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
-          set:
-            - meta_content_scope: meta.struct.quota.nftables
-
-            # Either an object...
-            - match: ({)
-              scope: punctuation.section.braces.begin.nftables
-              set:
-                - meta_content_scope: meta.struct.quota.nftables
-                - include: safe-values
-                - include: end-braces
-
-            # ... or raw elements can be specified.
-            - include: safe-values
-            - include: statement-separators
+          set: quota-specifications
 
     - include: helper-declaration
 
@@ -321,6 +313,22 @@ contexts:
 
         - include: semi-colons
         - include: end-braces
+
+  quota-specifications:
+    - meta_content_scope: meta.struct.quota.nftables
+
+    - include: integer
+    - match: \b(over|until)\b
+      scope: constant.language.quota-mode.nftables
+      push:
+        - include: integer
+        - include: force-pop
+    - match: \b(used)\b
+      scope: constant.language.quota-used.nftables
+      push:
+        - include: integer
+        - include: force-pop
+    - include: statement-separators
 
   helper-declaration:
     - match: (?:\bct\b\s+\b(helper)\b)
@@ -417,9 +425,8 @@ contexts:
                     - match: \b(handle|position)\b
                       scope: keyword.other.handle.nftables
                       push:
-                        - match: ({{integer}})
-                          scope: constant.numeric.integer.nftables
-                          pop: true
+                        - include: integer
+                        - include: force-pop
 
                     - include: rule-statements
                     - include: statement-separators
@@ -436,6 +443,13 @@ contexts:
                     - match: \b({{identifier_extended}})\b
                       scope: variable.other.readwrite.nftables
                       set: set-specifications
+
+        - match: \b(quota)\b
+          scope: storage.type.rule.nftables
+          set:
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.nftables
+              set: quota-specifications
 
         - include: helper-declaration
 
