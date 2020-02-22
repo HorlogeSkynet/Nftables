@@ -414,6 +414,13 @@ contexts:
                 - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
                   set:
+                    - match: \b(handle|position)\b
+                      scope: keyword.other.handle.nftables
+                      push:
+                        - match: ({{integer}})
+                          scope: constant.numeric.integer.nftables
+                          pop: true
+
                     - include: rule-statements
                     - include: statement-separators
 
