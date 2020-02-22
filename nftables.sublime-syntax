@@ -556,8 +556,7 @@ contexts:
 
   operators:
     - match: (\.)
-      captures:
-        1: keyword.operator.concatenation.nftables
+      scope: keyword.operator.concatenation.nftables
     - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
       scope: keyword.operator.arithmetic.nftables
     - match: (&|\||\<\<|\>\>|\^)
