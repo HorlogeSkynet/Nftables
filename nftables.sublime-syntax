@@ -590,12 +590,10 @@ contexts:
     - match: |-
         (?x)
         \b(
-          # Regular "terminal" statements.
           accept|drop|queue|continue|return|jump|goto|
-          # Regular "non-terminal" statements.
-          log|reject|counter|limit|(?:s|d)nat|masquerade|flow|notrack|
-          # `mark` should be matched only when followed by `set`.
-          (?:mark[[:space:]]+(?=set))
+          log|reject|counter|limit|
+          (?:s|d)nat|masquerade|redirect|dup|fwd|
+          set|flow|notrack
         )\b
       scope: keyword.control.rule-statement.nftables
 
