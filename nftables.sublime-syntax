@@ -269,10 +269,9 @@ contexts:
             - include: safe-values
             - include: statement-separators
 
-    - match: (?:\b(ct)\b\s+\b(helper)\b)
+    - match: (?:\bct\b\s+\b(helper)\b)
       captures:
-        1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
-        2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
+        1: storage.type.helper.nftables keyword.declaration.helper.nftables
       push:         
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
@@ -280,7 +279,7 @@ contexts:
             - match: ({)
               scope: punctuation.section.braces.begin.nftables
               set:
-                - meta_scope: meta.struct.ct-helper.nftables
+                - meta_scope: meta.struct.helper.nftables
                 - match: \b(type)\b
                   scope: storage.type.nftables
                   push:
@@ -533,10 +532,9 @@ contexts:
       scope: storage.type.nftables keyword.declaration.map.nftables
 
     # `ct helper`
-    - match: (?:\b(ct)\b\s+\b(helper)\b)
+    - match: (?:\bct\b\s+\b(helper)\b)
       captures:
-        1: storage.type.ct.nftables keyword.declaration.ct-helper.nftables
-        2: storage.type.helper.nftables keyword.declaration.ct-helper.nftables
+        1: storage.type.helper.nftables keyword.declaration.helper.nftables
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: consume-status-nat
