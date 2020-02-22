@@ -172,9 +172,9 @@ contexts:
 
   ip-addresses:
     - match: ({{ipv4_address}})
-      scope: constant.numeric.ip4-address.nftables
+      scope: constant.numeric.ipv4-address.nftables
     - match: ({{ipv6_address}})
-      scope: constant.numeric.ip6-address.nftables
+      scope: constant.numeric.ipv6-address.nftables
 
   numerics:
     - include: integers-range
@@ -193,10 +193,10 @@ contexts:
       scope: constant.numeric.integer.hexadecimal.nftables
 
   signed-integer:
-    - match: (\-)?\b({{integer}})\b
+    - match: (\-)?\b{{integer}}\b
       captures:
+        0: constant.numeric.integer.signed.nftables
         1: keyword.operator.arithmetic.nftables
-        2: constant.numeric.integer.nftables
 
   integer:
     # This context is not included `numerics` because `signed-integer` supersedes it.
@@ -205,11 +205,11 @@ contexts:
 
   structure:
     - match: ({)
-      scope: punctuation.section.braces.begin.nftables
+      scope: punctuation.section.braces.begin.structure.nftables
       push:
         - meta_scope: meta.struct.nftables
         - match: \b(timeout)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-element-timeout.nftables
           push:
             - include: time-string
             - include: force-pop
@@ -254,61 +254,61 @@ contexts:
       scope: storage.type.set.nftables keyword.declaration.set.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.set.nftables
           set: set-specifications
 
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.quota.nftables
           set: quota-specifications
 
     - include: helper-declaration
 
   set-specifications:
     - match: ({)
-      scope: punctuation.section.braces.begin.nftables
+      scope: punctuation.section.braces.begin.set.nftables
       set:
         - meta_scope: meta.object.set.nftables
         - match: \b(type)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-type.nftables
           push:
             - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
-              scope: constant.language.nftables
+              scope: constant.language.set-type.nftables
             - include: statement-separators
         - match: \b(timeout)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-timeout.nftables
           push:
             - include: time-string
             - include: statement-separators
         - match: \b(flags)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-flags.nftables
           push:
             - match: \b(constant|interval|timeout)\b
-              scope: constant.language.nftables
+              scope: constant.language.set-flag.nftables
             - include: commas
             - include: statement-separators
         - match: \b(gc\-interval)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-gcinterval.nftables
           push:
             - include: time-string
             - include: statement-separators
         - match: \b(elements)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-elements.nftables
           push:
             - include: assignment
             - include: statement-separators
         - match: \b(size)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-size.nftables
           push:
             - include: signed-integer
             - include: statement-separators
         - match: \b(policy)\b
-          scope: storage.type.nftables
+          scope: storage.type.set-policy.nftables
           push:
             - match: \b(performance|memory)\b
-              scope: constant.language.nftables
+              scope: constant.language.set-policy.nftables
             - include: statement-separators
 
         - include: semi-colons
@@ -336,28 +336,28 @@ contexts:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.helper.nftables
           set:
             - match: ({)
-              scope: punctuation.section.braces.begin.nftables
+              scope: punctuation.section.braces.begin.helper.nftables
               set:
                 - meta_scope: meta.object.helper.nftables
                 - match: \b(type)\b
-                  scope: storage.type.nftables
+                  scope: storage.type.helper-type.nftables
                   push:
                     - include: quoted-strings
                     - match: \b(protocol)\b
-                      scope: storage.type.nftables
+                      scope: storage.type.helper-protocol.nftables
                       set:
                         - match: \b(tcp|udp)\b
-                          scope: constant.language.nftables
+                          scope: constant.language.l4-proto.nftables
                         - include: statement-separators
 
                 - match: \b(l3proto)\b
-                  scope: storage.type.nftables
+                  scope: storage.type.helper-l3proto.nftables
                   push:
                     - match: ({{family_types}})
-                      scope: constant.language.nftables
+                      scope: constant.language.family-type.nftables
                     - include: statement-separators
 
                 - include: end-braces
@@ -390,37 +390,37 @@ contexts:
           scope: storage.type.table.nftables
           set:
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.nftables
+              scope: variable.other.readwrite.table.nftables
               pop: true
 
         - match: \b(chain)\b
           scope: storage.type.chain.nftables
           set:
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.nftables
+              scope: variable.other.readwrite.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.nftables
+                  scope: variable.other.readwrite.chain.nftables
                   set: chain-specifications
 
         - match: \b(flowtable)\b
-          scope: storage.type.chain.nftables
+          scope: storage.type.flowtable.nftables
           set:
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.nftables
+              scope: variable.other.readwrite.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.nftables
+                  scope: variable.other.readwrite.flowtable.nftables
                   set: flowtable-specifications
 
         - match: \b(rule)\b
           scope: storage.type.rule.nftables
           set:
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.nftables
+              scope: variable.other.readwrite.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.nftables
+                  scope: variable.other.readwrite.chain.nftables
                   set:
                     - match: \b(handle|position)\b
                       scope: keyword.other.handle.nftables
@@ -435,20 +435,20 @@ contexts:
           scope: storage.type.rule.nftables
           set:
             - match: ({{family_types}})
-              scope: constant.language.nftables
+              scope: constant.language.family-type.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.nftables
+                  scope: variable.other.readwrite.table.nftables
                   set:
                     - match: \b({{identifier_extended}})\b
-                      scope: variable.other.readwrite.nftables
+                      scope: variable.other.readwrite.set.nftables
                       set: set-specifications
 
         - match: \b(quota)\b
           scope: storage.type.rule.nftables
           set:
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.nftables
+              scope: variable.other.readwrite.table.nftables
               set: quota-specifications
 
         - include: helper-declaration
@@ -468,12 +468,12 @@ contexts:
       scope: storage.type.table.nftables keyword.declaration.table.nftables
       push:
         - match: ({{family_types}})
-          scope: constant.language.nftables
+          scope: constant.language.family-type.nftables
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.table.nftables
           set:
             - match: ({)
-              scope: punctuation.section.block.begin.nftables
+              scope: punctuation.section.block.begin.table.nftables
               set:
                 - meta_scope: meta.block.table.nftables
                 - include: common-blocks
@@ -487,11 +487,11 @@ contexts:
       scope: storage.type.chain.nftables keyword.declaration.chain.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.chain.nftables
           set: chain-specifications
   chain-specifications:
     - match: ({)
-      scope: punctuation.section.block.begin.nftables
+      scope: punctuation.section.block.begin.chain.nftables
       set:
         - meta_scope: meta.block.chain.nftables
         - include: chain-settings
@@ -501,31 +501,31 @@ contexts:
   chain-settings:
     - include: consume-rule-matches-type
     - match: \b(type)\b
-      scope: storage.type.nftables
+      scope: storage.type.chain-type.nftables
       push:
         - match: ({{chain_types}})
-          scope: constant.language.nftables
+          scope: constant.language.chain-type.nftables
           set:
             - match: \b(hook)\b
-              scope: storage.type.nftables
+              scope: storage.type.chain-hook.nftables
               set:
                 - match: ({{chain_hooks}})
-                  scope: constant.language.nftables
+                  scope: constant.language.hook.nftables
                   set:
                     - match: \b(priority)\b
-                      scope: storage.type.nftables
+                      scope: storage.type.chain-priority.nftables
                       set:
                         - match: ({{chain_types}})
-                          scope: constant.language.nftables
+                          scope: constant.language.chain-type.nftables
                         - include: signed-integer
                         - include: plus-or-dash
                         - include: statement-separators
   chain-policy:
     - match: \b(policy)\b
-      scope: storage.type.nftables
+      scope: storage.type.chain-policy.nftables
       push:
         - match: \b(accept|drop)\b
-          scope: constant.language.nftables
+          scope: constant.language.chain-policy.nftables
         - include: statement-separators
 
   flowtable:
@@ -533,11 +533,11 @@ contexts:
       scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
+          scope: variable.other.readwrite.flowtable.nftables
           set: flowtable-specifications
   flowtable-specifications:
     - match: ({)
-      scope: punctuation.section.block.begin.nftables
+      scope: punctuation.section.block.begin.flowtable.nftables
       set:
         - meta_scope: meta.block.flowtable.nftables
         - include: flowtable-settings
@@ -545,20 +545,21 @@ contexts:
         - include: end-block
   flowtable-settings:
     - match: \b(hook)\b
-      scope: storage.type.nftables
+      scope: storage.type.flowtable-hook.nftables
       push:
         - match: ({{chain_hooks}})
-          scope: constant.language.nftables
+          scope: constant.language.hook.nftables
           set:
             - match: \b(priority)\b
-              scope: storage.type.nftables
+              scope: storage.type.flowtable-priority.nftables
               set:
                 - match: ({{chain_types}})
-                  scope: constant.language.nftables
+                  scope: constant.language.chain-type.nftables
                 - include: signed-integer
                 - include: plus-or-dash
 
                 - match: \b(devices)\b
+                  scope: storage.type.flowtable-devices.nftables
                   set: assignment
 
   rule-statements:
@@ -571,7 +572,7 @@ contexts:
 
     # `map` & `vmap`
     - match: \b(v?map)\b
-      scope: storage.type.nftables keyword.declaration.map.nftables
+      scope: storage.type.map.nftables keyword.declaration.map.nftables
 
     # `ct helper`
     - match: (?:\bct\b\s+\b(helper)\b)
@@ -590,7 +591,7 @@ contexts:
           # `mark` should be matched only when followed by `set`.
           (?:mark[[:space:]]+(?=set))
         )\b
-      scope: keyword.control.statement.nftables
+      scope: keyword.control.rule-statement.nftables
 
   operators:
     - match: (\.)
