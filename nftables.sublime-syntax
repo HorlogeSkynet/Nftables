@@ -21,6 +21,7 @@ variables:
   identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
 
   timestring: (?:(?:\d+[wdhms])+)
+  family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
 
   # From <https://stackoverflow.com/a/17871737>.
   ipv4: |-
@@ -408,8 +409,8 @@ contexts:
         - match: \b(set)\b
           scope: storage.type.rule.nftables
           set:
-            - match: \b(arp|bridge|inet|ip6?|netdev)\b
-              scope: keyword.other.nftables
+            - match: ({{family_types}})
+              scope: constant.language.nftables
               set:
                 - match: \b({{identifier_extended}})\b
                   scope: variable.other.readwrite.nftables
@@ -432,8 +433,8 @@ contexts:
     - match: \b(table)\b
       scope: storage.type.table.nftables keyword.declaration.table.nftables
       push:
-        - match: \b(arp|bridge|inet|ip6?|netdev)\b
-          scope: keyword.other.nftables
+        - match: ({{family_types}})
+          scope: constant.language.nftables
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.nftables
           set:
