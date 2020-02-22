@@ -270,7 +270,7 @@ contexts:
     - match: ({)
       scope: punctuation.section.braces.begin.nftables
       set:
-        - meta_scope: meta.struct.set.nftables
+        - meta_scope: meta.object.set.nftables
         - match: \b(type)\b
           scope: storage.type.nftables
           push:
@@ -315,7 +315,7 @@ contexts:
         - include: end-braces
 
   quota-specifications:
-    - meta_content_scope: meta.struct.quota.nftables
+    - meta_content_scope: meta.object.quota.nftables
 
     - include: integer
     - match: \b(over|until)\b
@@ -341,7 +341,7 @@ contexts:
             - match: ({)
               scope: punctuation.section.braces.begin.nftables
               set:
-                - meta_scope: meta.struct.helper.nftables
+                - meta_scope: meta.object.helper.nftables
                 - match: \b(type)\b
                   scope: storage.type.nftables
                   push:
