@@ -119,18 +119,18 @@ contexts:
 
   values:
     - include: safe-values
-    - include: unquoted-strings
+    - include: unquoted-string
 
   safe-values:
     - include: strings
     - include: ip-addresses
     - include: numerics
     - include: variables
-    - include: structures
+    - include: structure
 
   strings:
     - include: quoted-strings
-    - include: time-strings
+    - include: time-string
 
   escape-char:
     - match: (?:\\.)
@@ -162,17 +162,17 @@ contexts:
           scope: punctuation.definition.string.end.nftables
           pop: true
 
-  unquoted-strings:
+  unquoted-string:
     - match: \b({{identifier_extended}})\b
       scope: string.unquoted.nftables
 
-  time-strings:
+  time-string:
     - match: \b({{timestring}})\b
-      scope: string.unquoted.time-strings.nftables
+      scope: string.unquoted.time-string.nftables
 
   numerics:
     - include: integers-range
-    - include: signed-integers
+    - include: signed-integer
     - include: hexadecimal
 
   integers-range:
@@ -192,13 +192,13 @@ contexts:
     - match: \b({{hexadecimal}})\b
       scope: constant.numeric.integer.hexadecimal.nftables
 
-  signed-integers:
+  signed-integer:
     - match: (\-)?\b({{integer}})\b
       captures:
         1: keyword.operator.arithmetic.nftables
         2: constant.numeric.integer.nftables
 
-  structures:
+  structure:
     - match: ({)
       scope: punctuation.section.braces.begin.nftables
       push:
@@ -206,10 +206,10 @@ contexts:
         - match: \b(timeout)\b
           scope: storage.type.nftables
           push:
-            - include: time-strings
+            - include: time-string
             - include: force-pop
 
-        # Structures objects may contain values, operators and specific punctuation.
+        # Structure objects may contain values, operators and specific punctuation.
         - include: values
         - include: operators
         - include: commas
@@ -219,7 +219,7 @@ contexts:
 
   common-blocks:
     - include: defines
-    - include: includes
+    - include: include
     - include: stateful-objects
     - include: semi-colons
 
@@ -237,7 +237,7 @@ contexts:
           scope: variable.other.constant.nftables
           pop: true
 
-  includes:
+  include:
     - match: \b(include)\b
       scope: keyword.control.import.nftables
       push:
@@ -288,7 +288,7 @@ contexts:
         - match: \b(timeout)\b
           scope: storage.type.nftables
           push:
-            - include: time-strings
+            - include: time-string
             - include: statement-separators
         - match: \b(flags)\b
           scope: storage.type.nftables
@@ -300,7 +300,7 @@ contexts:
         - match: \b(gc\-interval)\b
           scope: storage.type.nftables
           push:
-            - include: time-strings
+            - include: time-string
             - include: statement-separators
         - match: \b(elements)\b
           scope: storage.type.nftables
@@ -310,7 +310,7 @@ contexts:
         - match: \b(size)\b
           scope: storage.type.nftables
           push:
-            - include: signed-integers
+            - include: signed-integer
             - include: statement-separators
         - match: \b(policy)\b
           scope: storage.type.nftables
@@ -437,12 +437,12 @@ contexts:
         - include: statement-separators
 
   specifications:
-    - include: tables
-    - include: chains
-    - include: flowtables
+    - include: table
+    - include: chain
+    - include: flowtable
     - include: stateful-objects
 
-  tables:
+  table:
     - match: \b(table)\b
       scope: storage.type.table.nftables keyword.declaration.table.nftables
       push:
@@ -456,11 +456,11 @@ contexts:
               set:
                 - meta_scope: meta.block.table.nftables
                 - include: common-blocks
-                - include: chains
-                - include: flowtables
+                - include: chain
+                - include: flowtable
                 - include: end-block
 
-  chains:
+  chain:
     - include: common-blocks
     - match: \b(chain)\b
       scope: storage.type.chain.nftables keyword.declaration.chain.nftables
@@ -497,7 +497,7 @@ contexts:
                         - match: ({{chain_types}})
                           scope: constant.language.nftables
                         - include: plus-or-dash
-                        - include: signed-integers
+                        - include: signed-integer
                         - include: statement-separators
   chain-policy:
     - match: \b(policy)\b
@@ -507,7 +507,7 @@ contexts:
           scope: constant.language.nftables
         - include: statement-separators
 
-  flowtables:
+  flowtable:
     - match: \b(flowtable)\b
       scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
       push:
@@ -535,7 +535,7 @@ contexts:
                 - match: ({{chain_types}})
                   scope: constant.language.nftables
                 - include: plus-or-dash
-                - include: signed-integers
+                - include: signed-integer
 
                 - match: \b(devices)\b
                   set: assignment
