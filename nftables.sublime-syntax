@@ -133,7 +133,7 @@ contexts:
     - include: time-string
 
   escape-char:
-    - match: (?:\\.)
+    - match: (\\.)
       scope: constant.character.escape.nftables
 
   quoted-strings:
@@ -341,7 +341,7 @@ contexts:
                     - match: \b(protocol)\b
                       scope: storage.type.nftables
                       set:
-                        - match: \b(?:tcp|udp)\b
+                        - match: \b(tcp|udp)\b
                           scope: constant.language.nftables
                         - include: statement-separators
 
@@ -592,7 +592,7 @@ contexts:
     - include: plus-or-dash
 
   plus-or-dash:
-    - match: (?:\+|\-)
+    - match: (\+|\-)
       scope: keyword.operator.arithmetic.nftables
 
   # Below contexts require further explanations.
