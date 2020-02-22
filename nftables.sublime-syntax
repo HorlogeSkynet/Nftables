@@ -503,8 +503,8 @@ contexts:
                       set:
                         - match: ({{chain_types}})
                           scope: constant.language.nftables
-                        - include: plus-or-dash
                         - include: signed-integer
+                        - include: plus-or-dash
                         - include: statement-separators
   chain-policy:
     - match: \b(policy)\b
@@ -541,8 +541,8 @@ contexts:
               set:
                 - match: ({{chain_types}})
                   scope: constant.language.nftables
-                - include: plus-or-dash
                 - include: signed-integer
+                - include: plus-or-dash
 
                 - match: \b(devices)\b
                   set: assignment
