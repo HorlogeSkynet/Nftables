@@ -170,6 +170,12 @@ contexts:
     - match: \b({{timestring}})\b
       scope: string.unquoted.time-string.nftables
 
+  ip-addresses:
+    - match: ({{ipv4}})
+      scope: constant.numeric.ip4-address.nftables
+    - match: ({{ipv6}})
+      scope: constant.numeric.ip6-address.nftables
+
   numerics:
     - include: integers-range
     - include: signed-integer
@@ -181,12 +187,6 @@ contexts:
         1: constant.numeric.integer.nftables
         2: punctuation.separator.nftables
         3: constant.numeric.integer.nftables
-
-  ip-addresses:
-    - match: ({{ipv4}})
-      scope: constant.numeric.ip4-address.nftables
-    - match: ({{ipv6}})
-      scope: constant.numeric.ip6-address.nftables
 
   hexadecimal:
     - match: \b({{hexadecimal}})\b
