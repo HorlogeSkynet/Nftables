@@ -573,6 +573,11 @@ contexts:
       scope: keyword.operator.arithmetic.nftables
     - match: \b(and|x?or)\b
       scope: keyword.operator.arithmetic.nftables
+    - include: plus-or-dash
+
+  plus-or-dash:
+    - match: (?:\+|\-)
+      scope: keyword.operator.arithmetic.nftables
 
   # Below contexts require further explanations.
   # Sublime Text >= 3103 ships a specific optimized REGEXP engine, not supporting look-behinds.
