@@ -270,30 +270,7 @@ contexts:
             - include: safe-values
             - include: statement-separators
 
-    - match: (?:\bct\b\s+\b(helper)\b)
-      captures:
-        1: storage.type.helper.nftables keyword.declaration.helper.nftables
-      push:         
-        - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.nftables
-          set:
-            - match: ({)
-              scope: punctuation.section.braces.begin.nftables
-              set:
-                - meta_scope: meta.struct.helper.nftables
-                - match: \b(type)\b
-                  scope: storage.type.nftables
-                  push:
-                    - include: quoted-strings
-                    - match: \b(protocol)\b
-                      scope: storage.type.nftables
-                      set:
-                        - include: unquoted-strings
-                        - include: statement-separators
-
-                - include: safe-values
-                - include: semi-colons
-                - include: end-braces
+    - include: helper-declaration
 
   set-specifications:
     - match: ({)
@@ -342,6 +319,38 @@ contexts:
 
         - include: semi-colons
         - include: end-braces
+
+  helper-declaration:
+    - match: (?:\bct\b\s+\b(helper)\b)
+      captures:
+        1: storage.type.helper.nftables keyword.declaration.helper.nftables
+      push:
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.nftables
+          set:
+            - match: ({)
+              scope: punctuation.section.braces.begin.nftables
+              set:
+                - meta_scope: meta.struct.helper.nftables
+                - match: \b(type)\b
+                  scope: storage.type.nftables
+                  push:
+                    - include: quoted-strings
+                    - match: \b(protocol)\b
+                      scope: storage.type.nftables
+                      set:
+                        - match: \b(?:tcp|udp)\b
+                          scope: constant.language.nftables
+                        - include: statement-separators
+
+                - match: \b(l3proto)\b
+                  scope: storage.type.nftables
+                  push:
+                    - match: ({{family_types}})
+                      scope: constant.language.nftables
+                    - include: statement-separators
+
+                - include: end-braces
 
   assignment:
     - match: (=)
@@ -418,6 +427,8 @@ contexts:
                     - match: \b({{identifier_extended}})\b
                       scope: variable.other.readwrite.nftables
                       set: set-specifications
+
+        - include: helper-declaration
 
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
