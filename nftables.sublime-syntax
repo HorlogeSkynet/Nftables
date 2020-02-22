@@ -606,7 +606,7 @@ contexts:
     - include: plus-or-dash
 
   plus-or-dash:
-    - match: (\+|\-)
+    - match: \B(\+|\-)\B
       scope: keyword.operator.arithmetic.nftables
 
   # Below contexts require further explanations.
