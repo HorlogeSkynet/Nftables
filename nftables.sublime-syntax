@@ -22,6 +22,7 @@ variables:
 
   timestring: (?:(?:\d+[wdhms])+)
   chain_types: (?:\b(filter|route|nat)\b)
+  chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
 
   # From <https://stackoverflow.com/a/17871737>.
@@ -487,7 +488,7 @@ contexts:
             - match: \b(hook)\b
               scope: storage.type.nftables
               set:
-                - match: \b(prerouting|input|forward|output|postrouting|ingress)\b
+                - match: ({{chain_hooks}})
                   scope: constant.language.nftables
                   set:
                     - match: \b(priority)\b
@@ -525,7 +526,7 @@ contexts:
     - match: \b(hook)\b
       scope: storage.type.nftables
       push:
-        - match: \b(prerouting|input|forward|output|postrouting|ingress)\b
+        - match: ({{chain_hooks}})
           scope: constant.language.nftables
           set:
             - match: \b(priority)\b
