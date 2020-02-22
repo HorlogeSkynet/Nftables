@@ -20,17 +20,17 @@ variables:
   identifier: (?:[[:alpha:]][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
 
-  timestring: (?:(?:\d+[wdhms])+)
+  time_string: (?:(?:\d+[wdhms])+)
   chain_types: (?:\b(filter|route|nat)\b)
   chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
 
   # From <https://stackoverflow.com/a/17871737>.
-  ipv4: |-
+  ipv4_address: |-
     (?x)
     (?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3}
     (?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-  ipv6: |-
+  ipv6_address: |-
     (?x)
     (?:[0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
     (?:[0-9a-fA-F]{1,4}:){1,7}:|
@@ -167,13 +167,13 @@ contexts:
       scope: string.unquoted.nftables
 
   time-string:
-    - match: \b({{timestring}})\b
+    - match: \b({{time_string}})\b
       scope: string.unquoted.time-string.nftables
 
   ip-addresses:
-    - match: ({{ipv4}})
+    - match: ({{ipv4_address}})
       scope: constant.numeric.ip4-address.nftables
-    - match: ({{ipv6}})
+    - match: ({{ipv6_address}})
       scope: constant.numeric.ip6-address.nftables
 
   numerics:
