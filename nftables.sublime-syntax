@@ -25,6 +25,10 @@ variables:
   chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
 
+  # From <https://stackoverflow.com/a/4260512>.
+  mac_address: |-
+    (?x)
+    (?:[0-9a-fA-F]{2}[:-]){5}(?:[0-9a-fA-F]{2})
   # From <https://stackoverflow.com/a/17871737>.
   ipv4_address: |-
     (?x)
@@ -123,7 +127,7 @@ contexts:
 
   safe-values:
     - include: strings
-    - include: ip-addresses
+    - include: network-addresses
     - include: numerics
     - include: variables
     - include: structure
@@ -170,7 +174,9 @@ contexts:
     - match: \b({{time_string}})\b
       scope: string.unquoted.time-string.nftables
 
-  ip-addresses:
+  network-addresses:
+    - match: ({{mac_address}})
+      scope: constant.numeric.mac-address.nftables
     - match: ({{ipv4_address}})
       scope: constant.numeric.ipv4-address.nftables
     - match: ({{ipv6_address}})
