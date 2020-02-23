@@ -384,7 +384,7 @@ contexts:
             - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
-              pop: true
+              set: statement-separators
 
         - match: \b(chain)\b
           scope: storage.type.chain.nftables
