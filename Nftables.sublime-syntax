@@ -89,22 +89,22 @@ contexts:
   statement-separators:
     # Elements matching below patterns will 'pop' the current context off the stack.
     - match: (;)
-      scope: punctuation.terminator.nftables
+      scope: punctuation.terminator.semi-colon.nftables
       pop: true
     - match: ($)
       pop: true
 
   commas:
     - match: (,)
-      scope: punctuation.separator.nftables
+      scope: punctuation.separator.comma.nftables
 
   colons:
     - match: (:)
-      scope: punctuation.separator.nftables
+      scope: punctuation.separator.colon.nftables
 
   semi-colons:
     - match: (;)
-      scope: punctuation.terminator.nftables
+      scope: punctuation.terminator.semi-colon.nftables
 
   line-continuation:
     - match: (?:(\\)(.*)$)
@@ -182,7 +182,7 @@ contexts:
     - match: ({{integer}})(\-)({{integer}})
       captures:
         1: constant.numeric.integer.nftables
-        2: punctuation.separator.nftables
+        2: punctuation.separator.dash.nftables
         3: constant.numeric.integer.nftables
 
   hexadecimal:
