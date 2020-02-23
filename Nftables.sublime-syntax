@@ -81,7 +81,11 @@ contexts:
           pop: true
 
   variables:
-    - match: (\$|@)({{identifier}})
+    - match: (\$)({{identifier}})
+      captures:
+        1: punctuation.definition.variable.nftables
+        2: variable.other.constant.nftables
+    - match: (@)({{identifier}})
       captures:
         1: punctuation.definition.variable.nftables
         2: variable.other.readwrite.nftables
