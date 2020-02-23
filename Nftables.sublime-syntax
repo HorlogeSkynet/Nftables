@@ -601,7 +601,7 @@ contexts:
       scope: keyword.control.rule-statement.nftables
 
   operators:
-    - match: (\.)
+    - match: \B(\.)\B
       scope: keyword.operator.concatenation.nftables
     - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
       scope: keyword.operator.arithmetic.nftables
