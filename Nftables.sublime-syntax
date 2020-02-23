@@ -94,15 +94,15 @@ contexts:
     - match: ($)
       pop: true
 
-  commas:
+  comma:
     - match: (,)
       scope: punctuation.separator.comma.nftables
 
-  colons:
+  colon:
     - match: (:)
       scope: punctuation.separator.colon.nftables
 
-  semi-colons:
+  semi-colon:
     - match: (;)
       scope: punctuation.terminator.semi-colon.nftables
 
@@ -124,10 +124,10 @@ contexts:
     - include: anonymous-set
 
   strings:
-    - include: quoted-strings
+    - include: quoted-string
     - include: time-string
 
-  quoted-strings:
+  quoted-string:
     # Apparently NFTABLES supports double-quoted strings only.
     # `prototype` won't be propagated, but `line-continuation` has to be consumed.
     - match: (")
@@ -202,8 +202,8 @@ contexts:
 
         - include: values
         - include: operators
-        - include: commas
-        - include: colons
+        - include: comma
+        - include: colon
 
         - match: (})
           scope: punctuation.section.braces.end.anonymous-set.nftables
@@ -213,7 +213,7 @@ contexts:
     - include: defines
     - include: include
     - include: stateful-objects
-    - include: semi-colons
+    - include: semi-colon
 
   defines:
     - match: \b(define|redefine)\b
@@ -233,7 +233,7 @@ contexts:
     - match: \b(include)\b
       scope: keyword.control.import.nftables
       push:
-        - include: quoted-strings
+        - include: quoted-string
         - include: statement-separators
 
   stateful-objects:
@@ -275,7 +275,7 @@ contexts:
           push:
             - match: \b(constant|interval|timeout)\b
               scope: constant.language.set-flag.nftables
-            - include: commas
+            - include: comma
             - include: statement-separators
         - match: \b(gc\-interval)\b
           scope: storage.type.set-gcinterval.nftables
@@ -299,7 +299,7 @@ contexts:
               scope: constant.language.set-policy.nftables
             - include: statement-separators
 
-        - include: semi-colons
+        - include: semi-colon
         - match: (})
           scope: punctuation.section.braces.end.named-set.nftables
           pop: true
@@ -335,7 +335,7 @@ contexts:
                 - match: \b(type)\b
                   scope: storage.type.helper-type.nftables
                   push:
-                    - include: quoted-strings
+                    - include: quoted-string
                     - match: \b(protocol)\b
                       scope: storage.type.helper-protocol.nftables
                       set:
@@ -565,9 +565,9 @@ contexts:
     # Allows many various tokens in rules (additionally to `prototype`).
     - include: safe-values
     - include: operators
-    - include: commas
-    - include: colons
-    - include: semi-colons
+    - include: comma
+    - include: colon
+    - include: semi-colon
 
     # `map` & `vmap`
     - match: \b(v?map)\b
