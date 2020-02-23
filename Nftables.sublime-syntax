@@ -127,28 +127,14 @@ contexts:
     - include: quoted-strings
     - include: time-string
 
-  escape-char:
-    - match: (\\.)
-      scope: constant.character.escape.nftables
-
   quoted-strings:
-    # Simple and double-quoted strings.
-    # `prototype` won't be propagated, but `escape-char` & `line-continuation` have to be consumed.
-    - match: (')
-      scope: punctuation.definition.string.begin.nftables
-      with_prototype:
-        - include: escape-char
-        - include: line-continuation
-      push:
-        - meta_include_prototype: false
-        - meta_scope: string.quoted.simple.nftables meta.string.nftables
-        - match: (')
-          scope: punctuation.definition.string.end.nftables
-          pop: true
+    # Apparently NFTABLES supports double-quoted strings only.
+    # `prototype` won't be propagated, but `line-continuation` has to be consumed.
     - match: (")
       scope: punctuation.definition.string.begin.nftables
       with_prototype:
-        - include: escape-char
+        - match: (\\.)
+          scope: constant.character.escape.nftables
         - include: line-continuation
       push:
         - meta_include_prototype: false
