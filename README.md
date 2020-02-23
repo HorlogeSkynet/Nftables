@@ -24,7 +24,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 ### Manually
 
-1. Move into Sublime Text packages folder (usually `$HOME/.config/sublime-text-3/Packages/` or `%AppData%\Sublime Text 3\Packages\`)
+1. Move into Sublime Text packages folder (usually `$HOME/.config/sublime-text-3/Packages/User/` or `%AppData%\Sublime Text 3\Packages\User\`)
 2. Clone this repository there : `$ git clone https://github.com/HorlogeSkynet/Nftables.git`
 3. Restart Sublime Text and... :tada:
 
