@@ -112,15 +112,6 @@ contexts:
         1: punctuation.separator.continuation.nftables
         2: invalid.illegal.nftables
 
-  end-block:
-    - match: (})
-      scope: punctuation.section.block.end.nftables
-      pop: true
-  end-braces:
-    - match: (})
-      scope: punctuation.section.braces.end.nftables
-      pop: true
-
   values:
     - include: safe-values
     - include: unquoted-string
@@ -228,7 +219,9 @@ contexts:
         - include: commas
         - include: colons
 
-        - include: end-braces
+        - match: (})
+          scope: punctuation.section.braces.end.anonymous-set.nftables
+          pop: true
 
   common-blocks:
     - include: defines
@@ -321,7 +314,9 @@ contexts:
             - include: statement-separators
 
         - include: semi-colons
-        - include: end-braces
+        - match: (})
+          scope: punctuation.section.braces.end.named-set.nftables
+          pop: true
 
   quota-specifications:
     - meta_content_scope: meta.object.quota.nftables
@@ -369,7 +364,9 @@ contexts:
                       scope: constant.language.family-type.nftables
                     - include: statement-separators
 
-                - include: end-braces
+                - match: (})
+                  scope: punctuation.section.braces.end.helper.nftables
+                  pop: true
 
   assignment:
     - match: (=)
@@ -485,10 +482,13 @@ contexts:
               scope: punctuation.section.block.begin.table.nftables
               set:
                 - meta_scope: meta.block.table.nftables
+
                 - include: common-blocks
                 - include: chain
                 - include: flowtable
-                - include: end-block
+                - match: (})
+                  scope: punctuation.section.block.end.table.nftables
+                  pop: true
 
   chain:
     - include: common-blocks
@@ -506,7 +506,9 @@ contexts:
         - include: chain-settings
         - include: chain-policy
         - include: rule-statements
-        - include: end-block
+        - match: (})
+          scope: punctuation.section.block.end.chain.nftables
+          pop: true
   chain-settings:
     - include: consume-rule-matches-type
     - match: \b(type)\b
@@ -551,7 +553,9 @@ contexts:
         - meta_scope: meta.block.flowtable.nftables
         - include: flowtable-settings
         - include: rule-statements
-        - include: end-block
+        - match: (})
+          scope: punctuation.section.block.end.flowtable.nftables
+          pop: true
   flowtable-settings:
     - match: \b(hook)\b
       scope: storage.type.flowtable-hook.nftables
