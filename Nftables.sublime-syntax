@@ -381,6 +381,7 @@ contexts:
         - match: \b(table)\b
           scope: storage.type.table.nftables
           set:
+            - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
               pop: true
@@ -388,6 +389,7 @@ contexts:
         - match: \b(chain)\b
           scope: storage.type.chain.nftables
           set:
+            - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
               set:
@@ -398,6 +400,7 @@ contexts:
         - match: \b(flowtable)\b
           scope: storage.type.flowtable.nftables
           set:
+            - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
               set:
@@ -408,6 +411,7 @@ contexts:
         - match: \b(rule)\b
           scope: storage.type.rule.nftables
           set:
+            - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
               set:
@@ -426,19 +430,18 @@ contexts:
         - match: \b(set)\b
           scope: storage.type.rule.nftables
           set:
-            - match: ({{family_types}})
-              scope: constant.language.family-type.nftables
+            - include: family_types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.table.nftables
-                  set:
-                    - match: \b({{identifier_extended}})\b
-                      scope: variable.other.readwrite.set.nftables
-                      set: set-specifications
+                  scope: variable.other.readwrite.set.nftables
+                  set: set-specifications
 
         - match: \b(quota)\b
           scope: storage.type.rule.nftables
           set:
+            - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: variable.other.readwrite.table.nftables
               set: quota-specifications
@@ -459,8 +462,7 @@ contexts:
     - match: \b(table)\b
       scope: storage.type.table.nftables keyword.declaration.table.nftables
       push:
-        - match: ({{family_types}})
-          scope: constant.language.family-type.nftables
+        - include: family_types
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.table.nftables
           set:
@@ -560,6 +562,10 @@ contexts:
                 - match: \b(devices)\b
                   scope: storage.type.flowtable-devices.nftables
                   set: assignment
+
+  family_types:
+    - match: ({{family_types}})
+      scope: constant.language.family-type.nftables
 
   rule-statements:
     # Allows many various tokens in rules (additionally to `prototype`).
