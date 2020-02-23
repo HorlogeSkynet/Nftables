@@ -130,7 +130,7 @@ contexts:
     - include: network-addresses
     - include: numerics
     - include: variables
-    - include: structure
+    - include: anonymous-set
 
   strings:
     - include: quoted-strings
@@ -209,18 +209,20 @@ contexts:
     - match: \b({{integer}})\b
       scope: constant.numeric.integer.nftables
 
-  structure:
+  anonymous-set:
     - match: ({)
-      scope: punctuation.section.braces.begin.structure.nftables
+      scope: punctuation.section.braces.begin.anonymous-set.nftables
       push:
-        - meta_scope: meta.struct.nftables
+        - meta_scope: meta.object.anonymous-set.nftables
+
+        # Anonymous sets may contain values, operators and specific separators.
+        # Elements in the set may have a `timeout` (death-date).
         - match: \b(timeout)\b
           scope: storage.type.set-element-timeout.nftables
           push:
             - include: time-string
             - include: force-pop
 
-        # Structure objects may contain values, operators and specific punctuation.
         - include: values
         - include: operators
         - include: commas
@@ -274,9 +276,10 @@ contexts:
 
   set-specifications:
     - match: ({)
-      scope: punctuation.section.braces.begin.set.nftables
+      scope: punctuation.section.braces.begin.named-set.nftables
       set:
-        - meta_scope: meta.object.set.nftables
+        - meta_scope: meta.object.named-set.nftables
+
         - match: \b(type)\b
           scope: storage.type.set-type.nftables
           push:
