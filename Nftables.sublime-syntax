@@ -414,22 +414,7 @@ contexts:
 
         - match: \b(rule)\b
           scope: storage.type.rule.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
-              set:
-                - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.chain.nftables
-                  set:
-                    - match: \b(handle|position)\b
-                      scope: keyword.other.handle.nftables
-                      push:
-                        - include: integer
-                        - include: force-pop
-
-                    - include: rule-statements
-                    - include: statement-separators
+          set: rule-command
 
         - match: \b(set)\b
           scope: storage.type.rule.nftables
@@ -455,6 +440,25 @@ contexts:
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
         - include: statement-separators
+
+        - include: rule-command
+
+  rule-command:
+    - include: family_types
+    - match: \b({{identifier_extended}})\b
+      scope: variable.other.readwrite.table.nftables
+      set:
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.chain.nftables
+          set:
+            - match: \b(handle|position)\b
+              scope: keyword.other.handle.nftables
+              push:
+                - include: integer
+                - include: force-pop
+
+            - include: rule-statements
+            - include: statement-separators
 
   specifications:
     - include: table
