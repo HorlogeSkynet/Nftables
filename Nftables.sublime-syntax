@@ -460,6 +460,8 @@ contexts:
 
             - include: rule-statements
             - include: statement-separators
+        - include: statement-separators
+    - include: statement-separators
 
   specifications:
     - include: table
