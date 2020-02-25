@@ -328,7 +328,7 @@ contexts:
     - match: (?:\bct\b\s+\b(helper)\b)
       captures:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
-      push:
+      set:
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.helper.nftables
           set:
@@ -439,10 +439,11 @@ contexts:
 
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
-        - include: statement-separators
+          set:
+            - include: family_types
+            - include: statement-separators
 
         - include: rule-command
-
   rule-command:
     - include: family_types
     - match: \b({{identifier_extended}})\b
