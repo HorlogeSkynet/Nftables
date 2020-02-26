@@ -40,7 +40,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 ### Build
 
-* Open your command palette and type in : `Build With: nftables`
+* Open your command palette and type in : `Build With: Nftables`
 
 * Press `CTRL + B`
 
