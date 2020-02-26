@@ -14,13 +14,13 @@ See the [_Scripting_](https://wiki.nftables.org/wiki-nftables/index.php/Scriptin
 
 ## Installation
 
-<!-- ### With Package Control
+### With Package Control
 
 1. Open your command palette and type in : `Package Control: Install Package`
 2. Browse the list or search for `Nftables`
 3. Press `Enter` and you're done !
 
-Package Control dedicated page [here](https://packagecontrol.io/packages/Nftables). -->
+Package Control dedicated page [here](https://packagecontrol.io/packages/Nftables).
 
 ### Manually
 
