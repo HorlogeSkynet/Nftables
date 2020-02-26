@@ -255,7 +255,10 @@ contexts:
           scope: variable.other.readwrite.quota.nftables
           set: quota-specifications
 
-    - include: helper-declaration
+    - match: (?:\bct\b\s+\b(helper)\b)
+      captures:
+        1: storage.type.helper.nftables keyword.declaration.helper.nftables
+      push: helper-declaration
 
   set-specifications:
     - match: ({)
@@ -325,38 +328,34 @@ contexts:
     - include: statement-separators
 
   helper-declaration:
-    - match: (?:\bct\b\s+\b(helper)\b)
-      captures:
-        1: storage.type.helper.nftables keyword.declaration.helper.nftables
+    - match: \b({{identifier_extended}})\b
+      scope: variable.other.readwrite.helper.nftables
       set:
-        - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.helper.nftables
+        - match: ({)
+          scope: punctuation.section.braces.begin.helper.nftables
           set:
-            - match: ({)
-              scope: punctuation.section.braces.begin.helper.nftables
-              set:
-                - meta_scope: meta.object.helper.nftables
-                - match: \b(type)\b
-                  scope: storage.type.helper-type.nftables
-                  push:
-                    - include: quoted-string
-                    - match: \b(protocol)\b
-                      scope: storage.type.helper-protocol.nftables
-                      set:
-                        - match: \b(tcp|udp)\b
-                          scope: constant.language.l4-proto.nftables
-                        - include: statement-separators
-
-                - match: \b(l3proto)\b
-                  scope: storage.type.helper-l3proto.nftables
-                  push:
-                    - match: ({{family_types}})
-                      scope: constant.language.family-type.nftables
+            - meta_scope: meta.object.helper.nftables
+            - match: \b(type)\b
+              scope: storage.type.helper-type.nftables
+              push:
+                - include: quoted-string
+                - match: \b(protocol)\b
+                  scope: storage.type.helper-protocol.nftables
+                  set:
+                    - match: \b(tcp|udp)\b
+                      scope: constant.language.l4-proto.nftables
                     - include: statement-separators
 
-                - match: (})
-                  scope: punctuation.section.braces.end.helper.nftables
-                  pop: true
+            - match: \b(l3proto)\b
+              scope: storage.type.helper-l3proto.nftables
+              push:
+                - match: ({{family_types}})
+                  scope: constant.language.family-type.nftables
+                - include: statement-separators
+
+            - match: (})
+              scope: punctuation.section.braces.end.helper.nftables
+              pop: true
 
   assignment:
     - match: (=)
@@ -435,7 +434,10 @@ contexts:
               scope: variable.other.readwrite.table.nftables
               set: quota-specifications
 
-        - include: helper-declaration
+        - match: (?:\bct\b\s+\b(helper)\b)
+          captures:
+            1: storage.type.helper.nftables keyword.declaration.helper.nftables
+          set: helper-declaration
 
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
