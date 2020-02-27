@@ -241,7 +241,7 @@ contexts:
         - include: statement-separators
 
   stateful-objects:
-    - match: \b(set)\b
+    - match: \b(set|map)\b
       scope: storage.type.set.nftables keyword.declaration.set.nftables
       push:
         - match: \b({{identifier_extended}})\b
@@ -415,7 +415,7 @@ contexts:
           scope: storage.type.rule.nftables
           set: rule-command
 
-        - match: \b(set)\b
+        - match: \b(set|map)\b
           scope: storage.type.rule.nftables
           set:
             - include: family_types
