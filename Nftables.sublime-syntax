@@ -271,6 +271,7 @@ contexts:
           push:
             - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
               scope: constant.language.set-type.nftables
+            - include: colon
             - include: statement-separators
         - match: \b(timeout)\b
           scope: storage.type.set-timeout.nftables
