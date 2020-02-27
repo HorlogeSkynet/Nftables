@@ -426,6 +426,19 @@ contexts:
                   scope: variable.other.readwrite.set.nftables
                   set: set-specifications
 
+        - match: \b(element)\b
+          scope: storage.type.element.nftables
+          set:
+            - include: family_types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set:
+                - match: \b({{identifier_extended}})\b
+                  scope: variable.other.readwrite.set.nftables
+                  set:
+                    - include: anonymous-set
+                    - include: statement-separators
+
         - match: \b(quota)\b
           scope: storage.type.rule.nftables
           set:
