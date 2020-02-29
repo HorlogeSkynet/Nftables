@@ -379,7 +379,7 @@ contexts:
       scope: keyword.other.command.nftables
       push:
         - match: \b(table)\b
-          scope: storage.type.table.nftables
+          scope: storage.type.table.nftables keyword.declaration.table.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
@@ -387,7 +387,7 @@ contexts:
               set: statement-separators
 
         - match: \b(chain)\b
-          scope: storage.type.chain.nftables
+          scope: storage.type.chain.nftables keyword.declaration.chain.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
@@ -398,7 +398,7 @@ contexts:
                   set: chain-specs
 
         - match: \b(flowtable)\b
-          scope: storage.type.flowtable.nftables
+          scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
@@ -409,11 +409,11 @@ contexts:
                   set: flowtable-specs
 
         - match: \b(rule)\b
-          scope: storage.type.rule.nftables
+          scope: storage.type.rule.nftables keyword.declaration.rule.nftables
           set: rule-command
 
         - match: \b(set|map)\b
-          scope: storage.type.rule.nftables
+          scope: storage.type.set.nftables keyword.declaration.set.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
@@ -424,7 +424,7 @@ contexts:
                   set: set-specs
 
         - match: \b(element)\b
-          scope: storage.type.element.nftables
+          scope: storage.type.element.nftables keyword.declaration.element.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
@@ -437,7 +437,7 @@ contexts:
                     - include: statement-separators
 
         - match: \b(quota)\b
-          scope: storage.type.rule.nftables
+          scope: storage.type.quota.nftables keyword.declaration.quota.nftables
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
