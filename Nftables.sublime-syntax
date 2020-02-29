@@ -250,21 +250,21 @@ contexts:
       push:
         - match: \b({{identifier_extended}})\b
           scope: entity.name.set.nftables
-          set: set-specifications
+          set: set-specs
 
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
         - match: \b({{identifier_extended}})\b
           scope: entity.name.quota.nftables
-          set: quota-specifications
+          set: quota-specs
 
     - match: (?:\bct\b\s+\b(helper)\b)
       captures:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
       push: helper-declaration
 
-  set-specifications:
+  set-specs:
     - match: ({)
       scope: punctuation.section.braces.begin.named-set.nftables
       set:
@@ -317,7 +317,7 @@ contexts:
           scope: punctuation.section.braces.end.named-set.nftables
           pop: true
 
-  quota-specifications:
+  quota-specs:
     - meta_content_scope: meta.object.quota.nftables
 
     - include: integer
@@ -395,7 +395,7 @@ contexts:
               set:
                 - match: \b({{identifier_extended}})\b
                   scope: entity.name.chain.nftables
-                  set: chain-specifications
+                  set: chain-specs
 
         - match: \b(flowtable)\b
           scope: storage.type.flowtable.nftables
@@ -406,7 +406,7 @@ contexts:
               set:
                 - match: \b({{identifier_extended}})\b
                   scope: entity.name.flowtable.nftables
-                  set: flowtable-specifications
+                  set: flowtable-specs
 
         - match: \b(rule)\b
           scope: storage.type.rule.nftables
@@ -421,7 +421,7 @@ contexts:
               set:
                 - match: \b({{identifier_extended}})\b
                   scope: entity.name.set.nftables
-                  set: set-specifications
+                  set: set-specs
 
         - match: \b(element)\b
           scope: storage.type.element.nftables
@@ -442,7 +442,7 @@ contexts:
             - include: family_types
             - match: \b({{identifier_extended}})\b
               scope: entity.name.table.nftables
-              set: quota-specifications
+              set: quota-specs
 
         - match: (?:\bct\b\s+\b(helper)\b)
           captures:
@@ -510,48 +510,51 @@ contexts:
       push:
         - match: \b({{identifier_extended}})\b
           scope: entity.name.chain.nftables
-          set: chain-specifications
-  chain-specifications:
+          set: chain-specs
+  chain-specs:
     - match: ({)
       scope: punctuation.section.block.begin.chain.nftables
       set:
         - meta_scope: meta.block.chain.nftables
-        - include: chain-settings
-        - include: chain-policy
+
+        # Chain settings.
+        - include: consume-rule-matches-type
+        - match: \b(type)\b
+          scope: storage.type.chain-type.nftables
+          push:
+            - match: ({{chain_types}})
+              scope: constant.language.chain-type.nftables
+              set:
+                - match: \b(hook)\b
+                  scope: storage.type.chain-hook.nftables
+                  set:
+                    - match: ({{chain_hooks}})
+                      scope: constant.language.hook.nftables
+                      set:
+                        - match: \b(priority)\b
+                          scope: storage.type.chain-priority.nftables
+                          set:
+                            - match: ({{chain_types}})
+                              scope: constant.language.chain-type.nftables
+                            - include: signed-integer
+                            - include: plus-or-dash
+                            - include: statement-separators
+
+        # Chain policy.
+        - match: \b(policy)\b
+          scope: storage.type.chain-policy.nftables
+          push:
+            - match: \b(accept|drop)\b
+              scope: constant.language.chain-policy.nftables
+            - include: statement-separators
+
+        # Chain rules.
         - include: rule-definitions
         - include: semi-colon
+
         - match: (})
           scope: punctuation.section.block.end.chain.nftables
           pop: true
-  chain-settings:
-    - include: consume-rule-matches-type
-    - match: \b(type)\b
-      scope: storage.type.chain-type.nftables
-      push:
-        - match: ({{chain_types}})
-          scope: constant.language.chain-type.nftables
-          set:
-            - match: \b(hook)\b
-              scope: storage.type.chain-hook.nftables
-              set:
-                - match: ({{chain_hooks}})
-                  scope: constant.language.hook.nftables
-                  set:
-                    - match: \b(priority)\b
-                      scope: storage.type.chain-priority.nftables
-                      set:
-                        - match: ({{chain_types}})
-                          scope: constant.language.chain-type.nftables
-                        - include: signed-integer
-                        - include: plus-or-dash
-                        - include: statement-separators
-  chain-policy:
-    - match: \b(policy)\b
-      scope: storage.type.chain-policy.nftables
-      push:
-        - match: \b(accept|drop)\b
-          scope: constant.language.chain-policy.nftables
-        - include: statement-separators
 
   flowtable:
     - match: \b(flowtable)\b
@@ -559,36 +562,39 @@ contexts:
       push:
         - match: \b({{identifier_extended}})\b
           scope: entity.name.flowtable.nftables
-          set: flowtable-specifications
-  flowtable-specifications:
+          set: flowtable-specs
+  flowtable-specs:
     - match: ({)
       scope: punctuation.section.block.begin.flowtable.nftables
       set:
         - meta_scope: meta.block.flowtable.nftables
-        - include: flowtable-settings
+
+        # Flowtable settings.
+        - match: \b(hook)\b
+          scope: storage.type.flowtable-hook.nftables
+          push:
+            - match: ({{chain_hooks}})
+              scope: constant.language.hook.nftables
+              set:
+                - match: \b(priority)\b
+                  scope: storage.type.flowtable-priority.nftables
+                  set:
+                    - match: ({{chain_types}})
+                      scope: constant.language.chain-type.nftables
+                    - include: signed-integer
+                    - include: plus-or-dash
+
+                    - match: \b(devices)\b
+                      scope: storage.type.flowtable-devices.nftables
+                      set: assignment
+
+        # Flowtable rules.
         - include: rule-definitions
         - include: semi-colon
+
         - match: (})
           scope: punctuation.section.block.end.flowtable.nftables
           pop: true
-  flowtable-settings:
-    - match: \b(hook)\b
-      scope: storage.type.flowtable-hook.nftables
-      push:
-        - match: ({{chain_hooks}})
-          scope: constant.language.hook.nftables
-          set:
-            - match: \b(priority)\b
-              scope: storage.type.flowtable-priority.nftables
-              set:
-                - match: ({{chain_types}})
-                  scope: constant.language.chain-type.nftables
-                - include: signed-integer
-                - include: plus-or-dash
-
-                - match: \b(devices)\b
-                  scope: storage.type.flowtable-devices.nftables
-                  set: assignment
 
   family_types:
     - match: ({{family_types}})
