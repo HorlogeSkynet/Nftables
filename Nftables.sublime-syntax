@@ -213,6 +213,13 @@ contexts:
           scope: punctuation.section.braces.end.anonymous-set.nftables
           pop: true
 
+  assignment:
+    - match: (=)
+      scope: keyword.operator.assignment.nftables
+      set:
+        - include: values
+        - include: statement-separators
+
   common-blocks:
     - include: defines
     - include: include
@@ -358,13 +365,6 @@ contexts:
             - match: (})
               scope: punctuation.section.braces.end.helper.nftables
               pop: true
-
-  assignment:
-    - match: (=)
-      scope: keyword.operator.assignment.nftables
-      set:
-        - include: values
-        - include: statement-separators
 
   script-commands:
     - match: |-
