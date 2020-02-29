@@ -477,6 +477,9 @@ contexts:
             - include: rule-definitions
             - include: statement-separators
 
+        # Some commands do not require to specify a chain, so we must allow it to end right here.
+        - include: statement-separators
+
   specifications:
     - include: table
     - include: chain
