@@ -88,7 +88,7 @@ contexts:
     - match: (@)({{identifier}})
       captures:
         1: punctuation.definition.variable.nftables
-        2: variable.other.readwrite.nftables
+        2: variable.other.readwrite.set.nftables
 
   statement-separators:
     # Elements matching below patterns will 'pop' the current context off the stack.
@@ -246,14 +246,14 @@ contexts:
       scope: storage.type.set.nftables keyword.declaration.set.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.set.nftables
+          scope: entity.name.set.nftables
           set: set-specifications
 
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.quota.nftables
+          scope: entity.name.quota.nftables
           set: quota-specifications
 
     - match: (?:\bct\b\s+\b(helper)\b)
@@ -332,7 +332,7 @@ contexts:
 
   helper-declaration:
     - match: \b({{identifier_extended}})\b
-      scope: variable.other.readwrite.helper.nftables
+      scope: entity.name.helper.nftables
       set:
         - match: ({)
           scope: punctuation.section.braces.begin.helper.nftables
@@ -389,7 +389,7 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set: statement-separators
 
         - match: \b(chain)\b
@@ -397,10 +397,10 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.chain.nftables
+                  scope: entity.name.chain.nftables
                   set: chain-specifications
 
         - match: \b(flowtable)\b
@@ -408,10 +408,10 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.flowtable.nftables
+                  scope: entity.name.flowtable.nftables
                   set: flowtable-specifications
 
         - match: \b(rule)\b
@@ -423,10 +423,10 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.set.nftables
+                  scope: entity.name.set.nftables
                   set: set-specifications
 
         - match: \b(element)\b
@@ -434,10 +434,10 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set:
                 - match: \b({{identifier_extended}})\b
-                  scope: variable.other.readwrite.set.nftables
+                  scope: entity.name.set.nftables
                   set:
                     - include: anonymous-set
                     - include: statement-separators
@@ -447,7 +447,7 @@ contexts:
           set:
             - include: family_types
             - match: \b({{identifier_extended}})\b
-              scope: variable.other.readwrite.table.nftables
+              scope: entity.name.table.nftables
               set: quota-specifications
 
         - match: (?:\bct\b\s+\b(helper)\b)
@@ -465,10 +465,10 @@ contexts:
   rule-command:
     - include: family_types
     - match: \b({{identifier_extended}})\b
-      scope: variable.other.readwrite.table.nftables
+      scope: entity.name.table.nftables
       set:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.chain.nftables
+          scope: entity.name.chain.nftables
           set:
             - match: \b(handle|position)\b
               scope: keyword.other.handle.nftables
@@ -493,7 +493,7 @@ contexts:
       push:
         - include: family_types
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.table.nftables
+          scope: entity.name.table.nftables
           set:
             - match: ({)
               scope: punctuation.section.block.begin.table.nftables
@@ -513,7 +513,7 @@ contexts:
       scope: storage.type.chain.nftables keyword.declaration.chain.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.chain.nftables
+          scope: entity.name.chain.nftables
           set: chain-specifications
   chain-specifications:
     - match: ({)
@@ -561,7 +561,7 @@ contexts:
       scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
       push:
         - match: \b({{identifier_extended}})\b
-          scope: variable.other.readwrite.flowtable.nftables
+          scope: entity.name.flowtable.nftables
           set: flowtable-specifications
   flowtable-specifications:
     - match: ({)
