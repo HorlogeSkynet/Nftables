@@ -56,8 +56,8 @@ variables:
 contexts:
   main:
     - include: common-blocks
-    - include: script-commands
     - include: specifications
+    - include: script-commands
 
   prototype:
     - include: comments
@@ -220,7 +220,6 @@ contexts:
   common-blocks:
     - include: defines
     - include: include
-    - include: stateful-objects
     - include: semi-colon
 
   defines:
@@ -244,96 +243,350 @@ contexts:
         - include: quoted-string
         - include: statement-separators
 
-  stateful-objects:
+  script-commands:
+    - match: |-
+        (?x)
+        \b(
+          add|replace|create|
+          insert|delete|
+          get|list|
+          reset|flush|
+          rename|
+          import|export|
+          monitor|describe|
+          remove
+        )\b
+      scope: keyword.other.command.nftables
+      push:
+        - match: \b(table)\b
+          scope: storage.type.table.nftables keyword.declaration.table.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: entity.name.table.nftables
+              set: statement-separators
+
+        - match: \b(chain)\b
+          scope: storage.type.chain.nftables keyword.declaration.chain.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: chain-specs
+
+        - match: \b(flowtable)\b
+          scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: flowtable-specs
+
+        - match: \b(rule)\b
+          scope: storage.type.rule.nftables keyword.declaration.rule.nftables
+          set: rule-command
+
+        - match: \b(set|map)\b
+          scope: storage.type.set.nftables keyword.declaration.set.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: set-specs
+
+        - match: \b(element)\b
+          scope: storage.type.element.nftables keyword.declaration.element.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set:
+                - match: \b({{identifier_extended}})\b
+                  scope: variable.other.readwrite.set.nftables
+                  set:
+                    - include: anonymous-set
+                    - include: statement-separators
+
+        - match: \b(quota)\b
+          scope: storage.type.quota.nftables keyword.declaration.quota.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: quota-specs
+
+        - match: (?:\bct\b\s+\b(helper)\b)
+          captures:
+            1: storage.type.helper.nftables keyword.declaration.helper.nftables
+          set: helper-specs
+
+        - match: \b(ruleset)\b
+          scope: keyword.other.ruleset.nftables
+          set:
+            - include: family-types
+            - include: statement-separators
+
+        - include: rule-command
+        - include: statement-separators
+  rule-command:
+    - include: family-types
+    - match: \b({{identifier_extended}})\b
+      scope: variable.other.readwrite.table.nftables
+      set:
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.chain.nftables
+          set:
+            - match: \b(handle|position)\b
+              scope: keyword.other.handle.nftables
+              push:
+                - include: integer
+                - include: force-pop
+
+            - include: rule-definitions
+            - include: statement-separators
+
+        # Some commands do not require to specify a chain, so we must allow it to end right here.
+        - include: statement-separators
+
+  specifications:
+    - include: table-specs
+
+    - match: \b(chain)\b
+      scope: storage.type.chain.nftables keyword.declaration.chain.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: chain-specs
+
+    - match: \b(flowtable)\b
+      scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: flowtable-specs
+
     - match: \b(set|map)\b
       scope: storage.type.set.nftables keyword.declaration.set.nftables
       push:
+        - include: family-types
         - match: \b({{identifier_extended}})\b
-          scope: entity.name.set.nftables
+          scope: variable.other.readwrite.table.nftables
           set: set-specs
 
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
+        - include: family-types
         - match: \b({{identifier_extended}})\b
-          scope: entity.name.quota.nftables
+          scope: variable.other.readwrite.table.nftables
           set: quota-specs
 
     - match: (?:\bct\b\s+\b(helper)\b)
       captures:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
-      push: helper-declaration
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: helper-specs
+
+  table-specs:
+    - match: \b(table)\b
+      scope: storage.type.table.nftables keyword.declaration.table.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: entity.name.table.nftables
+          set:
+            - match: ({)
+              scope: punctuation.section.block.begin.table.nftables
+              set:
+                - meta_scope: meta.block.table.nftables
+
+                - include: common-blocks
+
+                - match: \b(chain)\b
+                  scope: storage.type.chain.nftables keyword.declaration.chain.nftables
+                  push: chain-specs
+
+                - match: \b(flowtable)\b
+                  scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+                  push: flowtable-specs
+
+                - match: \b(set|map)\b
+                  scope: storage.type.set.nftables keyword.declaration.set.nftables
+                  push: set-specs
+
+                - match: \b(quota)\b
+                  scope: storage.type.quota.nftables keyword.declaration.quota.nftables
+                  push: quota-specs
+
+                - match: (?:\bct\b\s+\b(helper)\b)
+                  captures:
+                    1: storage.type.helper.nftables keyword.declaration.helper.nftables
+                  push: helper-specs
+
+                - match: (})
+                  scope: punctuation.section.block.end.table.nftables
+                  pop: true
+
+  chain-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.chain.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.block.begin.chain.nftables
+          set:
+            - meta_scope: meta.block.chain.nftables
+
+            # Chain settings.
+            - include: consume-rule-matches-type
+            - match: \b(type)\b
+              scope: storage.type.chain-type.nftables
+              push:
+                - match: ({{chain_types}})
+                  scope: constant.language.chain-type.nftables
+                  set:
+                    - match: \b(hook)\b
+                      scope: storage.type.chain-hook.nftables
+                      set:
+                        - match: ({{chain_hooks}})
+                          scope: constant.language.hook.nftables
+                          set:
+                            - match: \b(priority)\b
+                              scope: storage.type.chain-priority.nftables
+                              set:
+                                - match: ({{chain_types}})
+                                  scope: constant.language.chain-type.nftables
+                                - include: signed-integer
+                                - include: plus-or-dash
+                                - include: statement-separators
+
+            # Chain policy.
+            - match: \b(policy)\b
+              scope: storage.type.chain-policy.nftables
+              push:
+                - match: \b(accept|drop)\b
+                  scope: constant.language.chain-policy.nftables
+                - include: statement-separators
+
+            # Chain rules.
+            - include: rule-definitions
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.block.end.chain.nftables
+              pop: true
+
+  flowtable-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.flowtable.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.block.begin.flowtable.nftables
+          set:
+            - meta_scope: meta.block.flowtable.nftables
+
+            # Flowtable settings.
+            - match: \b(hook)\b
+              scope: storage.type.flowtable-hook.nftables
+              push:
+                - match: ({{chain_hooks}})
+                  scope: constant.language.hook.nftables
+                  set:
+                    - match: \b(priority)\b
+                      scope: storage.type.flowtable-priority.nftables
+                      set:
+                        - match: ({{chain_types}})
+                          scope: constant.language.chain-type.nftables
+                        - include: signed-integer
+                        - include: plus-or-dash
+
+                        - match: \b(devices)\b
+                          scope: storage.type.flowtable-devices.nftables
+                          set: assignment
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.block.end.flowtable.nftables
+              pop: true
 
   set-specs:
-    - match: ({)
-      scope: punctuation.section.braces.begin.named-set.nftables
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.set.nftables
       set:
-        - meta_scope: meta.object.named-set.nftables
+        - match: ({)
+          scope: punctuation.section.braces.begin.named-set.nftables
+          set:
+            - meta_scope: meta.object.named-set.nftables
 
-        - match: \b(type)\b
-          scope: storage.type.set-type.nftables
-          push:
-            - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
-              scope: constant.language.set-type.nftables
-            - include: colon
-            - include: verdict-statements
-            - include: statement-separators
-        - match: \b(timeout)\b
-          scope: storage.type.set-timeout.nftables
-          push:
-            - include: time-string
-            - include: statement-separators
-        - match: \b(flags)\b
-          scope: storage.type.set-flags.nftables
-          push:
-            - match: \b(constant|interval|timeout)\b
-              scope: constant.language.set-flag.nftables
-            - include: comma
-            - include: statement-separators
-        - match: \b(gc\-interval)\b
-          scope: storage.type.set-gcinterval.nftables
-          push:
-            - include: time-string
-            - include: statement-separators
-        - match: \b(elements)\b
-          scope: storage.type.set-elements.nftables
-          push:
-            - include: assignment
-            - include: statement-separators
-        - match: \b(size)\b
-          scope: storage.type.set-size.nftables
-          push:
-            - include: signed-integer
-            - include: statement-separators
-        - match: \b(policy)\b
-          scope: storage.type.set-policy.nftables
-          push:
-            - match: \b(performance|memory)\b
-              scope: constant.language.set-policy.nftables
-            - include: statement-separators
+            - match: \b(type)\b
+              scope: storage.type.set-type.nftables
+              push:
+                - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
+                  scope: constant.language.set-type.nftables
+                - include: colon
+                - include: verdict-statements
+                - include: statement-separators
+            - match: \b(timeout)\b
+              scope: storage.type.set-timeout.nftables
+              push:
+                - include: time-string
+                - include: statement-separators
+            - match: \b(flags)\b
+              scope: storage.type.set-flags.nftables
+              push:
+                - match: \b(constant|interval|timeout)\b
+                  scope: constant.language.set-flag.nftables
+                - include: comma
+                - include: statement-separators
+            - match: \b(gc\-interval)\b
+              scope: storage.type.set-gcinterval.nftables
+              push:
+                - include: time-string
+                - include: statement-separators
+            - match: \b(elements)\b
+              scope: storage.type.set-elements.nftables
+              push:
+                - include: assignment
+                - include: statement-separators
+            - match: \b(size)\b
+              scope: storage.type.set-size.nftables
+              push:
+                - include: signed-integer
+                - include: statement-separators
+            - match: \b(policy)\b
+              scope: storage.type.set-policy.nftables
+              push:
+                - match: \b(performance|memory)\b
+                  scope: constant.language.set-policy.nftables
+                - include: statement-separators
 
-        - include: semi-colon
-        - match: (})
-          scope: punctuation.section.braces.end.named-set.nftables
-          pop: true
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.named-set.nftables
+              pop: true
 
   quota-specs:
-    - meta_content_scope: meta.object.quota.nftables
-
-    - include: integer
-    - match: \b(over|until)\b
-      scope: constant.language.quota-mode.nftables
-      push:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.quota.nftables
+      set:
         - include: integer
-        - include: force-pop
-    - match: \b(used)\b
-      scope: constant.language.quota-used.nftables
-      push:
-        - include: integer
-        - include: force-pop
-    - include: statement-separators
+        - match: \b(over|until)\b
+          scope: constant.language.quota-mode.nftables
+          push:
+            - include: integer
+            - include: force-pop
+        - match: \b(used)\b
+          scope: constant.language.quota-used.nftables
+          push:
+            - include: integer
+            - include: force-pop
+        - include: statement-separators
 
-  helper-declaration:
+  helper-specs:
     - match: \b({{identifier_extended}})\b
       scope: entity.name.helper.nftables
       set:
@@ -363,240 +616,7 @@ contexts:
               scope: punctuation.section.braces.end.helper.nftables
               pop: true
 
-  script-commands:
-    - match: |-
-        (?x)
-        \b(
-          add|replace|create|
-          insert|delete|
-          get|list|
-          reset|flush|
-          rename|
-          import|export|
-          monitor|describe|
-          remove
-        )\b
-      scope: keyword.other.command.nftables
-      push:
-        - match: \b(table)\b
-          scope: storage.type.table.nftables keyword.declaration.table.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set: statement-separators
-
-        - match: \b(chain)\b
-          scope: storage.type.chain.nftables keyword.declaration.chain.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set:
-                - match: \b({{identifier_extended}})\b
-                  scope: entity.name.chain.nftables
-                  set: chain-specs
-
-        - match: \b(flowtable)\b
-          scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set:
-                - match: \b({{identifier_extended}})\b
-                  scope: entity.name.flowtable.nftables
-                  set: flowtable-specs
-
-        - match: \b(rule)\b
-          scope: storage.type.rule.nftables keyword.declaration.rule.nftables
-          set: rule-command
-
-        - match: \b(set|map)\b
-          scope: storage.type.set.nftables keyword.declaration.set.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set:
-                - match: \b({{identifier_extended}})\b
-                  scope: entity.name.set.nftables
-                  set: set-specs
-
-        - match: \b(element)\b
-          scope: storage.type.element.nftables keyword.declaration.element.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set:
-                - match: \b({{identifier_extended}})\b
-                  scope: entity.name.set.nftables
-                  set:
-                    - include: anonymous-set
-                    - include: statement-separators
-
-        - match: \b(quota)\b
-          scope: storage.type.quota.nftables keyword.declaration.quota.nftables
-          set:
-            - include: family_types
-            - match: \b({{identifier_extended}})\b
-              scope: entity.name.table.nftables
-              set: quota-specs
-
-        - match: (?:\bct\b\s+\b(helper)\b)
-          captures:
-            1: storage.type.helper.nftables keyword.declaration.helper.nftables
-          set: helper-declaration
-
-        - match: \b(ruleset)\b
-          scope: keyword.other.ruleset.nftables
-          set:
-            - include: family_types
-            - include: statement-separators
-
-        - include: rule-command
-        - include: statement-separators
-  rule-command:
-    - include: family_types
-    - match: \b({{identifier_extended}})\b
-      scope: entity.name.table.nftables
-      set:
-        - match: \b({{identifier_extended}})\b
-          scope: entity.name.chain.nftables
-          set:
-            - match: \b(handle|position)\b
-              scope: keyword.other.handle.nftables
-              push:
-                - include: integer
-                - include: force-pop
-
-            - include: rule-definitions
-            - include: statement-separators
-
-        # Some commands do not require to specify a chain, so we must allow it to end right here.
-        - include: statement-separators
-
-  specifications:
-    - include: table
-    - include: chain
-    - include: flowtable
-    - include: stateful-objects
-
-  table:
-    - match: \b(table)\b
-      scope: storage.type.table.nftables keyword.declaration.table.nftables
-      push:
-        - include: family_types
-        - match: \b({{identifier_extended}})\b
-          scope: entity.name.table.nftables
-          set:
-            - match: ({)
-              scope: punctuation.section.block.begin.table.nftables
-              set:
-                - meta_scope: meta.block.table.nftables
-
-                - include: common-blocks
-                - include: chain
-                - include: flowtable
-                - match: (})
-                  scope: punctuation.section.block.end.table.nftables
-                  pop: true
-
-  chain:
-    - include: common-blocks
-    - match: \b(chain)\b
-      scope: storage.type.chain.nftables keyword.declaration.chain.nftables
-      push:
-        - match: \b({{identifier_extended}})\b
-          scope: entity.name.chain.nftables
-          set: chain-specs
-  chain-specs:
-    - match: ({)
-      scope: punctuation.section.block.begin.chain.nftables
-      set:
-        - meta_scope: meta.block.chain.nftables
-
-        # Chain settings.
-        - include: consume-rule-matches-type
-        - match: \b(type)\b
-          scope: storage.type.chain-type.nftables
-          push:
-            - match: ({{chain_types}})
-              scope: constant.language.chain-type.nftables
-              set:
-                - match: \b(hook)\b
-                  scope: storage.type.chain-hook.nftables
-                  set:
-                    - match: ({{chain_hooks}})
-                      scope: constant.language.hook.nftables
-                      set:
-                        - match: \b(priority)\b
-                          scope: storage.type.chain-priority.nftables
-                          set:
-                            - match: ({{chain_types}})
-                              scope: constant.language.chain-type.nftables
-                            - include: signed-integer
-                            - include: plus-or-dash
-                            - include: statement-separators
-
-        # Chain policy.
-        - match: \b(policy)\b
-          scope: storage.type.chain-policy.nftables
-          push:
-            - match: \b(accept|drop)\b
-              scope: constant.language.chain-policy.nftables
-            - include: statement-separators
-
-        # Chain rules.
-        - include: rule-definitions
-        - include: semi-colon
-
-        - match: (})
-          scope: punctuation.section.block.end.chain.nftables
-          pop: true
-
-  flowtable:
-    - match: \b(flowtable)\b
-      scope: storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
-      push:
-        - match: \b({{identifier_extended}})\b
-          scope: entity.name.flowtable.nftables
-          set: flowtable-specs
-  flowtable-specs:
-    - match: ({)
-      scope: punctuation.section.block.begin.flowtable.nftables
-      set:
-        - meta_scope: meta.block.flowtable.nftables
-
-        # Flowtable settings.
-        - match: \b(hook)\b
-          scope: storage.type.flowtable-hook.nftables
-          push:
-            - match: ({{chain_hooks}})
-              scope: constant.language.hook.nftables
-              set:
-                - match: \b(priority)\b
-                  scope: storage.type.flowtable-priority.nftables
-                  set:
-                    - match: ({{chain_types}})
-                      scope: constant.language.chain-type.nftables
-                    - include: signed-integer
-                    - include: plus-or-dash
-
-                    - match: \b(devices)\b
-                      scope: storage.type.flowtable-devices.nftables
-                      set: assignment
-
-        # Flowtable rules.
-        - include: rule-definitions
-        - include: semi-colon
-
-        - match: (})
-          scope: punctuation.section.block.end.flowtable.nftables
-          pop: true
-
-  family_types:
+  family-types:
     - match: ({{family_types}})
       scope: constant.language.family-type.nftables
 
@@ -617,11 +637,11 @@ contexts:
     - include: comma
     - include: colon
 
-    # `map` & `vmap`
+    # Consumes and scopes known stateful objects keywords.
     - match: \b(v?map)\b
       scope: storage.type.map.nftables keyword.declaration.map.nftables
-
-    # `ct helper`
+    - match: \b(quota)\b
+      scope: storage.type.quota.nftables keyword.declaration.quota.nftables
     - match: (?:\bct\b\s+\b(helper)\b)
       captures:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
