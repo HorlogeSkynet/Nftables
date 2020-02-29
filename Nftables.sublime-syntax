@@ -20,7 +20,6 @@ variables:
   identifier: (?:[[:alpha:]][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
 
-  time_string: (?:(?:\d+[wdhms])+)
   chain_types: (?:\b(filter|route|nat)\b)
   chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
@@ -152,7 +151,7 @@ contexts:
       scope: string.unquoted.nftables
 
   time-string:
-    - match: \b({{time_string}})\b
+    - match: \b((?:\d+[wdhms])+)\b
       scope: string.unquoted.time-string.nftables
 
   network-addresses:
