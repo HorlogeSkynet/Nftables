@@ -204,6 +204,7 @@ contexts:
             - include: time-string
             - include: force-pop
 
+        - include: verdict-statements
         - include: values
         - include: operators
         - include: comma
@@ -272,6 +273,7 @@ contexts:
             - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
               scope: constant.language.set-type.nftables
             - include: colon
+            - include: verdict-statements
             - include: statement-separators
         - match: \b(timeout)\b
           scope: storage.type.set-timeout.nftables
@@ -474,7 +476,7 @@ contexts:
                 - include: integer
                 - include: force-pop
 
-            - include: rule-statements
+            - include: rule-definitions
             - include: statement-separators
         - include: statement-separators
     - include: statement-separators
@@ -520,7 +522,7 @@ contexts:
         - meta_scope: meta.block.chain.nftables
         - include: chain-settings
         - include: chain-policy
-        - include: rule-statements
+        - include: rule-definitions
         - match: (})
           scope: punctuation.section.block.end.chain.nftables
           pop: true
@@ -567,7 +569,7 @@ contexts:
       set:
         - meta_scope: meta.block.flowtable.nftables
         - include: flowtable-settings
-        - include: rule-statements
+        - include: rule-definitions
         - match: (})
           scope: punctuation.section.block.end.flowtable.nftables
           pop: true
@@ -594,7 +596,17 @@ contexts:
     - match: ({{family_types}})
       scope: constant.language.family-type.nftables
 
-  rule-statements:
+  verdict-statements:
+    - match: \b(accept|drop|queue|continue|return)\b
+      scope: keyword.control.rule-statement.verdict.nftables
+    - match: \b(jump|goto)\b
+      scope: keyword.control.rule-statement.verdict.nftables
+      push:
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.chain.nftables
+          set: force-pop
+
+  rule-definitions:
     # Allows many various tokens in rules (additionally to `prototype`).
     - include: safe-values
     - include: operators
@@ -612,11 +624,11 @@ contexts:
         1: storage.type.helper.nftables keyword.declaration.helper.nftables
 
     # Each rules should (might ?) have (non-)terminal statement(s).
+    - include: verdict-statements
     - include: consume-status-nat
     - match: |-
         (?x)
         \b(
-          accept|drop|queue|continue|return|jump|goto|
           log|reject|counter|limit|
           (?:s|d)nat|masquerade|redirect|dup|fwd|
           set|flow|notrack
