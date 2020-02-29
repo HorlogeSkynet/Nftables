@@ -460,6 +460,7 @@ contexts:
             - include: statement-separators
 
         - include: rule-command
+        - include: statement-separators
   rule-command:
     - include: family_types
     - match: \b({{identifier_extended}})\b
@@ -476,8 +477,6 @@ contexts:
 
             - include: rule-definitions
             - include: statement-separators
-        - include: statement-separators
-    - include: statement-separators
 
   specifications:
     - include: table
@@ -521,6 +520,7 @@ contexts:
         - include: chain-settings
         - include: chain-policy
         - include: rule-definitions
+        - include: semi-colon
         - match: (})
           scope: punctuation.section.block.end.chain.nftables
           pop: true
@@ -568,6 +568,7 @@ contexts:
         - meta_scope: meta.block.flowtable.nftables
         - include: flowtable-settings
         - include: rule-definitions
+        - include: semi-colon
         - match: (})
           scope: punctuation.section.block.end.flowtable.nftables
           pop: true
@@ -610,7 +611,6 @@ contexts:
     - include: operators
     - include: comma
     - include: colon
-    - include: semi-colon
 
     # `map` & `vmap`
     - match: \b(v?map)\b
