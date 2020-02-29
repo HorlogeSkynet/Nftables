@@ -610,6 +610,7 @@ contexts:
                   scope: constant.language.family-type.nftables
                 - include: statement-separators
 
+            - include: semi-colon
             - match: (})
               scope: punctuation.section.braces.end.helper.nftables
               pop: true
