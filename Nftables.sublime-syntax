@@ -65,7 +65,7 @@ contexts:
 
   statements:
     - include: common-blocks
-    - include: base-commands
+    - include: script-commands
     - include: specifications
 
   force-pop:
@@ -367,7 +367,7 @@ contexts:
         - include: values
         - include: statement-separators
 
-  base-commands:
+  script-commands:
     - match: |-
         (?x)
         \b(
