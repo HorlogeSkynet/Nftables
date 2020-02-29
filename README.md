@@ -46,10 +46,10 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 * `Tools > Build`
 
-## Syntaxes currently supported
+## [Formats](https://wiki.nftables.org/wiki-nftables/index.php/Scripting#File_formats) currently supported
 
-* [X] "nftables output" format
-* [X] "scripted configuration" format
+* [X] Nftables output
+* [X] Scripted configuration
 
 ## Frequently Asked Questions
 
