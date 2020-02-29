@@ -218,11 +218,7 @@ contexts:
         - include: statement-separators
 
   common-blocks:
-    - include: defines
-    - include: include
-    - include: semi-colon
-
-  defines:
+    # Defines.
     - match: \b(define|redefine)\b
       scope: keyword.control.define.nftables
       push:
@@ -236,12 +232,14 @@ contexts:
           scope: variable.other.constant.nftables
           pop: true
 
-  include:
+    # Include.
     - match: \b(include)\b
       scope: keyword.control.import.nftables
       push:
         - include: quoted-string
         - include: statement-separators
+
+    - include: semi-colon
 
   script-commands:
     - match: |-
