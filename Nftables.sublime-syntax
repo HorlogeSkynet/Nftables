@@ -382,8 +382,6 @@ contexts:
         )\b
       scope: keyword.other.command.nftables
       push:
-        - meta_scope: meta.command.nftables
-
         - match: \b(table)\b
           scope: storage.type.table.nftables
           set:
