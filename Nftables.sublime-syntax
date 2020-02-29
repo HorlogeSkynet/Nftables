@@ -55,17 +55,14 @@ variables:
 
 contexts:
   main:
-    - include: statements
+    - include: common-blocks
+    - include: script-commands
+    - include: specifications
 
   prototype:
     - include: comments
     - include: variables
     - include: line-continuation
-
-  statements:
-    - include: common-blocks
-    - include: script-commands
-    - include: specifications
 
   force-pop:
     - match: ''
