@@ -524,9 +524,12 @@ contexts:
               scope: storage.type.set-type.nftables
               push:
                 - match: \b(ipv4_addr|ipv6_addr|ether_addr|inet_proto|inet_service|mark|ifname)\b
-                  scope: constant.language.set-type.nftables
+                  scope: constant.language.data-type.nftables
+                - include: dot-operator
                 - include: colon
                 - include: verdict-statements
+                - match: \b(verdict)\b
+                  scope: constant.language.verdict.nftables
                 - include: statement-separators
             - match: \b(timeout)\b
               scope: storage.type.set-timeout.nftables
@@ -658,8 +661,6 @@ contexts:
       scope: keyword.control.rule-statement.nftables
 
   operators:
-    - match: \B(\.)\B
-      scope: keyword.operator.concatenation.nftables
     - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
       scope: keyword.operator.arithmetic.nftables
     - match: (&|\||\<\<|\>\>|\^)
@@ -669,10 +670,15 @@ contexts:
     - match: \b(and|x?or)\b
       scope: keyword.operator.arithmetic.nftables
     - include: plus-or-dash
+    - include: dot-operator
 
   plus-or-dash:
     - match: \B(\+|\-)\B
       scope: keyword.operator.arithmetic.nftables
+
+  dot-operator:
+    - match: \B(\.)\B
+      scope: keyword.operator.concatenation.nftables
 
   # Below contexts require further explanations.
   # Sublime Text >= 3103 ships a specific optimized REGEXP engine, not supporting look-behinds.
