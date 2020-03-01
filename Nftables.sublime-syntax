@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 
-# NFTABLES syntax definition for Sublime Text 3 (>= 3092).
+# nftables syntax definition for Sublime Text 3 (>= 3092).
 
 # `file_extensions` contains `nftables.conf` to match the default packaged file in Debian.
 # `first_line_match` should match (at least) this shebang `#!/usr/sbin/nft -f`.
@@ -128,7 +128,7 @@ contexts:
     - include: time-string
 
   quoted-string:
-    # Apparently NFTABLES supports double-quoted strings only.
+    # Apparently nftables supports double-quoted strings only.
     # `prototype` won't be propagated, but `line-continuation` has to be consumed.
     - match: (")
       scope: punctuation.definition.string.begin.nftables

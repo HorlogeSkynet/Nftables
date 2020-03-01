@@ -1,16 +1,16 @@
 # Nftables
 
-> A Sublime Text 3 syntax definition for your Nftables rules
+> A Sublime Text 3 syntax definition for your nftables rules
 
 ![Preview](https://i.imgur.com/14wp8YU.png)
 
 ## Introduction
 
-[Nftables](https://netfilter.org/projects/nftables/) should _now_ be the regular way of handling Netfilter rules, and I was surprised not to find any syntax definition for Sublime Text.  
+[nftables](https://netfilter.org/projects/nftables/) should _now_ be the regular way of handling Netfilter rules, and I was surprised not to find any syntax definition for Sublime Text.  
 This project aims to provide a "basic" one, as long as a building procedure for GNU/Linux users (when the `nft` binary is available for "dynamic" syntax checks).
 
 This project has been inspired by [the official nano syntax definition](https://git.savannah.gnu.org/cgit/nano.git/tree/syntax/nftables.nanorc).  
-See the [_Scripting_](https://wiki.nftables.org/wiki-nftables/index.php/Scripting) Nftables Wiki page for external reference.
+See the [_Scripting_](https://wiki.nftables.org/wiki-nftables/index.php/Scripting) nftables Wiki page for external reference.
 
 ## Installation
 
@@ -48,12 +48,12 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 ## [Formats](https://wiki.nftables.org/wiki-nftables/index.php/Scripting#File_formats) currently supported
 
-* [X] Nftables output
+* [X] nftables output
 * [X] Scripted configuration
 
 ## Frequently Asked Questions
 
-### Do you plan to support the _whole_ Nftables syntax ?
+### Do you plan to support the _whole_ nftables syntax ?
 
 > No, but feel free to contribute.
 
