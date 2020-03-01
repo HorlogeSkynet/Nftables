@@ -110,7 +110,7 @@ contexts:
     - match: (?:(\\)(.*)$)
       captures:
         1: punctuation.separator.continuation.nftables
-        2: invalid.illegal.trailing-spaces.nftables
+        2: invalid.illegal.trailing-character.nftables
 
   values:
     - include: safe-values
