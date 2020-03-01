@@ -2,7 +2,7 @@
 
 > A Sublime Text 3 syntax definition for your nftables rules
 
-![Preview](https://i.imgur.com/14wp8YU.png)
+![Preview](https://i.imgur.com/maXvyiJ.png)
 
 ## Introduction
 
