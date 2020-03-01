@@ -69,3 +69,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 ### Would this plugin help me building a secure fire-wall ?
 
 > No, but I would advise you [this blog post](https://stosb.com/blog/explaining-my-configs-nftables/) as a well-explained starting point, written by [@tasn](https://github.com/tasn).
+
+### I've noticed you got an extensive tests suite, can I run it ?
+
+> Of course, open the `Nftables.sublime-syntax` file, press `CTRL + Shift + B` and choose `Build With: Syntax Tests`.

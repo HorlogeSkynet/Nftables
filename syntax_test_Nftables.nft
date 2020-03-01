@@ -1,0 +1,343 @@
+# SYNTAX TEST "Nftables.sublime-syntax"
+
+#!/usr/sbin/nft -f
+# <- source.nftables punctuation.definition.comment.nftables
+ # <- comment.line.nftables
+
+include "ipv4-nat.ruleset"
+# <- keyword.control.import.nftables
+#       ^ string.quoted.double.nftables meta.string.nftables punctuation.definition.string.begin.nftables
+#        ^^^^^^^^^^^^^^^^^ string.quoted.double.nftables meta.string.nftables
+#                        ^ punctuation.definition.string.end.nftables
+
+include "some esc\aped character and # false comments"
+#                ^^ constant.character.escape.nftables
+#                                    ^^^^^^^^^^^^^^^^^ meta.string.nftables - comment.line.nftables
+
+include "a more complex string
+	with multiple \
+	lines"        # <- punctuation.separator.continuation.nftables
+# <- meta.string.nftables
+
+define google_dns = 8.8.8.8
+# <- keyword.control.define.nftables
+#      ^^^^^^^^^^ variable.other.constant.nftables
+#                 ^ keyword.operator.assignment.nftables
+#                   ^^^^^^^ constant.numeric.ipv4-address.nftables
+
+define ntp_servers = { 84.77.40.132, 176.31.53.99, 81.19.96.148 }
+#                    ^ punctuation.section.braces.begin.anonymous-set.nftables
+#                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+#                                  ^ punctuation.separator.comma.nftables
+#                                                               ^ punctuation.section.braces.end.anonymous-set.nftables
+
+redefine google_dns = 8.8.4.4 \     
+# <- keyword.control.define.nftables
+#                              ^^^^^ invalid.illegal.trailing-character.nftables
+
+define localhost_v6 = ::1/64#IPv6
+#                     ^^^ constant.numeric.ipv6-address.nftables
+#                         ^^ constant.numeric.integer.signed.nftables
+#                           ^ punctuation.definition.comment.nftables
+#                           ^^^^^ comment.line.nftables
+define localhost_v4 = 127.0.0.1/24
+#                     ^^^^^^^^^ constant.numeric.ipv4-address.nftables
+#                               ^^ constant.numeric.integer.signed.nftables
+define local_nets = { $localhost_v4, $localhost_v6 }
+#                     ^ punctuation.definition.variable.nftables
+#                      ^ variable.other.constant.nftables
+#                                  ^ punctuation.separator.comma.nftables
+#                                    ^ punctuation.definition.variable.nftables
+#                                     ^ variable.other.constant.nftables
+
+;;;   ;   ;;;
+# <- punctuation.terminator.semi-colon.nftables
+#  ^^^ - punctuation.terminator.nftables
+#         ^^^ punctuation.terminator.semi-colon.nftables
+
+list ruleset arp ; flush ruleset
+# <- keyword.other.command.nftables
+#    ^ keyword.other.ruleset.nftables
+#            ^ constant.language.family-type.nftables
+#                ^ punctuation.terminator.semi-colon.nftables
+#                  ^ keyword.other.command.nftables
+#                        ^ keyword.other.ruleset.nftables
+
+add table ip6 filter
+# <- keyword.other.command.nftables
+#   ^ storage.type.table.nftables
+#         ^ constant.language.family-type.nftables
+#             ^ entity.name.table.nftables
+
+add chain filter input { type filter hook input priority 0; }
+# <- keyword.other.command.nftables
+#   ^ storage.type.chain.nftables
+#         ^ variable.other.readwrite.table.nftables
+#                ^ entity.name.chain.nftables
+#                      ^ punctuation.section.block.begin.chain.nftables
+#                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.block.chain.nftables
+#                        ^ storage.type.chain-type.nftables
+#                             ^ constant.language.chain-type.nftables
+#                                    ^ storage.type.chain-hook.nftables
+#                                         ^ constant.language.hook.nftables
+#                                               ^ storage.type.chain-priority.nftables
+#                                                        ^ constant.numeric.integer.signed.nftables
+#                                                         ^ punctuation.terminator.semi-colon.nftables
+#                                                           ^ punctuation.section.block.end.chain.nftables
+
+add rule filter input ip saddr $google_dns counter
+# <- keyword.other.command.nftables
+#   ^ storage.type.rule.nftables
+#        ^ variable.other.readwrite.table.nftables
+#               ^ variable.other.readwrite.chain.nftables
+#                     ^^^^^^^^ source.nftables
+#                              ^ punctuation.definition.variable.nftables
+#                               ^ variable.other.constant.nftables
+#                                          ^ keyword.control.rule-statement.nftables
+
+add rule filter input ct helper set udp dport map { \
+#                        ^ storage.type.helper.nftables keyword.declaration.helper.nftables
+#                               ^ keyword.control.rule-statement.nftables
+#                                             ^ storage.type.map.nftables
+#                                                 ^ punctuation.section.braces.begin.anonymous-set.nftables
+#                                                   ^ punctuation.separator.continuation.nftables
+	69 : "tftp-69", \
+	# <- constant.numeric.integer.signed.nftables
+	#  ^ punctuation.separator.colon.nftables
+	#    ^^^^^^^^^ string.quoted.double.nftables meta.string.nftables
+	#             ^ punctuation.separator.comma.nftables
+    5060 : "sip-5060" \
+}
+# <- punctuation.section.braces.end.anonymous-set.nftables
+
+add filter input position 1 ip saddr $ntp_servers counter
+#   ^ variable.other.readwrite.table.nftables
+#          ^ variable.other.readwrite.chain.nftables
+#                ^ keyword.other.handle.nftables
+#                         ^ constant.numeric.integer.signed.nftables
+#                                    ^ punctuation.definition.variable.nftables
+#                                     ^ variable.other.constant.nftables
+#                                                 ^ keyword.control.rule-statement.nftables
+
+add rule ip filter input ip protocol vmap { tcp : jump tcp-chain, udp : jump udp-chain, icmp : jump icmp-chain }
+#        ^ constant.language.family-type.nftables
+#                                    ^ storage.type.map.nftables keyword.declaration.map.nftables
+#                                         ^ punctuation.section.braces.begin.anonymous-set.nftables
+#                                                 ^ keyword.control.rule-statement.verdict.nftables
+#                                                      ^^^^^^^^^ variable.other.readwrite.chain.nftables
+
+add map filter ports { type inet_service : accept ; }
+#   ^ storage.type.set.nftables keyword.declaration.set.nftables
+#       ^ variable.other.readwrite.table.nftables
+#              ^ entity.name.set.nftables
+#                    ^ punctuation.section.braces.begin.named-set.nftables
+#                      ^ storage.type.set-type.nftables
+#                           ^ constant.language.data-type.nftables
+#                                          ^ keyword.control.rule-statement.verdict.nftables
+
+add rule filter output quota name tcp dport map @ports
+#                      ^ storage.type.quota.nftables keyword.declaration.quota.nftables
+#                                           ^ storage.type.map.nftables keyword.declaration.map.nftables
+#                                               ^ punctuation.definition.variable.nftables
+#                                                ^ variable.other.readwrite.set.nftables
+
+add rule netdev filter output ether saddr set aa:BB:cc:dd:ff:ee fwd to eth0
+#                                         ^^^ keyword.control.rule-statement.nftables
+#                                             ^^^^^^^^^^^^^^^^^ constant.numeric.mac-address.nftables
+#                                                               ^^^ keyword.control.rule-statement.nftables
+
+add map filter whitelist { type ipv4_addr . inet_service : verdict ; }
+#                                         ^ keyword.operator.concatenation.nftables
+#                                           ^ constant.language.data-type.nftables
+#                                                          ^ constant.language.verdict.nftables
+
+add element filter whitelist { 1.2.3.4 . 22 : accept}
+#   ^ storage.type.element.nftables keyword.declaration.element.nftables
+#           ^ variable.other.readwrite.table.nftables
+#                  ^ variable.other.readwrite.set.nftables
+#                            ^ punctuation.section.braces.begin.anonymous-set.nftables
+#                              ^^^^^^^ constant.numeric.ipv4-address.nftables
+#                                      ^ keyword.operator.concatenation.nftables
+#                                        ^^ constant.numeric.integer.signed.nftables
+#                                             ^ keyword.control.rule-statement.verdict.nftables
+
+table ip nat {
+# <- storage.type.table.nftables keyword.declaration.table.nftables
+#     ^ constant.language.family-type.nftables
+#        ^ entity.name.table.nftables
+#            ^ punctuation.section.block.begin.table.nftables
+
+	chain prerouting {
+	# <- storage.type.chain.nftables keyword.declaration.chain.nftables
+	#     ^ entity.name.chain.nftables
+	#                ^ punctuation.section.block.begin.chain.nftables
+
+		# <- meta.block.table.nftables meta.block.chain.nftables
+
+		type nat hook prerouting priority 0; policy accept;
+		#                                    ^ storage.type.chain-policy.nftables
+		#                                           ^ constant.language.chain-policy.nftables
+		#                                                 ^ punctuation.terminator.semi-colon.nftables
+
+		# <- meta.block.table.nftables meta.block.chain.nftables
+
+		dnat tcp dport map { 1000 : ::1, 2000 : 2.2.2.2 } : tcp dport map { 1000 : 1234, 2000 : 2345 } ;
+		#              ^ storage.type.map.nftables
+		#                  ^ punctuation.section.braces.begin.anonymous-set.nftables
+		#                    ^^^^ constant.numeric.integer.signed.nftables
+		#                         ^ punctuation.separator.colon.nftables
+		#                           ^^^ constant.numeric.ipv6-address.nftables
+		#                              ^ punctuation.separator.comma.nftables
+		#                                                 ^ punctuation.separator.colon.nftables
+
+		# <- meta.block.table.nftables meta.block.chain.nftables
+	}
+	# <- punctuation.section.block.end.chain.nftables
+
+	# <- meta.block.table.nftables - meta.block.chain.nftables
+}
+# <- punctuation.section.block.end.table.nftables
+
+# <- - meta.block.table.nftables
+
+table ip filter {
+	chain input {
+	#     ^^^^^ entity.name.chain.nftables
+
+		ct status dnat accept
+		#         ^^^^ - keyword.control.rule-statement.nftables
+		#              ^ keyword.control.rule-statement.verdict.nftables
+
+		ip6 nexthdr icmpv6 icmpv6 type { nd-neighbor-solicit, nd-router-advert } accept
+		#                         ^^^^ - storage.type.nftables
+		#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+
+		counter
+		# <- keyword.control.rule-statement.nftables
+	}
+}
+
+table a-strang3_Name {
+#     ^^^^^^^^^^^^^^ entity.name.table.nftables
+
+	undefine google_dns
+	# <- keyword.control.undefine.nftables
+	#        ^ variable.other.constant.nftables
+
+	ct helper sip-5060 {
+	# <- - storage.type.nftables
+	#  ^ storage.type.helper.nftables keyword.declaration.helper.nftables
+	#         ^^^^^^^^ entity.name.helper.nftables
+	#                  ^ punctuation.section.braces.begin.helper.nftables
+
+		type "sip" protocol udp;
+		# <- storage.type.helper-type.nftables
+		#    ^^^^^ meta.string.nftables
+		#          ^ storage.type.helper-protocol.nftables
+		#                   ^ constant.language.l4-proto.nftables
+
+		# <- meta.object.helper.nftables
+
+		l3proto inet;
+		# <- storage.type.helper-l3proto.nftables
+		#       ^ constant.language.family-type.nftables
+
+		# <- meta.object.helper.nftables
+	}
+	# <- punctuation.section.braces.end.helper.nftables
+
+	set filter {
+	# <- storage.type.set.nftables keyword.declaration.set.nftables
+	#   ^ entity.name.set.nftables
+
+		# <- meta.object.named-set.nftables
+
+		type inet_service; flags constant, interval;
+		# <- storage.type.set-type.nftables
+		#    ^ constant.language.data-type.nftables
+		#                ^ punctuation.terminator.semi-colon.nftables
+		#                  ^ storage.type.set-flags.nftables
+		#                        ^ constant.language.set-flag.nftables
+		#                                ^ punctuation.separator.comma.nftables
+		#                                  ^ constant.language.set-flag.nftables
+		#                                          ^ punctuation.terminator.semi-colon.nftables
+		timeout 3d45m1s;
+		# <- storage.type.set-timeout.nftables
+		#       ^^^^^^^ string.unquoted.time-string.nftables
+		gc-interval 60s;
+		# <- storage.type.set-gcinterval.nftables
+		#           ^^^ string.unquoted.time-string.nftables
+		elements = { domain, ntp timeout 30s }
+		# <- storage.type.set-elements.nftables
+		#        ^ keyword.operator.assignment.nftables
+		#          ^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+		#            ^ string.unquoted.nftables
+		#                    ^ string.unquoted.nftables
+		#                        ^ storage.type.set-element-timeout.nftables
+		#                                ^ string.unquoted.time-string.nftables
+
+		# <- meta.object.named-set.nftables
+	}
+	# <- punctuation.section.braces.end.named-set.nftables
+
+    flowtable f {
+    # <- storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+    #         ^ entity.name.flowtable.nftables
+        hook ingress priority 0 devices = { eth0, eth1 };
+        # <- storage.type.flowtable-hook.nftables
+        #    ^ constant.language.hook.nftables
+        #            ^ storage.type.flowtable-priority.nftables
+        #                     ^ constant.numeric.integer.signed.nftables
+        #                       ^ storage.type.flowtable-devices.nftables
+        #                               ^ keyword.operator.assignment.nftables
+        #                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+    }
+}
+
+chain a-strang3_Name c {
+# <- storage.type.chain.nftables keyword.declaration.chain.nftables
+#     ^^^^^^^^^^^^^^ variable.other.readwrite.table.nftables
+#                    ^ entity.name.chain.nftables
+#                      ^ punctuation.section.block.begin.chain.nftables
+
+	ct state established,related counter accept
+	#                   ^ punctuation.separator.comma.nftables
+	#                            ^ keyword.control.rule-statement.nftables
+	#                                    ^ keyword.control.rule-statement.verdict.nftables
+
+	tcp flags & (fin|syn|rst|psh|ack|urg) == 0x0 counter drop
+	#         ^ keyword.operator.bitwise.nftables
+	#               ^ keyword.operator.bitwise.nftables
+	#                                     ^^ keyword.operator.arithmetic.nftables
+	#                                        ^^^ constant.numeric.integer.hexadecimal.nftables
+}
+
+quota filter example over 100 mbytes used 0 bytes ;
+# <- storage.type.quota.nftables keyword.declaration.quota.nftables
+#     ^ variable.other.readwrite.table.nftables
+#            ^ entity.name.quota.nftables
+#                    ^ constant.language.quota-mode.nftables
+#                         ^^^ constant.numeric.integer.nftables
+#                                    ^ constant.language.quota-used.nftables
+#                                         ^ constant.numeric.integer.nftables
+#                                                 ^ punctuation.terminator.semi-colon.nftables
+
+table ip filter {
+	chain prerouting {
+		type nat hook prerouting priority nat - -100;
+		#                                 ^ constant.language.chain-type.nftables
+		#                                     ^ keyword.operator.arithmetic.nftables
+		#                                       ^ keyword.operator.arithmetic.nftables
+		#                                       ^^^^ constant.numeric.integer.signed.nftables
+
+		mark numgen inc mod 4 offset 3 jump prerouting
+		#    ^ keyword.operator.arithmetic.nftables
+		#                              ^ keyword.control.rule-statement.verdict.nftables
+		#                                   ^ variable.other.readwrite.chain.nftables
+
+		mark set jhash ip saddr . tcp dport . iiftype mod 2
+		#    ^ keyword.control.rule-statement.nftables
+		#        ^ keyword.operator.arithmetic.nftables
+		#                       ^ keyword.operator.concatenation.nftables
+	}
+}
