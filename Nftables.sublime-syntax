@@ -182,7 +182,7 @@ contexts:
         1: keyword.operator.arithmetic.nftables
 
   integer:
-    # This context is not included `numerics` because `signed-integer` supersedes it.
+    # This context is not included in `numerics` because `signed-integer` supersedes it.
     - match: \b({{integer}})\b
       scope: constant.numeric.integer.nftables
 
