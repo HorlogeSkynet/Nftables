@@ -453,6 +453,12 @@ contexts:
                         - match: ({{chain_hooks}})
                           scope: constant.language.hook.nftables
                           set:
+                            - match: \b(device)\b
+                              scope: storage.type.chain-device.nftables
+                              push:
+                                - include: unquoted-string
+                                - include: force-pop
+
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
                               set:
