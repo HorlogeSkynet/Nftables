@@ -630,7 +630,7 @@ contexts:
       push:
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.chain.nftables
-          set: force-pop
+          pop: true
 
   rule-definitions:
     # Allows many various tokens in rules (additionally to `prototype`).
