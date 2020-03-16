@@ -341,3 +341,14 @@ table ip filter {
 		#                       ^ keyword.operator.concatenation.nftables
 	}
 }
+
+table netdev ingress {
+	chain ingress {
+		type filter hook ingress device enp0s20f0 priority 0;
+		#                ^ constant.language.hook.nftables
+		#                        ^ storage.type.chain-device.nftables
+		#                               ^ string.unquoted.nftables
+		#                                         ^ storage.type.chain-priority.nftables
+		#                                                  ^ constant.numeric.integer.signed.nftables
+	}
+}
