@@ -122,7 +122,7 @@ contexts:
     - include: anonymous-set
 
   quoted-string:
-    # Apparently nftables supports double-quoted strings only.
+    # Apparently nftables only supports double-quoted strings.
     # `prototype` won't be propagated, but `line-continuation` has to be consumed.
     - match: (")
       scope: punctuation.definition.string.begin.nftables
@@ -442,7 +442,7 @@ contexts:
             - meta_scope: meta.block.chain.nftables
 
             # Chain settings.
-            - include: consume-rule-matches-type
+            - include: _consume-rule-matches-type
             - match: \b(type)\b
               scope: storage.type.chain-type.nftables
               push:
@@ -654,7 +654,7 @@ contexts:
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: verdict-statements
-    - include: consume-status-nat
+    - include: _consume-status-nat
     - match: |-
         (?x)
         \b(
@@ -690,7 +690,7 @@ contexts:
   #
   # In order to make this syntax definition working against this engine, we have to get rid of look-behinds.
   # As a workaround, we define here contexts that consume tokens we shouldn't be matching elsewhere.
-  consume-rule-matches-type:
+  _consume-rule-matches-type:
     - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\b\s+\b(type)\b)
-  consume-status-nat:
+  _consume-status-nat:
     - match: (?:\b(status)\b\s+\b((?:s|d)nat)\b)
