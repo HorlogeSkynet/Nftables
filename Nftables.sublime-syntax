@@ -17,6 +17,7 @@ variables:
   integer: (?:[[:digit:]]+)
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
+  time_string: (?:(?:\d+[wdhms])+)
   identifier: (?:[[:alpha:]][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
 
@@ -64,10 +65,6 @@ contexts:
     - include: variables
     - include: line-continuation
 
-  force-pop:
-    - match: ''
-      pop: true
-
   comments:
     - match: (#)
       scope: punctuation.definition.comment.nftables
@@ -114,21 +111,18 @@ contexts:
 
   values:
     - include: safe-values
+    - include: time-string
     - include: unquoted-string
 
   safe-values:
-    - include: strings
+    - include: quoted-string
     - include: network-addresses
     - include: numerics
     - include: variables
     - include: anonymous-set
 
-  strings:
-    - include: quoted-string
-    - include: time-string
-
   quoted-string:
-    # Apparently nftables supports double-quoted strings only.
+    # Apparently nftables only supports double-quoted strings.
     # `prototype` won't be propagated, but `line-continuation` has to be consumed.
     - match: (")
       scope: punctuation.definition.string.begin.nftables
@@ -143,13 +137,21 @@ contexts:
           scope: punctuation.definition.string.end.nftables
           pop: true
 
+  time-string:
+    - match: \b({{time_string}})\b
+      scope: string.unquoted.time-string.nftables
+  _expect-time-string:
+    - match: \b({{time_string}})\b
+      scope: string.unquoted.time-string.nftables
+      pop: true
+
   unquoted-string:
     - match: \b({{identifier_extended}})\b
       scope: string.unquoted.nftables
-
-  time-string:
-    - match: \b((?:\d+[wdhms])+)\b
-      scope: string.unquoted.time-string.nftables
+  _expect-unquoted-string:
+    - match: \b({{identifier_extended}})\b
+      scope: string.unquoted.nftables
+      pop: true
 
   network-addresses:
     - match: ({{mac_address}})
@@ -185,6 +187,10 @@ contexts:
     # This context is not included in `numerics` because `signed-integer` supersedes it.
     - match: \b({{integer}})\b
       scope: constant.numeric.integer.nftables
+  _expect-integer:
+    - match: \b({{integer}})\b
+      scope: constant.numeric.integer.nftables
+      pop: true
 
   anonymous-set:
     - match: ({)
@@ -196,9 +202,7 @@ contexts:
         # Elements in the set may have a `timeout` (death-date).
         - match: \b(timeout)\b
           scope: storage.type.set-element-timeout.nftables
-          push:
-            - include: time-string
-            - include: force-pop
+          push: _expect-time-string
 
         - include: verdict-statements
         - include: values
@@ -336,9 +340,7 @@ contexts:
           set:
             - match: \b(handle|position)\b
               scope: keyword.other.handle.nftables
-              push:
-                - include: integer
-                - include: force-pop
+              push: _expect-integer
 
             - include: rule-definitions
             - include: statement-separators
@@ -440,7 +442,7 @@ contexts:
             - meta_scope: meta.block.chain.nftables
 
             # Chain settings.
-            - include: consume-rule-matches-type
+            - include: _consume-rule-matches-type
             - match: \b(type)\b
               scope: storage.type.chain-type.nftables
               push:
@@ -453,6 +455,10 @@ contexts:
                         - match: ({{chain_hooks}})
                           scope: constant.language.hook.nftables
                           set:
+                            - match: \b(device)\b
+                              scope: storage.type.chain-device.nftables
+                              push: _expect-unquoted-string
+
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
                               set:
@@ -575,16 +581,14 @@ contexts:
       scope: entity.name.quota.nftables
       set:
         - include: integer
+
         - match: \b(over|until)\b
           scope: constant.language.quota-mode.nftables
-          push:
-            - include: integer
-            - include: force-pop
+          push: _expect-integer
         - match: \b(used)\b
           scope: constant.language.quota-used.nftables
-          push:
-            - include: integer
-            - include: force-pop
+          push: _expect-integer
+
         - include: statement-separators
 
   helper-specs:
@@ -650,7 +654,7 @@ contexts:
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: verdict-statements
-    - include: consume-status-nat
+    - include: _consume-status-nat
     - match: |-
         (?x)
         \b(
@@ -686,7 +690,7 @@ contexts:
   #
   # In order to make this syntax definition working against this engine, we have to get rid of look-behinds.
   # As a workaround, we define here contexts that consume tokens we shouldn't be matching elsewhere.
-  consume-rule-matches-type:
+  _consume-rule-matches-type:
     - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\b\s+\b(type)\b)
-  consume-status-nat:
+  _consume-status-nat:
     - match: (?:\b(status)\b\s+\b((?:s|d)nat)\b)
