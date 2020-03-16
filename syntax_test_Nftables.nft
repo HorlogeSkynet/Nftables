@@ -36,13 +36,11 @@ redefine google_dns = 8.8.4.4 \
 #                              ^^^^^ invalid.illegal.trailing-character.nftables
 
 define localhost_v6 = ::1/64#IPv6
-#                     ^^^ constant.numeric.ipv6-address.nftables
-#                         ^^ constant.numeric.integer.signed.nftables
+#                     ^^^^^^ constant.numeric.ipv6-subnet.nftables
 #                           ^ punctuation.definition.comment.nftables
 #                           ^^^^^ comment.line.nftables
 define localhost_v4 = 127.0.0.1/24
-#                     ^^^^^^^^^ constant.numeric.ipv4-address.nftables
-#                               ^^ constant.numeric.integer.signed.nftables
+#                     ^^^^^^^^^^^^ constant.numeric.ipv4-subnet.nftables
 define local_nets = { $localhost_v4, $localhost_v6 }
 #                     ^ punctuation.definition.variable.nftables
 #                      ^ variable.other.constant.nftables
