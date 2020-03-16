@@ -99,7 +99,7 @@ contexts:
     - match: (;)
       scope: punctuation.terminator.semi-colon.nftables
       pop: true
-    - match: ($)
+    - match: ($\n)
       pop: true
 
   comma:
@@ -115,7 +115,7 @@ contexts:
       scope: punctuation.terminator.semi-colon.nftables
 
   line-continuation:
-    - match: (?:(\\)(.*)$)
+    - match: (?:(\\)(.*)$\n)
       captures:
         1: punctuation.separator.continuation.nftables
         2: invalid.illegal.trailing-character.nftables

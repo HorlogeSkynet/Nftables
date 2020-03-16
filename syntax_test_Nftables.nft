@@ -159,6 +159,16 @@ add element filter whitelist { 1.2.3.4 . 22 : accept}
 #                                        ^^ constant.numeric.integer.signed.nftables
 #                                             ^ keyword.control.rule-statement.verdict.nftables
 
+add map filter mystats { \
+	type ipv4_addr : counter ; }
+	# <- storage.type.set-type.nftables
+	#                ^ constant.language.data-type.nftables
+
+add rule filter input counter name \
+	ip saddr map @mystats
+	#        ^ keyword.declaration.map.nftables
+	#             ^ variable.other.readwrite.set.nftables
+
 table ip nat {
 # <- storage.type.table.nftables keyword.declaration.table.nftables
 #     ^ constant.language.family-type.nftables
