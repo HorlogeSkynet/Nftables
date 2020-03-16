@@ -114,18 +114,15 @@ contexts:
 
   values:
     - include: safe-values
+    - include: time-string
     - include: unquoted-string
 
   safe-values:
-    - include: strings
+    - include: quoted-string
     - include: network-addresses
     - include: numerics
     - include: variables
     - include: anonymous-set
-
-  strings:
-    - include: quoted-string
-    - include: time-string
 
   quoted-string:
     # Apparently nftables supports double-quoted strings only.
@@ -143,13 +140,13 @@ contexts:
           scope: punctuation.definition.string.end.nftables
           pop: true
 
-  unquoted-string:
-    - match: \b({{identifier_extended}})\b
-      scope: string.unquoted.nftables
-
   time-string:
     - match: \b((?:\d+[wdhms])+)\b
       scope: string.unquoted.time-string.nftables
+
+  unquoted-string:
+    - match: \b({{identifier_extended}})\b
+      scope: string.unquoted.nftables
 
   network-addresses:
     - match: ({{mac_address}})
