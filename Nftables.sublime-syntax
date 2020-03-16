@@ -544,7 +544,7 @@ contexts:
             - match: \b(type)\b
               scope: storage.type.set-type.nftables
               push:
-                - match: \b((?:ipv[46]|ether)_addr|inet_(?:proto|service)|mark|ifname)\b
+                - match: \b((?:ipv[46]|ether)_addr|inet_(?:proto|service)|counter|ifname|mark)\b
                   scope: constant.language.data-type.nftables
                 - include: dot-operator
                 - include: colon
