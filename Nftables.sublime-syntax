@@ -18,8 +18,8 @@ variables:
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
   time_string: (?:(?:\d+[wdhms])+)
-  identifier: (?:[[:alpha:]][[:alnum:]_]*)
-  identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
+  identifier: (?:[[:alpha:]_][[:alnum:]_]*)
+  identifier_extended: (?:[[:alpha:]_][[:alnum:]_\-\.]*)
 
   chain_types: (?:\b(filter|route|nat)\b)
   chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
