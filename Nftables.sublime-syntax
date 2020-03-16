@@ -17,6 +17,7 @@ variables:
   integer: (?:[[:digit:]]+)
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
+  time_string: (?:(?:\d+[wdhms])+)
   identifier: (?:[[:alpha:]][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]][[:alnum:]_\-]*)
 
@@ -63,10 +64,6 @@ contexts:
     - include: comments
     - include: variables
     - include: line-continuation
-
-  force-pop:
-    - match: ''
-      pop: true
 
   comments:
     - match: (#)
@@ -141,12 +138,20 @@ contexts:
           pop: true
 
   time-string:
-    - match: \b((?:\d+[wdhms])+)\b
+    - match: \b({{time_string}})\b
       scope: string.unquoted.time-string.nftables
+  _expect-time-string:
+    - match: \b({{time_string}})\b
+      scope: string.unquoted.time-string.nftables
+      pop: true
 
   unquoted-string:
     - match: \b({{identifier_extended}})\b
       scope: string.unquoted.nftables
+  _expect-unquoted-string:
+    - match: \b({{identifier_extended}})\b
+      scope: string.unquoted.nftables
+      pop: true
 
   network-addresses:
     - match: ({{mac_address}})
@@ -182,6 +187,10 @@ contexts:
     # This context is not included in `numerics` because `signed-integer` supersedes it.
     - match: \b({{integer}})\b
       scope: constant.numeric.integer.nftables
+  _expect-integer:
+    - match: \b({{integer}})\b
+      scope: constant.numeric.integer.nftables
+      pop: true
 
   anonymous-set:
     - match: ({)
@@ -193,9 +202,7 @@ contexts:
         # Elements in the set may have a `timeout` (death-date).
         - match: \b(timeout)\b
           scope: storage.type.set-element-timeout.nftables
-          push:
-            - include: time-string
-            - include: force-pop
+          push: _expect-time-string
 
         - include: verdict-statements
         - include: values
@@ -333,9 +340,7 @@ contexts:
           set:
             - match: \b(handle|position)\b
               scope: keyword.other.handle.nftables
-              push:
-                - include: integer
-                - include: force-pop
+              push: _expect-integer
 
             - include: rule-definitions
             - include: statement-separators
@@ -452,9 +457,7 @@ contexts:
                           set:
                             - match: \b(device)\b
                               scope: storage.type.chain-device.nftables
-                              push:
-                                - include: unquoted-string
-                                - include: force-pop
+                              push: _expect-unquoted-string
 
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
@@ -578,16 +581,14 @@ contexts:
       scope: entity.name.quota.nftables
       set:
         - include: integer
+
         - match: \b(over|until)\b
           scope: constant.language.quota-mode.nftables
-          push:
-            - include: integer
-            - include: force-pop
+          push: _expect-integer
         - match: \b(used)\b
           scope: constant.language.quota-used.nftables
-          push:
-            - include: integer
-            - include: force-pop
+          push: _expect-integer
+
         - include: statement-separators
 
   helper-specs:

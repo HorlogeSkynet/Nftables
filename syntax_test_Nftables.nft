@@ -114,7 +114,7 @@ add filter input position 1 ip saddr $ntp_servers counter
 #   ^ variable.other.readwrite.table.nftables
 #          ^ variable.other.readwrite.chain.nftables
 #                ^ keyword.other.handle.nftables
-#                         ^ constant.numeric.integer.signed.nftables
+#                         ^ constant.numeric.integer.nftables
 #                                    ^ punctuation.definition.variable.nftables
 #                                     ^ variable.other.constant.nftables
 #                                                 ^ keyword.control.rule-statement.nftables
