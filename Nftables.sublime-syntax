@@ -52,6 +52,17 @@ variables:
     (?:[0-9a-fA-F]{1,4}:){1,4}:
     (?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
     (?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+  # From <http://blog.markhatton.co.uk/2011/03/15/regular-expressions-for-ip-addresses/>.
+  ipv4_subnet: |-
+    (?x)
+    (?:{{ipv4_address}})
+    (?:\/)
+    (?:3[0-2]|[1-2][0-9]|[0-9])
+  ipv6_subnet: |-
+    (?x)
+    (?:{{ipv6_address}})
+    (?:\/)
+    (?:12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9])
 
 
 contexts:
@@ -156,8 +167,12 @@ contexts:
   network-addresses:
     - match: ({{mac_address}})
       scope: constant.numeric.mac-address.nftables
+    - match: ({{ipv4_subnet}})
+      scope: constant.numeric.ipv4-subnet.nftables
     - match: ({{ipv4_address}})
       scope: constant.numeric.ipv4-address.nftables
+    - match: ({{ipv6_subnet}})
+      scope: constant.numeric.ipv6-subnet.nftables
     - match: ({{ipv6_address}})
       scope: constant.numeric.ipv6-address.nftables
 
