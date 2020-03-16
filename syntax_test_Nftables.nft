@@ -264,13 +264,14 @@ table a-strang3_Name {
 		timeout 3d45m1s;
 		# <- storage.type.set-timeout.nftables
 		#       ^^^^^^^ string.unquoted.time-string.nftables
+		#              ^ punctuation.terminator.semi-colon.nftables
 		gc-interval 60s;
 		# <- storage.type.set-gcinterval.nftables
 		#           ^^^ string.unquoted.time-string.nftables
 		elements = { domain, ntp timeout 30s }
 		# <- storage.type.set-elements.nftables
 		#        ^ keyword.operator.assignment.nftables
-		#          ^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+		#          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
 		#            ^ string.unquoted.nftables
 		#                    ^ string.unquoted.nftables
 		#                        ^ storage.type.set-element-timeout.nftables
