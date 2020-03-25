@@ -220,6 +220,14 @@ table ip filter {
 		#                         ^^^^ - storage.type.nftables
 		#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
 
+		fib daddr . iif type local accept
+		#         ^ keyword.operator.concatenation.nftables
+		#               ^^^^ - storage.type.nftables
+		#                          ^ keyword.control.rule-statement.verdict.nftables
+		ip daddr != 127.0.0.0/8 fib daddr type local counter
+		#                                 ^^^^ - storage.type.nftables
+		#                                            ^ keyword.control.rule-statement.nftables
+
 		counter
 		# <- keyword.control.rule-statement.nftables
 	}

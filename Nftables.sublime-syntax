@@ -706,6 +706,20 @@ contexts:
   # In order to make this syntax definition working against this engine, we have to get rid of look-behinds.
   # As a workaround, we define here contexts that consume tokens we shouldn't be matching elsewhere.
   _consume-rule-matches-type:
-    - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\b\s+\b(type)\b)
+    # Consume some rule matches using the `type` keyword".
+    - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\b\s+\btype\b)
+
+    # Consumes `fib ${key} ${data}` (as `data` **MIGHT** be `type`).
+    # See <https://wiki.nftables.org/wiki-nftables/index.php/Routing_information#fib>.
+    - match: \bfib\b
+      push:
+        # `${key}` might be the dot operator (`.`), so we must match it as well.
+        - include: dot-operator
+        # We assume that `fib` must be followed by a (known) `${data}` expression.
+        # So the first encountered one will act as a cue to leave this context.
+        - match: \b(oif(?:name)?|type)\b
+          pop: true
+
   _consume-status-nat:
-    - match: (?:\b(status)\b\s+\b((?:s|d)nat)\b)
+    # Consume `ct status` rule matches using `(s|d)nat`.
+    - match: (?:\bct\b\s+\bstatus\b\s+\b(?:s|d)nat\b)
