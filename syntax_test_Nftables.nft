@@ -208,7 +208,7 @@ table ip nat {
 
 # <- - meta.block.table.nftables
 
-table ip filter {
+table inet filter {
 	chain input {
 	#     ^^^^^ entity.name.chain.nftables
 
