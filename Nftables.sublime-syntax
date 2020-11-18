@@ -281,7 +281,20 @@ contexts:
             - include: family-types
             - match: \b({{identifier_extended}})\b
               scope: entity.name.table.nftables
-              set: statement-separators
+              set:
+                - match: ({)
+                  scope: punctuation.section.block.begin.table.nftables
+                  set:
+                    - meta_scope: meta.block.table.nftables
+
+                    - include: table-flags
+                    - include: statement-separators
+
+                    - match: (})
+                      scope: punctuation.section.block.end.table.nftables
+                      pop: true
+
+                - include: statement-separators
 
         - match: \b(chain)\b
           scope: storage.type.chain.nftables keyword.declaration.chain.nftables
@@ -419,6 +432,8 @@ contexts:
               scope: punctuation.section.block.begin.table.nftables
               set:
                 - meta_scope: meta.block.table.nftables
+
+                - include: table-flags
 
                 - include: common-blocks
 
@@ -640,6 +655,15 @@ contexts:
   family-types:
     - match: ({{family_types}})
       scope: constant.language.family-type.nftables
+
+  table-flags:
+    - match: \b(flags)\b
+      scope: storage.type.table-flags.nftables
+      push:
+        - match: \b(dormant)\b
+          scope: constant.language.table-flag.nftables
+        - include: comma
+        - include: statement-separators
 
   verdict-statements:
     - match: \b(accept|drop|queue|continue|return)\b
