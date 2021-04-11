@@ -697,7 +697,7 @@ contexts:
     - match: |-
         (?x)
         \b(
-          log|reject|counter|limit|
+          log|reject|counter|limit|comment|
           (?:s|d)nat|masquerade|redirect|dup|fwd|
           set|flow|notrack
         )\b

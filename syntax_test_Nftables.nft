@@ -337,6 +337,10 @@ chain a-strang3_Name c {
 	#               ^ keyword.operator.bitwise.nftables
 	#                                     ^^ keyword.operator.arithmetic.nftables
 	#                                        ^^^ constant.numeric.integer.hexadecimal.nftables
+
+	tcp flags syn tcp option maxseg size 1-536 counter drop comment "TCP Maximum Segment Size"
+	#                                     ^ punctuation.separator.dash.nftables
+	#                                                       ^^^^^^^ keyword.control.rule-statement.nftables
 }
 
 quota filter example over 100 mbytes used 0 bytes ;
