@@ -270,8 +270,7 @@ contexts:
           reset|flush|
           rename|
           import|export|
-          monitor|describe|
-          remove
+          monitor|describe
         )\b
       scope: keyword.other.command.nftables
       push:
