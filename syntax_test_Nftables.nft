@@ -150,6 +150,33 @@ add rule netdev filter output ether saddr set aa:BB:cc:dd:ff:ee fwd to eth0
 #                                             ^^^^^^^^^^^^^^^^^ constant.numeric.mac-address.nftables
 #                                                               ^^^ keyword.control.rule-statement.nftables
 
+insert rule filter output position 8 ip daddr 127.0.0.8 drop
+# <- keyword.other.command.nftables
+#      ^ storage.type.rule.nftables
+#           ^ variable.other.readwrite.table.nftables
+#                  ^ variable.other.readwrite.chain.nftables
+#                         ^ keyword.other.handle.nftables
+#                                  ^ constant.numeric.integer.nftables
+#                                                       ^ keyword.control.rule-statement.verdict.nftables
+
+replace rule filter input handle 2 counter
+# <- keyword.other.command.nftables
+#       ^ storage.type.rule.nftables
+#            ^ variable.other.readwrite.table.nftables
+#                   ^ variable.other.readwrite.chain.nftables
+#                         ^ keyword.other.handle.nftables
+#                                ^ constant.numeric.integer.nftables
+#                                  ^ keyword.control.rule-statement.nftables
+
+## Not yet implemented, but who knows ?
+## See <https://wiki.nftables.org/wiki-nftables/index.php/Simple_rule_management#Removing_rules>
+delete rule filter output ip saddr 192.168.1.1 counter
+# <- keyword.other.command.nftables
+#      ^ storage.type.rule.nftables
+#           ^ variable.other.readwrite.table.nftables
+#                  ^ variable.other.readwrite.chain.nftables
+#                                              ^ keyword.control.rule-statement.nftables
+
 add map filter whitelist { type ipv4_addr . inet_service : verdict ; }
 #                                         ^ keyword.operator.concatenation.nftables
 #                                           ^ constant.language.data-type.nftables
