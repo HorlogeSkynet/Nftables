@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 
-# nftables syntax definition for Sublime Text 3 (>= 3092).
+# nftables syntax definition for Sublime Text 3+ (>= 3092).
 
 # `file_extensions` contains `nftables.conf` to match the default packaged file in Debian.
 # `first_line_match` should match (at least) this shebang `#!/usr/sbin/nft -f`.

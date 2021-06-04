@@ -1,6 +1,6 @@
 # Nftables
 
-> A Sublime Text 3 syntax definition for your nftables rules
+> A Sublime Text 3+ syntax definition for your nftables rules
 
 ![Preview](https://i.imgur.com/maXvyiJ.png)
 
