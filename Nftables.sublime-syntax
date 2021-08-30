@@ -24,6 +24,8 @@ variables:
   chain_types: (?:\b(filter|route|nat)\b)
   chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
+  # nftables >= 0.9.6, chains priorities can be set using keywords.
+  priorities: (?:\b(raw|mangle|(?:dst|src)nat|filter|security|out)\b)
 
   # From <https://stackoverflow.com/a/4260512>.
   mac_address: |-
@@ -491,8 +493,8 @@ contexts:
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
                               set:
-                                - match: ({{chain_types}})
-                                  scope: constant.language.chain-type.nftables
+                                - match: ({{priorities}})
+                                  scope: constant.language.chain-priority.nftables
                                 - include: signed-integer
                                 - include: plus-or-dash
                                 - include: statement-separators
@@ -532,8 +534,8 @@ contexts:
                     - match: \b(priority)\b
                       scope: storage.type.flowtable-priority.nftables
                       set:
-                        - match: ({{chain_types}})
-                          scope: constant.language.chain-type.nftables
+                        - match: ({{priorities}})
+                          scope: constant.language.chain-priority.nftables
                         - include: signed-integer
                         - include: plus-or-dash
 
