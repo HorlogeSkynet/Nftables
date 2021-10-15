@@ -110,7 +110,7 @@ add rule filter input ct helper set udp dport map { \
 	#  ^ punctuation.separator.colon.nftables
 	#    ^^^^^^^^^ string.quoted.double.nftables meta.string.nftables
 	#             ^ punctuation.separator.comma.nftables
-    5060 : "sip-5060" \
+	5060 : "sip-5060" \
 }
 # <- punctuation.section.braces.end.anonymous-set.nftables
 
@@ -235,7 +235,7 @@ table ip nat {
 	}
 	# <- punctuation.section.block.end.chain.nftables
 
-	# <- meta.block.table.nftables - meta.block.chain.nftables
+    # <- meta.block.table.nftables - meta.block.chain.nftables
 }
 # <- punctuation.section.block.end.table.nftables
 
@@ -334,18 +334,18 @@ table a-strang3_Name {
 	}
 	# <- punctuation.section.braces.end.named-set.nftables
 
-    flowtable f {
-    # <- storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
-    #         ^ entity.name.flowtable.nftables
-        hook ingress priority 0 devices = { eth0, eth1 };
-        # <- storage.type.flowtable-hook.nftables
-        #    ^ constant.language.hook.nftables
-        #            ^ storage.type.flowtable-priority.nftables
-        #                     ^ constant.numeric.integer.signed.nftables
-        #                       ^ storage.type.flowtable-devices.nftables
-        #                               ^ keyword.operator.assignment.nftables
-        #                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
-    }
+	flowtable f {
+	# <- storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
+	#         ^ entity.name.flowtable.nftables
+		hook ingress priority 0 devices = { eth0, eth1 };
+		# <- storage.type.flowtable-hook.nftables
+		#    ^ constant.language.hook.nftables
+		#            ^ storage.type.flowtable-priority.nftables
+		#                     ^ constant.numeric.integer.signed.nftables
+		#                       ^ storage.type.flowtable-devices.nftables
+		#                               ^ keyword.operator.assignment.nftables
+		#                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+	}
 }
 
 chain a-strang3_Name c {
