@@ -543,6 +543,9 @@ contexts:
                           scope: storage.type.flowtable-devices.nftables
                           set: assignment
 
+            - match: \b(counter)\b
+              scope: storage.type.flowtable-counter.nftables
+
             - include: semi-colon
             - match: (})
               scope: punctuation.section.block.end.flowtable.nftables
