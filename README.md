@@ -49,7 +49,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 ## [Formats](https://wiki.nftables.org/wiki-nftables/index.php/Scripting#File_formats) currently supported
 
 * [X] nftables output
-* [X] Scripted configuration
+* [X] scripted configuration
 
 ## Frequently Asked Questions
 
