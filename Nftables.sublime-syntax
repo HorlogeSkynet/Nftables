@@ -568,6 +568,13 @@ contexts:
                 - match: \b(verdict)\b
                   scope: constant.language.verdict.nftables
                 - include: statement-separators
+            - match: \b(typeof)\b
+              scope: storage.type.set-typeof.nftables
+              push:
+                - include: safe-values
+                - include: dot-operator
+                - include: colon
+                - include: statement-separators
             - match: \b(timeout)\b
               scope: storage.type.set-timeout.nftables
               push:
