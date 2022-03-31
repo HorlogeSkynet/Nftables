@@ -19,6 +19,7 @@ include "a more complex string
 	lines"        # <- punctuation.separator.continuation.nftables
 # <- meta.string.nftables
 
+define _ = 0xDEAD
 define google_dns = 8.8.8.8
 # <- keyword.control.define.nftables
 #      ^^^^^^^^^^ variable.other.constant.nftables
@@ -85,7 +86,7 @@ add chain filter input { type filter hook input priority 0; }
 #                                    ^ storage.type.chain-hook.nftables
 #                                         ^ constant.language.hook.nftables
 #                                               ^ storage.type.chain-priority.nftables
-#                                                        ^ constant.numeric.integer.signed.nftables
+#                                                        ^ constant.numeric.integer.decimal.nftables
 #                                                         ^ punctuation.terminator.semi-colon.nftables
 #                                                           ^ punctuation.section.block.end.chain.nftables
 
@@ -106,7 +107,7 @@ add rule filter input ct helper set udp dport map { \
 #                                                 ^ punctuation.section.braces.begin.anonymous-set.nftables
 #                                                   ^ punctuation.separator.continuation.nftables
 	69 : "tftp-69", \
-	# <- constant.numeric.integer.signed.nftables
+	# <- constant.numeric.integer.decimal.nftables
 	#  ^ punctuation.separator.colon.nftables
 	#    ^^^^^^^^^ string.quoted.double.nftables meta.string.nftables
 	#             ^ punctuation.separator.comma.nftables
@@ -118,7 +119,7 @@ add filter input position 1 ip saddr $ntp_servers counter
 #   ^ variable.other.readwrite.table.nftables
 #          ^ variable.other.readwrite.chain.nftables
 #                ^ keyword.other.handle.nftables
-#                         ^ constant.numeric.integer.nftables
+#                         ^ constant.numeric.integer.decimal.nftables
 #                                    ^ punctuation.definition.variable.nftables
 #                                     ^ variable.other.constant.nftables
 #                                                 ^ keyword.control.rule-statement.nftables
@@ -156,7 +157,7 @@ insert rule filter output position 8 ip daddr 127.0.0.8 drop
 #           ^ variable.other.readwrite.table.nftables
 #                  ^ variable.other.readwrite.chain.nftables
 #                         ^ keyword.other.handle.nftables
-#                                  ^ constant.numeric.integer.nftables
+#                                  ^ constant.numeric.integer.decimal.nftables
 #                                                       ^ keyword.control.rule-statement.verdict.nftables
 
 replace rule filter input handle 2 counter
@@ -165,7 +166,7 @@ replace rule filter input handle 2 counter
 #            ^ variable.other.readwrite.table.nftables
 #                   ^ variable.other.readwrite.chain.nftables
 #                         ^ keyword.other.handle.nftables
-#                                ^ constant.numeric.integer.nftables
+#                                ^ constant.numeric.integer.decimal.nftables
 #                                  ^ keyword.control.rule-statement.nftables
 
 ## Not yet implemented, but who knows ?
@@ -189,7 +190,7 @@ add element filter whitelist { 1.2.3.4 . 22 : accept}
 #                            ^ punctuation.section.braces.begin.anonymous-set.nftables
 #                              ^^^^^^^ constant.numeric.ipv4-address.nftables
 #                                      ^ keyword.operator.concatenation.nftables
-#                                        ^^ constant.numeric.integer.signed.nftables
+#                                        ^^ constant.numeric.integer.decimal.nftables
 #                                             ^ keyword.control.rule-statement.verdict.nftables
 
 add map filter mystats { \
@@ -225,7 +226,7 @@ table ip nat {
 		dnat tcp dport map { 1000 : ::1, 2000 : 2.2.2.2 } : tcp dport map { 1000 : 1234, 2000 : 2345 } ;
 		#              ^ storage.type.map.nftables
 		#                  ^ punctuation.section.braces.begin.anonymous-set.nftables
-		#                    ^^^^ constant.numeric.integer.signed.nftables
+		#                    ^^^^ constant.numeric.integer.decimal.nftables
 		#                         ^ punctuation.separator.colon.nftables
 		#                           ^^^ constant.numeric.ipv6-address.nftables
 		#                              ^ punctuation.separator.comma.nftables
@@ -363,7 +364,7 @@ table a-strang3_Name {
 		# <- storage.type.flowtable-hook.nftables
 		#    ^ constant.language.hook.nftables
 		#            ^ storage.type.flowtable-priority.nftables
-		#                     ^ constant.numeric.integer.signed.nftables
+		#                     ^ constant.numeric.integer.decimal.nftables
 		#                       ^ storage.type.flowtable-devices.nftables
 		#                               ^ keyword.operator.assignment.nftables
 		#                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
@@ -392,6 +393,11 @@ chain a-strang3_Name c {
 	tcp flags syn tcp option maxseg size 1-536 counter drop comment "TCP Maximum Segment Size"
 	#                                     ^ punctuation.separator.dash.nftables
 	#                                                       ^^^^^^^ keyword.control.rule-statement.nftables
+
+	ip daddr . tcp dport { 10.0.0.0/8 . 10-23, 192.168.1.1-192.168.3.8 . 80-443 } accept
+	#                                          ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
+	#                                                     ^ punctuation.separator.dash.nftables
+	#                                                      ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
 }
 
 quota filter example over 100 mbytes used 0 bytes ;
@@ -399,9 +405,9 @@ quota filter example over 100 mbytes used 0 bytes ;
 #     ^ variable.other.readwrite.table.nftables
 #            ^ entity.name.quota.nftables
 #                    ^ constant.language.quota-mode.nftables
-#                         ^^^ constant.numeric.integer.nftables
+#                         ^^^ constant.numeric.integer.decimal.nftables
 #                                    ^ constant.language.quota-used.nftables
-#                                         ^ constant.numeric.integer.nftables
+#                                         ^ constant.numeric.integer.decimal.nftables
 #                                                 ^ punctuation.terminator.semi-colon.nftables
 
 table ip filter {
@@ -410,7 +416,7 @@ table ip filter {
 		#                                 ^ constant.language.chain-priority.nftables
 		#                                        ^ keyword.operator.arithmetic.nftables
 		#                                          ^ keyword.operator.arithmetic.nftables
-		#                                          ^^^^ constant.numeric.integer.signed.nftables
+		#                                           ^^^ constant.numeric.integer.decimal.nftables
 
 		mark numgen inc mod 4 offset 3 jump prerouting
 		#    ^ keyword.operator.arithmetic.nftables
@@ -431,6 +437,6 @@ table netdev ingress {
 		#                        ^ storage.type.chain-device.nftables
 		#                               ^ string.unquoted.nftables
 		#                                         ^ storage.type.chain-priority.nftables
-		#                                                  ^ constant.numeric.integer.signed.nftables
+		#                                                  ^ constant.numeric.integer.decimal.nftables
 	}
 }

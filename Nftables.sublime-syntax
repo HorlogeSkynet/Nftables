@@ -14,7 +14,7 @@ hidden: false
 
 
 variables:
-  integer: (?:[[:digit:]]+)
+  decimal: (?:[[:digit:]]+)
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
   time_string: (?:(?:\d+[wdhms])+)
@@ -104,6 +104,10 @@ contexts:
     - match: ($\n)
       pop: true
 
+  bail-out:
+    - match: (?=\S|$\n)
+      pop: true
+
   comma:
     - match: (,)
       scope: punctuation.separator.comma.nftables
@@ -169,44 +173,67 @@ contexts:
   network-addresses:
     - match: ({{mac_address}})
       scope: constant.numeric.mac-address.nftables
+      push:
+        - match: (\-)
+          scope: punctuation.separator.dash.nftables
+          push:
+            - match: ({{mac_address}})
+              scope: constant.numeric.mac-address.nftables
+              pop: true
+        - include: bail-out
+
     - match: ({{ipv4_subnet}})
       scope: constant.numeric.ipv4-subnet.nftables
+
     - match: ({{ipv4_address}})
       scope: constant.numeric.ipv4-address.nftables
+      push:
+        - match: (\-)
+          scope: punctuation.separator.dash.nftables
+          push:
+            - match: ({{ipv4_address}})
+              scope: constant.numeric.ipv4-address.nftables
+              pop: true
+        - include: bail-out
+
     - match: ({{ipv6_subnet}})
       scope: constant.numeric.ipv6-subnet.nftables
+
     - match: ({{ipv6_address}})
       scope: constant.numeric.ipv6-address.nftables
+      push:
+        - match: (\-)
+          scope: punctuation.separator.dash.nftables
+          push:
+            - match: ({{ipv6_address}})
+              scope: constant.numeric.ipv6-address.nftables
+              pop: true
+        - include: bail-out
 
   numerics:
-    - include: integers-range
-    - include: signed-integer
-    - include: hexadecimal
-
-  integers-range:
-    - match: ({{integer}})(\-)({{integer}})
+    - match: (\-)?\b(?:({{decimal}})|({{hexadecimal}}))\b
       captures:
-        1: constant.numeric.integer.nftables
-        2: punctuation.separator.dash.nftables
-        3: constant.numeric.integer.nftables
-
-  hexadecimal:
-    - match: \b({{hexadecimal}})\b
-      scope: constant.numeric.integer.hexadecimal.nftables
-
-  signed-integer:
-    - match: (\-)?\b{{integer}}\b
-      captures:
-        0: constant.numeric.integer.signed.nftables
         1: keyword.operator.arithmetic.nftables
+        2: constant.numeric.integer.decimal.nftables
+        3: constant.numeric.integer.hexadecimal.nftables
+      push:
+        - match: (\-)
+          scope: punctuation.separator.dash.nftables
+          push:
+            - match: (\-)?\b(?:({{decimal}})|({{hexadecimal}}))\b
+              captures:
+                1: keyword.operator.arithmetic.nftables
+                2: constant.numeric.integer.decimal.nftables
+                3: constant.numeric.integer.hexadecimal.nftables
+              pop: true
+        - include: bail-out
 
-  integer:
-    # This context is not included in `numerics` because `signed-integer` supersedes it.
-    - match: \b({{integer}})\b
-      scope: constant.numeric.integer.nftables
-  _expect-integer:
-    - match: \b({{integer}})\b
-      scope: constant.numeric.integer.nftables
+  _expect-numeric:
+    - match: ({{decimal}})
+      scope: constant.numeric.integer.decimal.nftables
+      pop: true
+    - match: ({{hexadecimal}})
+      scope: constant.numeric.integer.hexadecimal.nftables
       pop: true
 
   anonymous-set:
@@ -369,7 +396,7 @@ contexts:
           set:
             - match: \b(handle|position)\b
               scope: keyword.other.handle.nftables
-              push: _expect-integer
+              push: _expect-numeric
 
             - include: rule-definitions
             - include: statement-separators
@@ -495,7 +522,7 @@ contexts:
                               set:
                                 - match: ({{priorities}})
                                   scope: constant.language.chain-priority.nftables
-                                - include: signed-integer
+                                - include: numerics
                                 - include: plus-or-dash
                                 - include: statement-separators
 
@@ -536,7 +563,7 @@ contexts:
                       set:
                         - match: ({{priorities}})
                           scope: constant.language.chain-priority.nftables
-                        - include: signed-integer
+                        - include: numerics
                         - include: plus-or-dash
 
                         - match: \b(devices)\b
@@ -603,7 +630,7 @@ contexts:
             - match: \b(size)\b
               scope: storage.type.set-size.nftables
               push:
-                - include: signed-integer
+                - include: numerics
                 - include: statement-separators
             - match: \b(policy)\b
               scope: storage.type.set-policy.nftables
@@ -627,10 +654,10 @@ contexts:
 
         - match: \b(over|until)\b
           scope: constant.language.quota-mode.nftables
-          push: _expect-integer
+          push: _expect-numeric
         - match: \b(used)\b
           scope: constant.language.quota-used.nftables
-          push: _expect-integer
+          push: _expect-numeric
 
         - include: statement-separators
 
