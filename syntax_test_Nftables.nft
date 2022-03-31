@@ -412,16 +412,15 @@ quota filter example over 100 mbytes used 0 bytes ;
 
 table ip filter {
 	chain prerouting {
-		type nat hook prerouting priority dstnat - -100;
+		type nat hook prerouting priority dstnat - 100;
 		#                                 ^ constant.language.chain-priority.nftables
 		#                                        ^ keyword.operator.arithmetic.nftables
-		#                                          ^ keyword.operator.arithmetic.nftables
-		#                                           ^^^ constant.numeric.integer.decimal.nftables
+		#                                          ^^^ constant.numeric.integer.decimal.nftables
 
-		mark numgen inc mod 4 offset 3 jump prerouting
-		#    ^ keyword.operator.arithmetic.nftables
-		#                              ^ keyword.control.rule-statement.verdict.nftables
-		#                                   ^ variable.other.readwrite.chain.nftables
+		mark set numgen inc mod 4 offset 3 jump prerouting
+		#        ^ keyword.operator.arithmetic.nftables
+		#                                  ^ keyword.control.rule-statement.verdict.nftables
+		#                                       ^ variable.other.readwrite.chain.nftables
 
 		mark set jhash ip saddr . tcp dport . iiftype mod 2
 		#    ^ keyword.control.rule-statement.nftables
