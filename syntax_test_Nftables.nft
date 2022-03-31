@@ -131,14 +131,14 @@ add rule ip filter input ip protocol vmap { tcp : jump tcp-chain, udp : jump udp
 #                                                 ^ keyword.control.rule-statement.verdict.nftables
 #                                                      ^^^^^^^^^ variable.other.readwrite.chain.nftables
 
-add map filter ports { type inet_service : accept ; }
+add map filter ports { type inet_service : verdict ; }
 #   ^ storage.type.set.nftables keyword.declaration.set.nftables
 #       ^ variable.other.readwrite.table.nftables
 #              ^ entity.name.set.nftables
 #                    ^ punctuation.section.braces.begin.named-set.nftables
 #                      ^ storage.type.set-type.nftables
 #                           ^ constant.language.data-type.nftables
-#                                          ^ keyword.control.rule-statement.verdict.nftables
+#                                          ^ constant.language.verdict.nftables
 
 add rule filter output quota name tcp dport map @ports
 #                      ^ storage.type.quota.nftables keyword.declaration.quota.nftables
