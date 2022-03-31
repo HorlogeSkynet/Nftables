@@ -360,14 +360,15 @@ table a-strang3_Name {
 	flowtable f {
 	# <- storage.type.flowtable.nftables keyword.declaration.flowtable.nftables
 	#         ^ entity.name.flowtable.nftables
-		hook ingress priority 0 devices = { eth0, eth1 };
+		hook ingress priority 0;
 		# <- storage.type.flowtable-hook.nftables
 		#    ^ constant.language.hook.nftables
 		#            ^ storage.type.flowtable-priority.nftables
 		#                     ^ constant.numeric.integer.decimal.nftables
-		#                       ^ storage.type.flowtable-devices.nftables
-		#                               ^ keyword.operator.assignment.nftables
-		#                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+		devices = { eth0, eth1 }
+		# <- storage.type.flowtable-devices.nftables
+		#       ^ keyword.operator.assignment.nftables
+		#         ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
 		counter
 		# <- storage.type.flowtable-counter.nftables
 	}

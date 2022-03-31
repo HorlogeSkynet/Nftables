@@ -565,10 +565,13 @@ contexts:
                           scope: constant.language.chain-priority.nftables
                         - include: numerics
                         - include: plus-or-dash
+                        - include: statement-separators
 
-                        - match: \b(devices)\b
-                          scope: storage.type.flowtable-devices.nftables
-                          set: assignment
+            - match: \b(devices)\b
+              scope: storage.type.flowtable-devices.nftables
+              push:
+                - include: assignment
+                - include: statement-separators
 
             - match: \b(counter)\b
               scope: storage.type.flowtable-counter.nftables
