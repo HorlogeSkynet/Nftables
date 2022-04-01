@@ -754,7 +754,7 @@ contexts:
     - match: ([!=]=|[\<\>]=?)
       scope: keyword.operator.arithmetic.nftables
     - match: \b(and|x?or)\b
-      scope: keyword.operator.arithmetic.nftables
+      scope: keyword.operator.word.nftables
     - include: plus-or-dash
     - include: dot-operator
 
