@@ -399,6 +399,19 @@ chain a-strang3_Name c {
 	#                                          ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
 	#                                                     ^ punctuation.separator.dash.nftables
 	#                                                      ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
+
+	tcp dport 22 jump {
+	#                 ^ punctuation.section.braces.begin.implicit-chain.nftables
+
+		# <- meta.block.implicit-chain.nftables
+
+		ip saddr { 127.0.0.0/8, 172.23.0.0/16, 192.168.13.0/24 } accept
+		#        ^ punctuation.section.braces.begin.anonymous-set.nftables
+		ip6 saddr ::1/128 accept;
+
+		# <- meta.block.implicit-chain.nftables
+	}
+	# <- punctuation.section.braces.end.implicit-chain.nftables
 }
 
 quota filter example over 100 mbytes used 0 bytes ;
