@@ -616,7 +616,7 @@ contexts:
             - match: \b(flags)\b
               scope: storage.type.set-flags.nftables
               push:
-                - match: \b(constant|interval|timeout)\b
+                - match: \b(constant|dynamic|interval|timeout)\b
                   scope: constant.language.set-flag.nftables
                 - include: comma
                 - include: statement-separators
