@@ -427,6 +427,10 @@ table ip filter {
 		#    ^ keyword.control.rule-statement.nftables
 		#        ^ keyword.operator.arithmetic.nftables
 		#                       ^ keyword.operator.concatenation.nftables
+
+		meta mark set meta mark lshift 1 or 0x1
+		#                       ^ keyword.operator.word.nftables
+		#                                ^ keyword.operator.word.nftables
 	}
 }
 

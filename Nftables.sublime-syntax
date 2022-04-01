@@ -753,7 +753,7 @@ contexts:
       scope: keyword.operator.bitwise.nftables
     - match: ([!=]=|[\<\>]=?)
       scope: keyword.operator.arithmetic.nftables
-    - match: \b(and|x?or)\b
+    - match: \b(and|x?or|[lr]shift)\b
       scope: keyword.operator.word.nftables
     - include: plus-or-dash
     - include: dot-operator
