@@ -22,7 +22,7 @@ variables:
   identifier_extended: (?:[[:alpha:]_][[:alnum:]_\-\.]*)
 
   chain_types: (?:\b(filter|route|nat)\b)
-  chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|ingress)\b)
+  chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|(?:e|in)gress)\b)
   family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
   # nftables >= 0.9.6, chains priorities can be set using keywords.
   priorities: (?:\b(raw|mangle|(?:dst|src)nat|filter|security|out)\b)
