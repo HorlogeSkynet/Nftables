@@ -718,7 +718,7 @@ contexts:
         - include: statement-separators
 
   verdict-statements:
-    - match: \b(accept|drop|queue|continue|return)\b
+    - match: \b(accept|drop|queue|continue|return|tproxy)\b
       scope: keyword.control.rule-statement.verdict.nftables
     - match: \b(jump|goto)\b
       scope: keyword.control.rule-statement.verdict.nftables

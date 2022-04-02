@@ -458,6 +458,9 @@ table ip filter {
 		meta mark set meta mark lshift 1 or 0x1
 		#                       ^ keyword.operator.word.nftables
 		#                                ^ keyword.operator.word.nftables
+
+		tcp dport 80 tproxy to :8080
+		#            ^ keyword.control.rule-statement.verdict.nftables
 	}
 }
 
