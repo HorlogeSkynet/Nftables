@@ -702,7 +702,7 @@ contexts:
     - match: \b(flags)\b
       scope: storage.type.table-flags.nftables
       push:
-        - match: \b(dormant)\b
+        - match: \b(dormant|owner)\b
           scope: constant.language.table-flag.nftables
         - include: comma
         - include: statement-separators
