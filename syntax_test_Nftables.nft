@@ -349,6 +349,9 @@ table a-strang3_Name {
 		gc-interval 60s;
 		# <- storage.type.set-gcinterval.nftables
 		#           ^^^ string.unquoted.time-string.nftables
+		comment "list of unwanted traffic by IP address"
+		# <- storage.type.set-comments.nftables
+		#       ^ string.quoted.double.nftables
 		counter
 		# <- storage.type.set-counter.nftables
 		elements = { domain, ntp timeout 30s }
