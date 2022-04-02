@@ -83,6 +83,7 @@ contexts:
       scope: punctuation.definition.comment.nftables
       push:
         - meta_scope: comment.line.nftables
+
         - match: (?=$)
           pop: true
 
@@ -150,6 +151,7 @@ contexts:
       push:
         - meta_include_prototype: false
         - meta_scope: string.quoted.double.nftables meta.string.nftables
+
         - match: (")
           scope: punctuation.definition.string.end.nftables
           pop: true
@@ -674,6 +676,7 @@ contexts:
           scope: punctuation.section.braces.begin.helper.nftables
           set:
             - meta_scope: meta.object.helper.nftables
+
             - match: \b(type)\b
               scope: storage.type.helper-type.nftables
               push:
