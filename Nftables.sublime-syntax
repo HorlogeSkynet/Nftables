@@ -291,6 +291,12 @@ contexts:
       set:
         - include: values
         - include: statement-separators
+  _expect-assignment-safe-values:
+    - match: (=)
+      scope: keyword.operator.assignment.nftables
+      set:
+        - include: safe-values
+        - include: bail-out
 
   common-blocks:
     # Defines.
@@ -556,7 +562,6 @@ contexts:
           set:
             - meta_scope: meta.block.chain.nftables
 
-            # Chain settings.
             - include: _consume-rule-matches-type
             - match: \b(type)\b
               scope: storage.type.chain-type.nftables
@@ -579,6 +584,10 @@ contexts:
                                 - include: _expect-quoted-string
                                 - include: _expect-unquoted-string
 
+                            - match: \b(devices)\b
+                              scope: storage.type.chain-devices.nftables
+                              push: _expect-assignment-safe-values
+
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
                               set:
@@ -588,7 +597,6 @@ contexts:
                                 - include: plus-or-dash
                                 - include: statement-separators
 
-            # Chain policy.
             - match: \b(policy)\b
               scope: storage.type.chain-policy.nftables
               push:
@@ -596,7 +604,6 @@ contexts:
                   scope: constant.language.chain-policy.nftables
                   pop: true
 
-            # Chain rules.
             - include: rule-definitions
 
             - include: semi-colon
@@ -631,9 +638,7 @@ contexts:
 
             - match: \b(devices)\b
               scope: storage.type.flowtable-devices.nftables
-              push:
-                - include: assignment
-                - include: statement-separators
+              push: _expect-assignment-safe-values
 
             - match: \b(flags)\b
               scope: storage.type.flowtable-flags.nftables
@@ -695,9 +700,7 @@ contexts:
               push: _expect-time-string
             - match: \b(elements)\b
               scope: storage.type.set-elements.nftables
-              push:
-                - include: assignment
-                - include: statement-separators
+              push: _expect-assignment-safe-values
             - match: \b(size)\b
               scope: storage.type.set-size.nftables
               push: _expect-numeric

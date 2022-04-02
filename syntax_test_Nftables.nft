@@ -485,7 +485,7 @@ table ip filter {
 	}
 }
 
-table netdev ingress {
+table netdev filter {
 	chain ingress {
 		type filter hook ingress device enp0s20f0 priority 0;
 		#                ^ constant.language.hook.nftables
@@ -501,4 +501,9 @@ table netdev ingress {
 	chain ingress_3 { type filter hook ingress device $_ priority 0; }
 	#                                                 ^ punctuation.definition.variable.nftables
 	#                                                  ^ variable.other.constant.nftables
+
+	chain egress {
+		type filter hook egress devices = { eth0, eth1 } priority 0;
+		meta priority set ip saddr map { 192.168.10.2 : abcd:2, 192.168.10.3 : abcd:3 }
+	}
 }
