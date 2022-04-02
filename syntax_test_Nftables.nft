@@ -203,6 +203,9 @@ add rule filter input counter name \
 	#        ^ keyword.declaration.map.nftables
 	#             ^ variable.other.readwrite.set.nftables
 
+add rule filter input delete @mystats { ip daddr }
+#                     ^ keyword.control.rule-statement.nftables
+
 table ip nat {
 # <- storage.type.table.nftables keyword.declaration.table.nftables
 #     ^ constant.language.family-type.nftables

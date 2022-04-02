@@ -871,7 +871,8 @@ contexts:
         \b(
           log|reject|counter|limit|comment|
           [ds]nat|masquerade|redirect|dup|fwd|
-          set|flow|notrack
+          set|flow|notrack|
+          add|update|delete
         )\b
       scope: keyword.control.rule-statement.nftables
 
