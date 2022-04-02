@@ -96,6 +96,12 @@ contexts:
       captures:
         1: punctuation.definition.variable.nftables
         2: variable.other.readwrite.set.nftables
+  _expect-constant:
+    - match: (\$)({{identifier}})
+      captures:
+        1: punctuation.definition.variable.nftables
+        2: variable.other.constant.nftables
+      pop: true
 
   statement-separators:
     # Elements matching below patterns will 'pop' the current context off the stack.
@@ -149,6 +155,20 @@ contexts:
           scope: constant.character.escape.nftables
         - include: line-continuation
       push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted.double.nftables meta.string.nftables
+
+        - match: (")
+          scope: punctuation.definition.string.end.nftables
+          pop: true
+  _expect-quoted-string:
+    - match: (")
+      scope: punctuation.definition.string.begin.nftables
+      with_prototype:
+        - match: (\\.)
+          scope: constant.character.escape.nftables
+        - include: line-continuation
+      set:
         - meta_include_prototype: false
         - meta_scope: string.quoted.double.nftables meta.string.nftables
 
@@ -547,7 +567,12 @@ contexts:
                           set:
                             - match: \b(device)\b
                               scope: storage.type.chain-device.nftables
-                              push: _expect-unquoted-string
+                              push:
+                                - meta_include_prototype: false
+
+                                - include: _expect-constant
+                                - include: _expect-quoted-string
+                                - include: _expect-unquoted-string
 
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables

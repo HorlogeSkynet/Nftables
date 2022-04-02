@@ -490,4 +490,11 @@ table netdev ingress {
 		#                                         ^ storage.type.chain-priority.nftables
 		#                                                  ^ constant.numeric.integer.decimal.nftables
 	}
+
+	chain ingress_2 { type filter hook ingress device "enp0s20f0" priority 0; }
+	#                                                 ^^^^^^^^^^^ string.quoted.double.nftables
+
+	chain ingress_3 { type filter hook ingress device $_ priority 0; }
+	#                                                 ^ punctuation.definition.variable.nftables
+	#                                                  ^ variable.other.constant.nftables
 }
