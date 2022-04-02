@@ -400,6 +400,14 @@ contexts:
                     - include: anonymous-set
                     - include: statement-separators
 
+        - match: \b(secmark)\b
+          scope: storage.type.secmark.nftables keyword.declaration.secmark.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: secmark-specs
+
         - match: \b(quota)\b
           scope: storage.type.quota.nftables keyword.declaration.quota.nftables
           set:
@@ -466,6 +474,14 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: set-specs
 
+    - match: \b(secmark)\b
+      scope: storage.type.secmark.nftables keyword.declaration.secmark.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: secmark-specs
+
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
@@ -529,6 +545,10 @@ contexts:
                 - match: \b(set|map)\b
                   scope: storage.type.set.nftables keyword.declaration.set.nftables
                   push: set-specs
+
+                - match: \b(secmark)\b
+                  scope: storage.type.secmark.nftables keyword.declaration.secmark.nftables
+                  push: secmark-specs
 
                 - match: \b(quota)\b
                   scope: storage.type.quota.nftables keyword.declaration.quota.nftables
@@ -719,6 +739,22 @@ contexts:
             - include: semi-colon
             - match: (})
               scope: punctuation.section.braces.end.named-set.nftables
+              pop: true
+
+  secmark-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.secmark.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.secmark.nftables
+          set:
+            - meta_scope: meta.object.secmark.nftables
+
+            - include: quoted-string
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.secmark.nftables
               pop: true
 
   _quota-config:

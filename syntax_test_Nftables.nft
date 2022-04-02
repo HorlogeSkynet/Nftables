@@ -206,6 +206,12 @@ add rule filter input counter name \
 add rule filter input delete @mystats { ip daddr }
 #                     ^ keyword.control.rule-statement.nftables
 
+add secmark filter sshtag { "system_u:object_r:ssh_server_packet_t:s0" }
+#   ^ storage.type.secmark.nftables
+#                  ^ entity.name.secmark.nftables
+#                         ^ meta.object.secmark.nftables punctuation.section.braces.begin.secmark.nftables
+#                           ^ string.quoted.double.nftables
+
 table ip nat {
 # <- storage.type.table.nftables keyword.declaration.table.nftables
 #     ^ constant.language.family-type.nftables
@@ -287,6 +293,12 @@ table a-strang3_Name {
 	undefine google_dns
 	# <- keyword.control.undefine.nftables
 	#        ^ variable.other.constant.nftables
+
+	secmark sshtag { "system_u:object_r:ssh_server_packet_t:s0" }
+	# <- storage.type.secmark.nftables
+	#       ^ entity.name.secmark.nftables
+	#              ^ meta.object.secmark.nftables punctuation.section.braces.begin.secmark.nftables
+	#                ^ string.quoted.double.nftables
 
 	quota q_until_sip { until 100 mbytes used 0 bytes }
 	# <- storage.type.quota.nftables keyword.declaration.quota.nftables
