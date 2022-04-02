@@ -284,6 +284,8 @@ contexts:
     - match: \b(include)\b
       scope: keyword.control.import.nftables
       push:
+        - meta_scope: meta.path.nftables
+
         - include: quoted-string
         - include: statement-separators
 

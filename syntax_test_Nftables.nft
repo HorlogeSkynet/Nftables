@@ -7,7 +7,7 @@
 include "ipv4-nat.ruleset"
 # <- keyword.control.import.nftables
 #       ^ string.quoted.double.nftables meta.string.nftables punctuation.definition.string.begin.nftables
-#        ^^^^^^^^^^^^^^^^^ string.quoted.double.nftables meta.string.nftables
+#        ^^^^^^^^^^^^^^^^^ meta.path.nftables string.quoted.double.nftables meta.string.nftables
 #                        ^ punctuation.definition.string.end.nftables
 
 include "some esc\aped character and # false comments"
