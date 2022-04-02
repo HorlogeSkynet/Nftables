@@ -429,10 +429,11 @@ chain a-strang3_Name c {
 	#                                     ^ punctuation.separator.dash.nftables
 	#                                                       ^^^^^^^ keyword.control.rule-statement.nftables
 
-	ip daddr . tcp dport { 10.0.0.0/8 . 10-23, 192.168.1.1-192.168.3.8 . 80-443 } accept
+	ip daddr . tcp dport { 10.0.0.0/8 . 10-23, 192.168.1.1-192.168.3.8 . 80-443, * . 53 } accept
 	#                                          ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
 	#                                                     ^ punctuation.separator.dash.nftables
 	#                                                      ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
+	#                                                                            ^ keyword.operator.wildcard.nftables
 
 	tcp dport 22 jump {
 	#                 ^ punctuation.section.braces.begin.implicit-chain.nftables

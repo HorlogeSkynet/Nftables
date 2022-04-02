@@ -127,6 +127,10 @@ contexts:
     - match: (;)
       scope: punctuation.terminator.semi-colon.nftables
 
+  wildcard:
+    - match: (\*)
+      scope: keyword.operator.wildcard.nftables
+
   line-continuation:
     - match: (?:(\\)(.*)$\n)
       captures:
@@ -272,6 +276,7 @@ contexts:
 
         - include: verdict-statements
         - include: values
+        - include: wildcard
         - include: operators
         - include: comma
         - include: colon
