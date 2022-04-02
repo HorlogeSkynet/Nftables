@@ -577,6 +577,14 @@ contexts:
                 - include: assignment
                 - include: statement-separators
 
+            - match: \b(flags)\b
+              scope: storage.type.flowtable-flags.nftables
+              push:
+                - match: \b(offload)\b
+                  scope: constant.language.flowtable-flag.nftables
+                - include: comma
+                - include: statement-separators
+
             - match: \b(counter)\b
               scope: storage.type.flowtable-counter.nftables
 

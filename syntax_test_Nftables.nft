@@ -372,6 +372,9 @@ table a-strang3_Name {
 		# <- storage.type.flowtable-devices.nftables
 		#       ^ keyword.operator.assignment.nftables
 		#         ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+		flags offload
+		# <- storage.type.flowtable-flags.nftables
+		#     ^ constant.language.flowtable-flag.nftables
 		counter
 		# <- storage.type.flowtable-counter.nftables
 	}
