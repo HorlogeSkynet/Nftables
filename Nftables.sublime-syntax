@@ -607,15 +607,17 @@ contexts:
               push:
                 - match: \b((?:ipv[46]|ether)_addr|inet_(?:proto|service)|counter|ifname|mark)\b
                   scope: constant.language.data-type.nftables
+                - match: \b(verdict)\b
+                  scope: constant.language.verdict.nftables
                 - include: dot-operator
                 - include: colon
                 - include: verdict-statements
-                - match: \b(verdict)\b
-                  scope: constant.language.verdict.nftables
                 - include: statement-separators
             - match: \b(typeof)\b
               scope: storage.type.set-typeof.nftables
               push:
+                - match: \b(verdict)\b
+                  scope: constant.language.verdict.nftables
                 - include: safe-values
                 - include: dot-operator
                 - include: colon

@@ -360,10 +360,11 @@ table a-strang3_Name {
 	}
 
 	map addr2mark {
-		typeof ip saddr . tcp dport : meta mark
+		typeof ip saddr . tcp dport : verdict
 		# <- storage.type.set-typeof.nftables
 		#               ^ keyword.operator.concatenation.nftables
 		#                           ^ punctuation.separator.colon.nftables
+		#                             ^ constant.language.verdict.nftables
 		elements = { 192.168.10.35 . 80 : 0x00000001, 192.168.10.135 . 80 : 0x00000002 }
 	}
 
