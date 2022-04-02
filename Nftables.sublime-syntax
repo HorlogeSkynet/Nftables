@@ -932,7 +932,7 @@ contexts:
     - match: ([!/])
       scope: keyword.operator.bitwise.nftables
   operators:
-    - match: \b(eq|ne|[gl][et]|numgen|jhash)\b
+    - match: \b(eq|ne|[gl][et]|numgen|(?:j|sym)hash)\b
       scope: keyword.operator.arithmetic.nftables
     - match: (&|\||\<\<|\>\>|\^)
       scope: keyword.operator.bitwise.nftables
