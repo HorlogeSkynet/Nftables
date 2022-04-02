@@ -760,13 +760,16 @@ contexts:
         (?x)
         \b(
           log|reject|counter|limit|comment|
-          (?:s|d)nat|masquerade|redirect|dup|fwd|
+          [ds]nat|masquerade|redirect|dup|fwd|
           set|flow|notrack
         )\b
       scope: keyword.control.rule-statement.nftables
 
+  bits-checking:
+    - match: ([!/])
+      scope: keyword.operator.bitwise.nftables
   operators:
-    - match: \b(eq|ne|(?:l|g)[et]|numgen|jhash)\b
+    - match: \b(eq|ne|[gl][et]|numgen|jhash)\b
       scope: keyword.operator.arithmetic.nftables
     - match: (&|\||\<\<|\>\>|\^)
       scope: keyword.operator.bitwise.nftables
@@ -774,6 +777,7 @@ contexts:
       scope: keyword.operator.arithmetic.nftables
     - match: \b(and|x?or|[lr]shift)\b
       scope: keyword.operator.word.nftables
+    - include: bits-checking
     - include: plus-or-dash
     - include: dot-operator
 
@@ -807,5 +811,14 @@ contexts:
           pop: true
 
   _consume-status-nat:
-    # Consume `ct status` rule matches using `(s|d)nat`.
-    - match: (?:\bct\b\s+\bstatus\b\s+\b(?:s|d)nat\b)
+    # Consume `ct status` rule matches using `[ds]nat`.
+    - match: (?:\bct\b\s+\bstatus\b\s+)
+      push:
+        # Bits checking may be performed starting with nftables 0.9.9.
+        - include: bits-checking
+
+        # Consume any repetition of `[ds]nat` separated by a comma (,).
+        - match: (?:(?:\b(?:[ds]nat)\b|(,))+)
+          captures:
+            1: punctuation.separator.comma.nftables
+          pop: true
