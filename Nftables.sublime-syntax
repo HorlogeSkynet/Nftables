@@ -721,20 +721,36 @@ contexts:
               scope: punctuation.section.braces.end.named-set.nftables
               pop: true
 
+  _quota-config:
+      - match: \b(over|until)\b
+        scope: constant.language.quota-mode.nftables
+        push: _expect-numeric
+      - match: \b(used)\b
+        scope: constant.language.quota-used.nftables
+        push: _expect-numeric
+
   quota-specs:
     - match: \b({{identifier_extended}})\b
       scope: entity.name.quota.nftables
       set:
-        - include: integer
-
-        - match: \b(over|until)\b
-          scope: constant.language.quota-mode.nftables
-          push: _expect-numeric
-        - match: \b(used)\b
-          scope: constant.language.quota-used.nftables
-          push: _expect-numeric
-
+        - include: _quota-config
         - include: statement-separators
+
+        - match: ({)
+          scope: punctuation.section.braces.begin.quota.nftables
+          set:
+            - meta_scope: meta.object.quota.nftables
+
+            - include: _quota-config
+
+            - match: \b(comment)\b
+              scope: storage.type.quota-comments.nftables
+              push: _expect-quoted-string
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.quota.nftables
+              pop: true
 
   ct-expectation-specs:
     - match: \b({{identifier_extended}})\b
