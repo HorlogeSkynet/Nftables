@@ -379,8 +379,8 @@ contexts:
 
         - match: (?:\bct\b\s+\b(helper)\b)
           captures:
-            1: storage.type.helper.nftables keyword.declaration.helper.nftables
-          set: helper-specs
+            1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
+          set: ct-helper-specs
 
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
@@ -443,14 +443,32 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: quota-specs
 
-    - match: (?:\bct\b\s+\b(helper)\b)
+    - match: (?:\bct\b\s+\b(expectation)\b)
       captures:
-        1: storage.type.helper.nftables keyword.declaration.helper.nftables
+        1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
       push:
         - include: family-types
         - match: \b({{identifier_extended}})\b
           scope: variable.other.readwrite.table.nftables
-          set: helper-specs
+          set: ct-expectation-specs
+
+    - match: (?:\bct\b\s+\b(helper)\b)
+      captures:
+        1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: ct-helper-specs
+
+    - match: (?:\bct\b\s+\b(timeout)\b)
+      captures:
+        1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: ct-timeout-specs
 
   table-specs:
     - match: \b(table)\b
@@ -485,10 +503,20 @@ contexts:
                   scope: storage.type.quota.nftables keyword.declaration.quota.nftables
                   push: quota-specs
 
+                - match: (?:\bct\b\s+\b(expectation)\b)
+                  captures:
+                    1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
+                  push: ct-expectation-specs
+
                 - match: (?:\bct\b\s+\b(helper)\b)
                   captures:
-                    1: storage.type.helper.nftables keyword.declaration.helper.nftables
-                  push: helper-specs
+                    1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
+                  push: ct-helper-specs
+
+                - match: (?:\bct\b\s+\b(timeout)\b)
+                  captures:
+                    1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
+                  push: ct-timeout-specs
 
                 - match: (})
                   scope: punctuation.section.block.end.table.nftables
@@ -672,28 +700,36 @@ contexts:
 
         - include: statement-separators
 
-  helper-specs:
+  ct-expectation-specs:
     - match: \b({{identifier_extended}})\b
-      scope: entity.name.helper.nftables
+      scope: entity.name.ct-expectation.nftables
       set:
         - match: ({)
-          scope: punctuation.section.braces.begin.helper.nftables
+          scope: punctuation.section.braces.begin.ct-expectation.nftables
           set:
-            - meta_scope: meta.object.helper.nftables
+            - meta_scope: meta.object.ct-expectation.nftables
 
-            - match: \b(type)\b
-              scope: storage.type.helper-type.nftables
+            - match: \b(protocol)\b
+              scope: storage.type.ct-expectation-protocol.nftables
               push:
-                - include: quoted-string
-                - match: \b(protocol)\b
-                  scope: storage.type.helper-protocol.nftables
-                  set:
-                    - match: \b(tcp|udp)\b
-                      scope: constant.language.l4-proto.nftables
-                      pop: true
+                - match: \b(tcp|udp)\b
+                  scope: constant.language.l4-proto.nftables
+                  pop: true
+
+            - match: \b(dport)\b
+              scope: storage.type.ct-expectation-dport.nftables
+              push: _expect-numeric
+
+            - match: \b(timeout)\b
+              scope: storage.type.ct-expectation-timeout.nftables
+              push: _expect-time-string
+
+            - match: \b(size)\b
+              scope: storage.type.ct-expectation-size.nftables
+              push: _expect-numeric
 
             - match: \b(l3proto)\b
-              scope: storage.type.helper-l3proto.nftables
+              scope: storage.type.ct-expectation-l3proto.nftables
               push:
                 - match: ({{family_types}})
                   scope: constant.language.family-type.nftables
@@ -701,7 +737,73 @@ contexts:
 
             - include: semi-colon
             - match: (})
-              scope: punctuation.section.braces.end.helper.nftables
+              scope: punctuation.section.braces.end.ct-expectation.nftables
+              pop: true
+
+  ct-helper-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.ct-helper.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.ct-helper.nftables
+          set:
+            - meta_scope: meta.object.ct-helper.nftables
+
+            - match: \b(type)\b
+              scope: storage.type.ct-helper-type.nftables
+              push:
+                - include: quoted-string
+                - match: \b(protocol)\b
+                  scope: storage.type.ct-helper-protocol.nftables
+                  set:
+                    - match: \b(tcp|udp)\b
+                      scope: constant.language.l4-proto.nftables
+                      pop: true
+
+            - match: \b(l3proto)\b
+              scope: storage.type.ct-helper-l3proto.nftables
+              push:
+                - match: ({{family_types}})
+                  scope: constant.language.family-type.nftables
+                  pop: true
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.ct-helper.nftables
+              pop: true
+
+  ct-timeout-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.ct-timeout.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.ct-timeout.nftables
+          set:
+            - meta_scope: meta.object.ct-timeout.nftables
+
+            - match: \b(protocol)\b
+              scope: storage.type.ct-timeout-protocol.nftables
+              push:
+                - match: \b(tcp|udp)\b
+                  scope: constant.language.l4-proto.nftables
+                  pop: true
+
+            - match: \b(policy)\b
+              scope: storage.type.ct-timeout-policy.nftables
+              push:
+                - include: anonymous-set
+                - include: statement-separators
+
+            - match: \b(l3proto)\b
+              scope: storage.type.ct-timeout-l3proto.nftables
+              push:
+                - match: ({{family_types}})
+                  scope: constant.language.family-type.nftables
+                  pop: true
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.ct-timeout.nftables
               pop: true
 
   family-types:
@@ -751,9 +853,15 @@ contexts:
       scope: storage.type.map.nftables keyword.declaration.map.nftables
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
+    - match: (?:\bct\b\s+\b(expectation)\b)
+      captures:
+        1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
     - match: (?:\bct\b\s+\b(helper)\b)
       captures:
-        1: storage.type.helper.nftables keyword.declaration.helper.nftables
+        1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
+    - match: (?:\bct\b\s+\b(timeout)\b)
+      captures:
+        1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: verdict-statements

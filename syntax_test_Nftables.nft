@@ -101,7 +101,7 @@ add rule filter input ip saddr $google_dns counter
 #                                          ^ keyword.control.rule-statement.nftables
 
 add rule filter input ct helper set udp dport map { \
-#                        ^ storage.type.helper.nftables keyword.declaration.helper.nftables
+#                        ^ storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
 #                               ^ keyword.control.rule-statement.nftables
 #                                             ^ storage.type.map.nftables
 #                                                 ^ punctuation.section.braces.begin.anonymous-set.nftables
@@ -287,25 +287,39 @@ table a-strang3_Name {
 
 	ct helper sip-5060 {
 	# <- - storage.type.nftables
-	#  ^ storage.type.helper.nftables keyword.declaration.helper.nftables
-	#         ^^^^^^^^ entity.name.helper.nftables
-	#                  ^ punctuation.section.braces.begin.helper.nftables
+	#  ^ storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
+	#         ^^^^^^^^ entity.name.ct-helper.nftables
+	#                  ^ punctuation.section.braces.begin.ct-helper.nftables
 
 		type "sip" protocol udp;
-		# <- storage.type.helper-type.nftables
+		# <- storage.type.ct-helper-type.nftables
 		#    ^^^^^ meta.string.nftables
-		#          ^ storage.type.helper-protocol.nftables
+		#          ^ storage.type.ct-helper-protocol.nftables
 		#                   ^ constant.language.l4-proto.nftables
 
-		# <- meta.object.helper.nftables
+		# <- meta.object.ct-helper.nftables
 
 		l3proto inet;
-		# <- storage.type.helper-l3proto.nftables
+		# <- storage.type.ct-helper-l3proto.nftables
 		#       ^ constant.language.family-type.nftables
 
-		# <- meta.object.helper.nftables
+		# <- meta.object.ct-helper.nftables
 	}
-	# <- punctuation.section.braces.end.helper.nftables
+	# <- punctuation.section.braces.end.ct-helper.nftables
+
+	ct expectation e_pgsql {
+		protocol tcp
+		dport 5432
+		timeout 1h
+		size 12
+		l3proto ip
+	}
+
+	ct timeout agressive-tcp {
+		protocol tcp;
+		l3proto ip;
+		policy = { established: 100, close_wait: 4, close: 4 }
+	}
 
 	set filter {
 	# <- storage.type.set.nftables keyword.declaration.set.nftables
