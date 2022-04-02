@@ -536,7 +536,7 @@ contexts:
               push:
                 - match: \b(accept|drop)\b
                   scope: constant.language.chain-policy.nftables
-                - include: statement-separators
+                  pop: true
 
             # Chain rules.
             - include: rule-definitions
@@ -614,9 +614,7 @@ contexts:
                 - include: statement-separators
             - match: \b(timeout)\b
               scope: storage.type.set-timeout.nftables
-              push:
-                - include: time-string
-                - include: statement-separators
+              push: _expect-time-string
             - match: \b(flags)\b
               scope: storage.type.set-flags.nftables
               push:
@@ -626,9 +624,7 @@ contexts:
                 - include: statement-separators
             - match: \b(gc\-interval)\b
               scope: storage.type.set-gcinterval.nftables
-              push:
-                - include: time-string
-                - include: statement-separators
+              push: _expect-time-string
             - match: \b(elements)\b
               scope: storage.type.set-elements.nftables
               push:
@@ -636,15 +632,13 @@ contexts:
                 - include: statement-separators
             - match: \b(size)\b
               scope: storage.type.set-size.nftables
-              push:
-                - include: numerics
-                - include: statement-separators
+              push: _expect-numeric
             - match: \b(policy)\b
               scope: storage.type.set-policy.nftables
               push:
                 - match: \b(performance|memory)\b
                   scope: constant.language.set-policy.nftables
-                - include: statement-separators
+                  pop: true
             - match: \b(counter)\b
               scope: storage.type.set-counter.nftables
 
@@ -686,14 +680,14 @@ contexts:
                   set:
                     - match: \b(tcp|udp)\b
                       scope: constant.language.l4-proto.nftables
-                    - include: statement-separators
+                      pop: true
 
             - match: \b(l3proto)\b
               scope: storage.type.helper-l3proto.nftables
               push:
                 - match: ({{family_types}})
                   scope: constant.language.family-type.nftables
-                - include: statement-separators
+                  pop: true
 
             - include: semi-colon
             - match: (})
