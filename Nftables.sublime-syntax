@@ -18,6 +18,7 @@ variables:
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
   time_string: (?:(?:\d+[wdhms])+)
+  time_units: (?:\b(?:second|minute|hour|day|week)\b)
   identifier: (?:[[:alpha:]_][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]_][[:alnum:]_\-\.]*)
 
@@ -408,6 +409,14 @@ contexts:
               scope: variable.other.readwrite.table.nftables
               set: secmark-specs
 
+        - match: \b(limit)\b
+          scope: storage.type.limit.nftables keyword.declaration.limit.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: limit-specs
+
         - match: \b(quota)\b
           scope: storage.type.quota.nftables keyword.declaration.quota.nftables
           set:
@@ -492,6 +501,14 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: secmark-specs
 
+    - match: \b(limit)\b
+      scope: storage.type.limit.nftables keyword.declaration.limit.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: limit-specs
+
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
       push:
@@ -559,6 +576,10 @@ contexts:
                 - match: \b(secmark)\b
                   scope: storage.type.secmark.nftables keyword.declaration.secmark.nftables
                   push: secmark-specs
+
+                - match: \b(limit)\b
+                  scope: storage.type.limit.nftables keyword.declaration.limit.nftables
+                  push: limit-specs
 
                 - match: \b(quota)\b
                   scope: storage.type.quota.nftables keyword.declaration.quota.nftables
@@ -767,6 +788,47 @@ contexts:
               scope: punctuation.section.braces.end.secmark.nftables
               pop: true
 
+  _limit-config:
+      - match: (/)
+        scope: punctuation.separator.limit-rate.nftables
+      - match: \b(over|until)\b
+        scope: constant.language.limit-mode.nftables
+        push: _expect-numeric
+      - match: \b(burst)\b
+        scope: constant.language.limit-burst.nftables
+        push: _expect-numeric
+      - match: ({{time_units}})
+        scope: string.unquoted.time-string.nftables
+      - match: \b([bk]?bytes|packets)\b
+      - include: numerics
+
+  limit-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.limit.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.limit.nftables
+          set:
+            - meta_scope: meta.object.limit.nftables
+
+            - match: \b(rate)\b
+              scope: storage.type.limit-rate.nftables
+              push:
+                - include: _limit-config
+                - include: statement-separators
+                # We reach end of `rate` definition, leave this context without consuming '}'.
+                - match: (?=})
+                  pop: true
+
+            - match: \b(comment)\b
+              scope: storage.type.limit-comments.nftables
+              push: _expect-quoted-string
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.limit.nftables
+              pop: true
+
   _quota-config:
       - match: \b(over|until)\b
         scope: constant.language.quota-mode.nftables
@@ -963,11 +1025,22 @@ contexts:
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: verdict-statements
+
+    # Handle `limit` verdict specifically as we want to scope its definition.
+    - match: \b(limit)\b
+      scope: keyword.control.rule-statement.nftables
+      push:
+        - match: \b(rate)\b
+          scope: storage.type.limit-rate.nftables
+          set:
+            - include: _limit-config
+            - include: bail-out
+
     - include: _consume-status-nat
     - match: |-
         (?x)
         \b(
-          log|reject|counter|limit|comment|
+          log|reject|counter|comment|
           [ds]nat|masquerade|redirect|dup|fwd|
           set|flow|notrack|
           add|update|delete

@@ -313,6 +313,22 @@ table a-strang3_Name {
 	#                                      ^ storage.type.quota-comments.nftables
 	#                                              ^ string.quoted.double.nftables
 
+	limit lim_400ppm { rate 400/minute }
+	# <- storage.type.limit.nftables keyword.declaration.limit.nftables
+	#     ^ entity.name.limit.nftables
+	#                ^^^^^^^^^^^^^^^^^^^ meta.object.limit.nftables
+	#                  ^ storage.type.limit-rate.nftables
+	#                       ^^^ constant.numeric.integer.decimal.nftables
+	#                          ^ punctuation.separator.limit-rate.nftables
+	#                           ^ string.unquoted.time-string.nftables
+	limit lim_1kbps  { rate over 1024 bytes/second burst 512 bytes ; comment "use to limit incoming smtp" ; }
+	#                       ^ constant.language.limit-mode.nftables
+	#                                              ^ constant.language.limit-burst.nftables
+	#                                                    ^^^ constant.numeric.integer.decimal.nftables
+	#                                                              ^ punctuation.terminator.semi-colon.nftables
+	#                                                                ^ storage.type.limit-comments.nftables
+	#                                                                        ^ string.quoted.double.nftables
+
 	ct helper sip-5060 {
 	# <- - storage.type.nftables
 	#  ^ storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
@@ -459,6 +475,15 @@ chain a-strang3_Name c {
 	#                                                     ^ punctuation.separator.dash.nftables
 	#                                                      ^^^^^^^^^^^ constant.numeric.ipv4-address.nftables
 	#                                                                            ^ keyword.operator.wildcard.nftables
+
+	limit rate over 1023/second burst 10 packets log prefix "LIMITED"
+	# <- keyword.control.rule-statement.nftables
+	#     ^ storage.type.limit-rate.nftables
+	#          ^ constant.language.limit-mode.nftables
+	#                   ^ punctuation.separator.limit-rate.nftables
+	#                    ^ string.unquoted.time-string.nftables
+	#                           ^ constant.language.limit-burst.nftables
+	#                                            ^ keyword.control.rule-statement.nftables
 
 	tcp dport 22 jump {
 	#                 ^ punctuation.section.braces.begin.implicit-chain.nftables
