@@ -493,6 +493,8 @@ chain a-strang3_Name c {
 		ip saddr { 127.0.0.0/8, 172.23.0.0/16, 192.168.13.0/24 } accept
 		#        ^ punctuation.section.braces.begin.anonymous-set.nftables
 		ip6 saddr ::1/128 accept;
+		#         ^ constant.numeric.ipv6-subnet.nftables
+		#                 ^ keyword.control.rule-statement.verdict.nftables
 
 		# <- meta.block.implicit-chain.nftables
 	}
