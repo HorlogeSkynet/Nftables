@@ -49,6 +49,9 @@ define local_nets = { $localhost_v4, $localhost_v6 }
 #                                    ^ punctuation.definition.variable.nftables
 #                                     ^ variable.other.constant.nftables
 
+define iface = enp0s20f0
+#              ^ string.unquoted.nftables
+
 ;;;   ;   ;;;
 # <- punctuation.terminator.semi-colon.nftables
 #  ^^^ - punctuation.terminator.nftables
@@ -399,8 +402,6 @@ table a-strang3_Name {
 		# <- storage.type.set-elements.nftables
 		#        ^ keyword.operator.assignment.nftables
 		#          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
-		#            ^ string.unquoted.nftables
-		#                    ^ string.unquoted.nftables
 		#                        ^ storage.type.set-element-timeout.nftables
 		#                                ^ string.unquoted.time-string.nftables
 

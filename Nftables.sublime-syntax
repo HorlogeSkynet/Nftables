@@ -139,12 +139,8 @@ contexts:
         2: invalid.illegal.trailing-character.nftables
 
   values:
-    - include: safe-values
-    - include: time-string
-    - include: unquoted-string
-
-  safe-values:
     - include: quoted-string
+    - include: time-string
     - include: network-addresses
     - include: numerics
     - include: variables
@@ -189,9 +185,6 @@ contexts:
       scope: string.unquoted.time-string.nftables
       pop: true
 
-  unquoted-string:
-    - match: \b({{identifier_extended}})\b
-      scope: string.unquoted.nftables
   _expect-unquoted-string:
     - match: \b({{identifier_extended}})\b
       scope: string.unquoted.nftables
@@ -263,41 +256,51 @@ contexts:
       scope: constant.numeric.integer.hexadecimal.nftables
       pop: true
 
+  _anonymous-set-content:
+    # Anonymous sets may contain values, operators and specific separators.
+    # Elements in the set may have a `timeout` (death-date).
+    - match: \b(timeout)\b
+      scope: storage.type.set-element-timeout.nftables
+      push: _expect-time-string
+
+    - include: rule-definitions
+    - include: wildcard
+
   anonymous-set:
     - match: ({)
       scope: punctuation.section.braces.begin.anonymous-set.nftables
       push:
         - meta_scope: meta.object.anonymous-set.nftables
 
-        # Anonymous sets may contain values, operators and specific separators.
-        # Elements in the set may have a `timeout` (death-date).
-        - match: \b(timeout)\b
-          scope: storage.type.set-element-timeout.nftables
-          push: _expect-time-string
-
-        - include: verdict-statements
-        - include: values
-        - include: wildcard
-        - include: operators
-        - include: comma
-        - include: colon
+        - include: _anonymous-set-content
 
         - match: (})
           scope: punctuation.section.braces.end.anonymous-set.nftables
           pop: true
+  _expect-anonymous-set-assignment:
+    - match: (=)
+      scope: keyword.operator.assignment.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.anonymous-set.nftables
+          set:
+            - meta_scope: meta.object.anonymous-set.nftables
+
+            - include: _anonymous-set-content
+
+            - match: (})
+              scope: punctuation.section.braces.end.anonymous-set.nftables
+              pop: true
 
   assignment:
     - match: (=)
       scope: keyword.operator.assignment.nftables
       set:
         - include: values
+        - match: \b({{identifier}})\b
+          scope: string.unquoted.nftables
+          pop: true
         - include: statement-separators
-  _expect-assignment-safe-values:
-    - match: (=)
-      scope: keyword.operator.assignment.nftables
-      set:
-        - include: safe-values
-        - include: bail-out
 
   common-blocks:
     # Defines.
@@ -637,7 +640,7 @@ contexts:
 
                             - match: \b(devices)\b
                               scope: storage.type.chain-devices.nftables
-                              push: _expect-assignment-safe-values
+                              push: _expect-anonymous-set-assignment
 
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
@@ -689,7 +692,7 @@ contexts:
 
             - match: \b(devices)\b
               scope: storage.type.flowtable-devices.nftables
-              push: _expect-assignment-safe-values
+              push: _expect-anonymous-set-assignment
 
             - match: \b(flags)\b
               scope: storage.type.flowtable-flags.nftables
@@ -732,7 +735,7 @@ contexts:
               push:
                 - match: \b(verdict)\b
                   scope: constant.language.verdict.nftables
-                - include: safe-values
+                - include: values
                 - include: dot-operator
                 - include: colon
                 - include: statement-separators
@@ -751,7 +754,7 @@ contexts:
               push: _expect-time-string
             - match: \b(elements)\b
               scope: storage.type.set-elements.nftables
-              push: _expect-assignment-safe-values
+              push: _expect-anonymous-set-assignment
             - match: \b(size)\b
               scope: storage.type.set-size.nftables
               push: _expect-numeric
@@ -1003,7 +1006,7 @@ contexts:
 
   rule-definitions:
     # Allows many various tokens in rules (additionally to `prototype`).
-    - include: safe-values
+    - include: values
     - include: operators
     - include: comma
     - include: colon
