@@ -18,15 +18,15 @@ variables:
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
   time_string: (?:(?:\d+[wdhms])+)
-  time_units: (?:\b(?:second|minute|hour|day|week)\b)
+  time_units: \b(?:second|minute|hour|day|week)\b
   identifier: (?:[[:alpha:]_][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]_][[:alnum:]_\-\.]*)
 
-  chain_types: (?:\b(filter|route|nat)\b)
-  chain_hooks: (?:\b(prerouting|input|forward|output|postrouting|(?:e|in)gress)\b)
-  family_types: (?:\b(arp|bridge|inet|ip6?|netdev)\b)
+  chain_types: \b(?:filter|route|nat)\b
+  chain_hooks: \b(?:prerouting|input|forward|output|postrouting|(?:e|in)gress)\b
+  family_types: \b(arp|bridge|inet|ip6?|netdev)\b
   # nftables >= 0.9.6, chains priorities can be set using keywords.
-  priorities: (?:\b(raw|mangle|(?:dst|src)nat|filter|security|out)\b)
+  priorities: \b(raw|mangle|(?:dst|src)nat|filter|security|out)\b
 
   # From <https://stackoverflow.com/a/4260512>.
   mac_address: |-
