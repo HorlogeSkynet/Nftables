@@ -416,10 +416,20 @@ contexts:
               scope: variable.other.readwrite.table.nftables
               set: quota-specs
 
+        - match: (?:\bct\b\s+\b(expectation)\b)
+          captures:
+            1: storage.type.ct-expecation.nftables keyword.declaration.ct-expectation.nftables
+          set: ct-expectation-specs
+
         - match: (?:\bct\b\s+\b(helper)\b)
           captures:
             1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
           set: ct-helper-specs
+
+        - match: (?:\bct\b\s+\b(timeout)\b)
+          captures:
+            1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
+          set: ct-timeout-specs
 
         - match: \b(ruleset)\b
           scope: keyword.other.ruleset.nftables
