@@ -301,7 +301,7 @@ contexts:
 
   common-blocks:
     # Defines.
-    - match: \b(define|redefine)\b
+    - match: \b(?:re)?define\b
       scope: keyword.control.define.nftables
       push:
         - match: \b({{identifier}})\b
