@@ -556,6 +556,11 @@ table netdev filter {
 
 	chain egress {
 		type filter hook egress devices = { eth0, eth1 } priority 0;
-		meta priority set ip saddr map { 192.168.10.2 : abcd:2, 192.168.10.3 : abcd:3 }
+		#                ^ constant.language.hook.nftables
+		#                       ^ storage.type.chain-devices.nftables
+		#                               ^ keyword.operator.assignment.nftables
+		#                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
+		#                                                ^ storage.type.chain-priority.nftables
+		#                                                         ^ constant.numeric.integer.decimal.nftables
 	}
 }
