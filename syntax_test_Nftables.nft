@@ -555,13 +555,16 @@ table netdev filter {
 	#                                                 ^ punctuation.definition.variable.nftables
 	#                                                  ^ variable.other.constant.nftables
 
+	define devices = { eth0, eth1 }
+
 	chain egress {
-		type filter hook egress devices = { eth0, eth1 } priority 0;
+		type filter hook egress devices = $devices priority 0;
 		#                ^ constant.language.hook.nftables
 		#                       ^ storage.type.chain-devices.nftables
 		#                               ^ keyword.operator.assignment.nftables
-		#                                 ^^^^^^^^^^^^^^ meta.object.anonymous-set.nftables
-		#                                                ^ storage.type.chain-priority.nftables
-		#                                                         ^ constant.numeric.integer.decimal.nftables
+		#                                 ^ punctuation.definition.variable.nftables
+		#                                  ^ variable.other.constant.nftables
+		#                                          ^ storage.type.chain-priority.nftables
+		#                                                   ^ constant.numeric.integer.decimal.nftables
 	}
 }

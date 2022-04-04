@@ -281,6 +281,10 @@ contexts:
     - match: (=)
       scope: keyword.operator.assignment.nftables
       set:
+        - meta_include_prototype: false
+
+        - include: _expect-constant
+
         - match: ({)
           scope: punctuation.section.braces.begin.anonymous-set.nftables
           set:
