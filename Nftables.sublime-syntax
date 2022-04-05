@@ -231,21 +231,14 @@ contexts:
         - include: bail-out
 
   numerics:
-    - match: (\-)?\b(?:({{decimal}})|({{hexadecimal}}))\b
+    - match: \b(?:({{decimal}})|({{hexadecimal}}))\b
       captures:
-        1: keyword.operator.arithmetic.nftables
-        2: constant.numeric.integer.decimal.nftables
-        3: constant.numeric.integer.hexadecimal.nftables
+        1: constant.numeric.integer.decimal.nftables
+        2: constant.numeric.integer.hexadecimal.nftables
       push:
         - match: (\-)
           scope: punctuation.separator.dash.nftables
-          push:
-            - match: (\-)?\b(?:({{decimal}})|({{hexadecimal}}))\b
-              captures:
-                1: keyword.operator.arithmetic.nftables
-                2: constant.numeric.integer.decimal.nftables
-                3: constant.numeric.integer.hexadecimal.nftables
-              pop: true
+          push: _expect-numeric
         - include: bail-out
 
   _expect-numeric:
@@ -1071,7 +1064,7 @@ contexts:
     - include: dot-operator
 
   plus-or-dash:
-    - match: \B(\+|\-)\B
+    - match: \B(\+|\-)
       scope: keyword.operator.arithmetic.nftables
 
   dot-operator:
