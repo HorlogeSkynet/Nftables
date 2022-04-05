@@ -76,7 +76,6 @@ contexts:
 
   prototype:
     - include: comments
-    - include: variables
     - include: line-continuation
 
   comments:
@@ -270,12 +269,10 @@ contexts:
         - match: (})
           scope: punctuation.section.braces.end.anonymous-set.nftables
           pop: true
-  _expect-anonymous-set-assignment:
+  _expect-anonymous-set-or-constant-assignment:
     - match: (=)
       scope: keyword.operator.assignment.nftables
       set:
-        - meta_include_prototype: false
-
         - include: _expect-constant
 
         - match: ({)
@@ -649,15 +646,13 @@ contexts:
                             - match: \b(device)\b
                               scope: storage.type.chain-device.nftables
                               push:
-                                - meta_include_prototype: false
-
                                 - include: _expect-constant
                                 - include: _expect-quoted-string
                                 - include: _expect-unquoted-string
 
                             - match: \b(devices)\b
                               scope: storage.type.chain-devices.nftables
-                              push: _expect-anonymous-set-assignment
+                              push: _expect-anonymous-set-or-constant-assignment
 
                             - match: \b(priority)\b
                               scope: storage.type.chain-priority.nftables
@@ -709,7 +704,7 @@ contexts:
 
             - match: \b(devices)\b
               scope: storage.type.flowtable-devices.nftables
-              push: _expect-anonymous-set-assignment
+              push: _expect-anonymous-set-or-constant-assignment
 
             - match: \b(flags)\b
               scope: storage.type.flowtable-flags.nftables
@@ -771,7 +766,7 @@ contexts:
               push: _expect-time-string
             - match: \b(elements)\b
               scope: storage.type.set-elements.nftables
-              push: _expect-anonymous-set-assignment
+              push: _expect-anonymous-set-or-constant-assignment
             - match: \b(size)\b
               scope: storage.type.set-size.nftables
               push: _expect-numeric
@@ -998,7 +993,7 @@ contexts:
 
             - match: \b(policy)\b
               scope: storage.type.ct-timeout-policy.nftables
-              push: _expect-anonymous-set-assignment
+              push: _expect-anonymous-set-or-constant-assignment
 
             - match: \b(l3proto)\b
               scope: storage.type.ct-timeout-l3proto.nftables
