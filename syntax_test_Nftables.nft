@@ -370,17 +370,29 @@ table a-strang3_Name {
 	# <- punctuation.section.braces.end.ct-helper.nftables
 
 	ct expectation e_pgsql {
+	#  ^ storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
 		protocol tcp
 		dport 5432
 		timeout 1h
+		# <- storage.type.ct-expectation-timeout.nftables
+		#       ^ string.unquoted.time-string.nftables
 		size 12
 		l3proto ip
+		# <- storage.type.ct-expectation-l3proto.nftables
+		#       ^ constant.language.family-type.nftables
 	}
 
 	ct timeout agressive-tcp {
+	#  ^ storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
 		protocol tcp;
+		# <- storage.type.ct-timeout-protocol.nftables
+		#        ^ constant.language.l4-proto.nftables
+		#           ^ punctuation.terminator.semi-colon.nftables
 		l3proto ip;
 		policy = { established: 100, close_wait: 4, close: 4 }
+		# <- storage.type.ct-timeout-policy.nftables
+		#      ^ keyword.operator.assignment.nftables
+		#        ^ meta.object.anonymous-set.nftables
 	}
 
 	set filter {

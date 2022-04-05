@@ -998,9 +998,7 @@ contexts:
 
             - match: \b(policy)\b
               scope: storage.type.ct-timeout-policy.nftables
-              push:
-                - include: anonymous-set
-                - include: statement-separators
+              push: _expect-anonymous-set-assignment
 
             - match: \b(l3proto)\b
               scope: storage.type.ct-timeout-l3proto.nftables
