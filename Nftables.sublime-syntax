@@ -409,6 +409,14 @@ contexts:
               scope: variable.other.readwrite.table.nftables
               set: secmark-specs
 
+        - match: \b(synproxy)\b
+          scope: storage.type.synproxy.nftables keyword.declaration.synproxy.nftables
+          set:
+            - include: family-types
+            - match: \b({{identifier_extended}})\b
+              scope: variable.other.readwrite.table.nftables
+              set: synproxy-specs
+
         - match: \b(limit)\b
           scope: storage.type.limit.nftables keyword.declaration.limit.nftables
           set:
@@ -501,6 +509,14 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: secmark-specs
 
+    - match: \b(synproxy)\b
+      scope: storage.type.synproxy.nftables keyword.declaration.synproxy.nftables
+      push:
+        - include: family-types
+        - match: \b({{identifier_extended}})\b
+          scope: variable.other.readwrite.table.nftables
+          set: synproxy-specs
+
     - match: \b(limit)\b
       scope: storage.type.limit.nftables keyword.declaration.limit.nftables
       push:
@@ -576,6 +592,10 @@ contexts:
                 - match: \b(secmark)\b
                   scope: storage.type.secmark.nftables keyword.declaration.secmark.nftables
                   push: secmark-specs
+
+                - match: \b(synproxy)\b
+                  scope: storage.type.synproxy.nftables keyword.declaration.synproxy.nftables
+                  push: synproxy-specs
 
                 - match: \b(limit)\b
                   scope: storage.type.limit.nftables keyword.declaration.limit.nftables
@@ -786,6 +806,34 @@ contexts:
             - include: semi-colon
             - match: (})
               scope: punctuation.section.braces.end.secmark.nftables
+              pop: true
+
+  synproxy-specs:
+    - match: \b({{identifier_extended}})\b
+      scope: entity.name.synproxy.nftables
+      set:
+        - match: ({)
+          scope: punctuation.section.braces.begin.synproxy.nftables
+          set:
+            - meta_scope: meta.object.synproxy.nftables
+
+            - match: \b(mss)\b
+              scope: storage.type.synproxy-mss.nftables
+              push: _expect-numeric
+
+            - match: \b(wscale)\b
+              scope: storage.type.synproxy-wscale.nftables
+              push: _expect-numeric
+
+            - match: \b(timestamp)\b
+              scope: storage.type.synproxy-timestamp.nftables
+
+            - match: \b(sack-perm)\b
+              scope: storage.type.synproxy-sack-perm.nftables
+
+            - include: semi-colon
+            - match: (})
+              scope: punctuation.section.braces.end.synproxy.nftables
               pop: true
 
   _limit-config:
@@ -1013,6 +1061,8 @@ contexts:
       scope: storage.type.map.nftables keyword.declaration.map.nftables
     - match: \b(quota)\b
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
+    - match: \b(synproxy)\b
+      scope: storage.type.synproxy.nftables keyword.declaration.synproxy.nftables
     - match: (?:\bct\b\s+\b(expectation)\b)
       captures:
         1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables

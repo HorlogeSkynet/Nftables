@@ -297,6 +297,21 @@ table a-strang3_Name {
 	# <- keyword.control.undefine.nftables
 	#        ^ variable.other.constant.nftables
 
+	synproxy https-synproxy {
+	# <- storage.type.synproxy.nftables
+	#        ^ entity.name.synproxy.nftables
+		mss 1460
+		# <- storage.type.synproxy-mss.nftables
+		#   ^ constant.numeric.integer.decimal.nftables
+		wscale 7;
+		# <- storage.type.synproxy-wscale.nftables
+		#      ^ constant.numeric.integer.decimal.nftables
+		#       ^ punctuation.terminator.semi-colon.nftables
+		timestamp sack-perm
+		# <- storage.type.synproxy-timestamp.nftables
+		#         ^ storage.type.synproxy-sack-perm.nftables
+	}
+
 	secmark sshtag { "system_u:object_r:ssh_server_packet_t:s0" }
 	# <- storage.type.secmark.nftables
 	#       ^ entity.name.secmark.nftables
@@ -485,6 +500,9 @@ chain a-strang3_Name c {
 	#                    ^ string.unquoted.time-string.nftables
 	#                           ^ constant.language.limit-burst.nftables
 	#                                            ^ keyword.control.rule-statement.nftables
+
+	tcp dport 8888 ct state invalid,untracked synproxy mss 1460 wscale 7 timestamp sack-perm
+	#                                         ^ storage.type.synproxy.nftables
 
 	tcp dport 22 jump {
 	#                 ^ punctuation.section.braces.begin.implicit-chain.nftables
