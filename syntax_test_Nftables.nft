@@ -290,8 +290,8 @@ table a-strang3_Name {
 #     ^^^^^^^^^^^^^^ entity.name.table.nftables
 
 	flags dormant
-#   ^ storage.type.table-flags.nftables
-#         ^ constant.language.table-flag.nftables
+	# <- storage.type.table-flags.nftables
+	#     ^ constant.language.table-flag.nftables
 
 	undefine google_dns
 	# <- keyword.control.undefine.nftables
