@@ -258,6 +258,10 @@ table inet filter {
 	chain input {
 	#     ^^^^^ entity.name.chain.nftables
 
+		ct status dnat accept
+		#         ^^^^ - keyword.control.rule-statement.nftables
+		#              ^ keyword.control.rule-statement.verdict.nftables
+
 		ct status ! snat,dnat accept
 		#         ^ keyword.operator.bitwise.nftables
 		#           ^^^^ - keyword.control.rule-statement.nftables
@@ -265,9 +269,11 @@ table inet filter {
 		#                ^^^^ - keyword.control.rule-statement.nftables
 		#                     ^ keyword.control.rule-statement.verdict.nftables
 
-		ct status dnat accept
-		#         ^^^^ - keyword.control.rule-statement.nftables
-		#              ^ keyword.control.rule-statement.verdict.nftables
+		ct status { snat, dnat } accept
+		#           ^^^^ - keyword.control.rule-statement.nftables
+		#               ^ punctuation.separator.comma.nftables
+		#                 ^^^^ - keyword.control.rule-statement.nftables
+		#                        ^ keyword.control.rule-statement.verdict.nftables
 
 		ip6 nexthdr icmpv6 icmpv6 type { nd-neighbor-solicit, nd-router-advert } accept
 		#                         ^^^^ - storage.type.nftables

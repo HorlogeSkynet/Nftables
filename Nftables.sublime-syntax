@@ -466,6 +466,7 @@ contexts:
               push: _expect-numeric
 
             - include: rule-definitions
+            - include: rule-statements
             - include: statement-separators
 
         # Some commands do not require to specify a chain, so we must allow it to end right here.
@@ -671,6 +672,7 @@ contexts:
                   pop: true
 
             - include: rule-definitions
+            - include: rule-statements
 
             - include: semi-colon
             - match: (})
@@ -1036,11 +1038,34 @@ contexts:
             - meta_scope: meta.block.implicit-chain.nftables
 
             - include: rule-definitions
+            - include: rule-statements
 
             - include: semi-colon
             - match: (})
               scope: punctuation.section.braces.end.implicit-chain.nftables
               pop: true
+
+  rule-statements:
+    - include: _consume-status-nat
+    - match: |-
+        (?x)
+        \b(
+          log|reject|counter|comment|
+          [ds]nat|masquerade|redirect|dup|fwd|
+          set|flow|notrack|
+          add|update|delete
+        )\b
+      scope: keyword.control.rule-statement.nftables
+
+    # Handle `limit` verdict specifically as we want to scope its definition.
+    - match: \b(limit)\b
+      scope: keyword.control.rule-statement.nftables
+      push:
+        - match: \b(rate)\b
+          scope: storage.type.limit-rate.nftables
+          set:
+            - include: _limit-config
+            - include: bail-out
 
   rule-definitions:
     # Allows many various tokens in rules (additionally to `prototype`).
@@ -1068,27 +1093,6 @@ contexts:
 
     # Each rules should (might ?) have (non-)terminal statement(s).
     - include: verdict-statements
-
-    # Handle `limit` verdict specifically as we want to scope its definition.
-    - match: \b(limit)\b
-      scope: keyword.control.rule-statement.nftables
-      push:
-        - match: \b(rate)\b
-          scope: storage.type.limit-rate.nftables
-          set:
-            - include: _limit-config
-            - include: bail-out
-
-    - include: _consume-status-nat
-    - match: |-
-        (?x)
-        \b(
-          log|reject|counter|comment|
-          [ds]nat|masquerade|redirect|dup|fwd|
-          set|flow|notrack|
-          add|update|delete
-        )\b
-      scope: keyword.control.rule-statement.nftables
 
   bits-checking:
     - match: ([!/])
@@ -1147,3 +1151,5 @@ contexts:
           captures:
             1: punctuation.separator.comma.nftables
           pop: true
+
+        - include: bail-out
