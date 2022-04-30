@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.0.1] - 2022-04-30
+### Fixed
+- `ct status { ... }` usages
+- Rule statements matched in `set`
+- Sublime Text "All Syntaxes" build command conflict with GitHub Actions workflow
+
 ## [v2.0.0] - 2022-04-05
 ### Added
 - CI using GitHub Actions
@@ -157,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial version
 
-[Unreleased]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.1...HEAD
+[v2.0.0]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.3.0...v2.0.0
 [v1.3.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.2.3...v1.3.0
 [v1.2.3]: https://github.com/HorlogeSkynet/Nftables/compare/v1.2.2...v1.2.3
