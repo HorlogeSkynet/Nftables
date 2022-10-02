@@ -164,7 +164,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial version
 
 [Unreleased]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.1...HEAD
-[v2.0.0]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.0...v2.0.1
+[v2.0.1]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.3.0...v2.0.0
 [v1.3.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.2.3...v1.3.0
 [v1.2.3]: https://github.com/HorlogeSkynet/Nftables/compare/v1.2.2...v1.2.3
