@@ -104,15 +104,14 @@ contexts:
       pop: true
 
   statement-separators:
-    # Elements matching below patterns will 'pop' the current context off the stack.
     - match: (;)
       scope: punctuation.terminator.semi-colon.nftables
       pop: true
-    - match: ($\n)
+    - match: ($\r?\n)
       pop: true
 
   bail-out:
-    - match: (?=\S|$\n)
+    - match: (?=\S|$\r?\n)
       pop: true
 
   comma:
@@ -132,7 +131,7 @@ contexts:
       scope: keyword.operator.wildcard.nftables
 
   line-continuation:
-    - match: (?:(\\)(.*)$\n)
+    - match: (?:(\\)(.*)$\r?\n)
       captures:
         1: punctuation.separator.continuation.nftables
         2: invalid.illegal.trailing-character.nftables
