@@ -192,7 +192,7 @@ contexts:
     - match: ({{mac_address}})
       scope: constant.numeric.mac-address.nftables
       push:
-        - match: (\-)
+        - match: (-)
           scope: punctuation.separator.dash.nftables
           push:
             - match: ({{mac_address}})
@@ -206,7 +206,7 @@ contexts:
     - match: ({{ipv4_address}})
       scope: constant.numeric.ipv4-address.nftables
       push:
-        - match: (\-)
+        - match: (-)
           scope: punctuation.separator.dash.nftables
           push:
             - match: ({{ipv4_address}})
@@ -220,7 +220,7 @@ contexts:
     - match: ({{ipv6_address}})
       scope: constant.numeric.ipv6-address.nftables
       push:
-        - match: (\-)
+        - match: (-)
           scope: punctuation.separator.dash.nftables
           push:
             - match: ({{ipv6_address}})
@@ -234,7 +234,7 @@ contexts:
         1: constant.numeric.integer.decimal.nftables
         2: constant.numeric.integer.hexadecimal.nftables
       push:
-        - match: (\-)
+        - match: (-)
           scope: punctuation.separator.dash.nftables
           push: _expect-numeric
         - include: bail-out
@@ -762,7 +762,7 @@ contexts:
                   scope: constant.language.set-flag.nftables
                 - include: comma
                 - include: statement-separators
-            - match: \b(gc\-interval)\b
+            - match: \b(gc-interval)\b
               scope: storage.type.set-gcinterval.nftables
               push: _expect-time-string
             - match: \b(elements)\b
@@ -1110,7 +1110,7 @@ contexts:
     - include: dot-operator
 
   plus-or-dash:
-    - match: \B(\+|\-)
+    - match: \B(\+|-)
       scope: keyword.operator.arithmetic.nftables
 
   dot-operator:
