@@ -24,8 +24,8 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 
 ### Manually
 
-1. Move into Sublime Text packages folder (usually `$HOME/.config/sublime-text-3/Packages/` or `%AppData%\Sublime Text 3\Packages\`)
-2. Clone this repository there : `$ git clone https://github.com/HorlogeSkynet/Nftables.git`
+1. Move into Sublime Text packages folder (usually `$HOME/.config/sublime-text/Packages/` or `%AppData%\Sublime Text\Packages\`)
+2. Clone this repository there : `git clone https://github.com/HorlogeSkynet/Nftables.git`
 3. Restart Sublime Text and... :tada:
 
 ## Usage
@@ -62,7 +62,7 @@ Package Control dedicated page [here](https://packagecontrol.io/packages/Nftable
 > Well, sorry to hear that. Grammar wasn't my favorite course at school.  
 > I'd be pleased to review any [issue](https://github.com/HorlogeSkynet/Nftables/issues/new) or pull request.
 
-### Why didn't you convert the [official Bison parser](https://git.netfilter.org/nftables/tree/src/parser_bison.y) to [Sublime's definition syntax](https://www.sublimetext.com/docs/3/syntax.html) ?
+### Why didn't you convert the [official Bison parser](https://git.netfilter.org/nftables/tree/src/parser_bison.y) to [Sublime's definition syntax](https://www.sublimetext.com/docs/syntax.html) ?
 
 > [It looks like](https://forum.sublimetext.com/t/convert-bnf-yacc-grammar-definition-to-syntax-package/15980) such a tool does not exist (yet ?).
 
