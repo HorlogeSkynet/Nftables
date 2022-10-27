@@ -431,7 +431,7 @@ contexts:
 
         - match: (?:\bct\s+(expectation)\b)
           captures:
-            1: storage.type.ct-expecation.nftables keyword.declaration.ct-expectation.nftables
+            1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
           set: ct-expectation-specs
 
         - match: (?:\bct\s+(helper)\b)
