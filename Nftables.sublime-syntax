@@ -107,7 +107,7 @@ contexts:
     - match: (;)
       scope: punctuation.terminator.semi-colon.nftables
       pop: true
-    - match: ($\r?\n)
+    - match: (?:$\r?\n)
       pop: true
 
   bail-out:
