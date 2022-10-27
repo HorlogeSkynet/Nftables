@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.1.0] - 2022-10-27
+### Fixed
+- CHANGELOG v2.0.1 anchor link
+- Windows line termination support
+- Rename `storage.type.ct-expecation.nftables` to `storage.type.ct-expectation.nftables` (typo)
+
+### Changed
+- Exclude syntax test files from package
+- Relax `first_line_match` REGEXP to match a wider set of shebangs
+- Stop capturing end-of-lines characters in `statement-separators`
+- Simplify some REGEXPs by avoiding unnecessary word-boundaries and escapes
+
 ## [v2.0.1] - 2022-04-30
 ### Fixed
 - `ct status { ... }` usages
@@ -163,7 +175,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial version
 
-[Unreleased]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/HorlogeSkynet/Nftables/compare/v2.1.0...HEAD
+[v2.1.0]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.1...v2.1.0
 [v2.0.1]: https://github.com/HorlogeSkynet/Nftables/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.3.0...v2.0.0
 [v1.3.0]: https://github.com/HorlogeSkynet/Nftables/compare/v1.2.3...v1.3.0
