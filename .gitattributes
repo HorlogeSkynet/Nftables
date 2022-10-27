@@ -1,2 +1,5 @@
 # Trick to make (GitHub's) Linguist detect plugin sources as "programming" languages
 *.sublime-* linguist-detectable
+
+# Exclude test files from the package
+syntax_test_* export-ignore
