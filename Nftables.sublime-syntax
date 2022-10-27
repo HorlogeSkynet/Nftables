@@ -429,17 +429,17 @@ contexts:
               scope: variable.other.readwrite.table.nftables
               set: quota-specs
 
-        - match: (?:\bct\b\s+\b(expectation)\b)
+        - match: (?:\bct\s+(expectation)\b)
           captures:
             1: storage.type.ct-expecation.nftables keyword.declaration.ct-expectation.nftables
           set: ct-expectation-specs
 
-        - match: (?:\bct\b\s+\b(helper)\b)
+        - match: (?:\bct\s+(helper)\b)
           captures:
             1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
           set: ct-helper-specs
 
-        - match: (?:\bct\b\s+\b(timeout)\b)
+        - match: (?:\bct\s+(timeout)\b)
           captures:
             1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
           set: ct-timeout-specs
@@ -530,7 +530,7 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: quota-specs
 
-    - match: (?:\bct\b\s+\b(expectation)\b)
+    - match: (?:\bct\s+(expectation)\b)
       captures:
         1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
       push:
@@ -539,7 +539,7 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: ct-expectation-specs
 
-    - match: (?:\bct\b\s+\b(helper)\b)
+    - match: (?:\bct\s+(helper)\b)
       captures:
         1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
       push:
@@ -548,7 +548,7 @@ contexts:
           scope: variable.other.readwrite.table.nftables
           set: ct-helper-specs
 
-    - match: (?:\bct\b\s+\b(timeout)\b)
+    - match: (?:\bct\s+(timeout)\b)
       captures:
         1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
       push:
@@ -602,17 +602,17 @@ contexts:
                   scope: storage.type.quota.nftables keyword.declaration.quota.nftables
                   push: quota-specs
 
-                - match: (?:\bct\b\s+\b(expectation)\b)
+                - match: (?:\bct\s+(expectation)\b)
                   captures:
                     1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
                   push: ct-expectation-specs
 
-                - match: (?:\bct\b\s+\b(helper)\b)
+                - match: (?:\bct\s+(helper)\b)
                   captures:
                     1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
                   push: ct-helper-specs
 
-                - match: (?:\bct\b\s+\b(timeout)\b)
+                - match: (?:\bct\s+(timeout)\b)
                   captures:
                     1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
                   push: ct-timeout-specs
@@ -1080,13 +1080,13 @@ contexts:
       scope: storage.type.quota.nftables keyword.declaration.quota.nftables
     - match: \b(synproxy)\b
       scope: storage.type.synproxy.nftables keyword.declaration.synproxy.nftables
-    - match: (?:\bct\b\s+\b(expectation)\b)
+    - match: (?:\bct\s+(expectation)\b)
       captures:
         1: storage.type.ct-expectation.nftables keyword.declaration.ct-expectation.nftables
-    - match: (?:\bct\b\s+\b(helper)\b)
+    - match: (?:\bct\s+(helper)\b)
       captures:
         1: storage.type.ct-helper.nftables keyword.declaration.ct-helper.nftables
-    - match: (?:\bct\b\s+\b(timeout)\b)
+    - match: (?:\bct\s+(timeout)\b)
       captures:
         1: storage.type.ct-timeout.nftables keyword.declaration.ct-timeout.nftables
 
@@ -1125,7 +1125,7 @@ contexts:
   # As a workaround, we define here contexts that consume tokens we shouldn't be matching elsewhere.
   _consume-rule-matches-type:
     # Consume some rule matches using the `type` keyword".
-    - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\b\s+\btype\b)
+    - match: (?:\b(?:ether|dccp|icmp(?:v6|x)?|mh|rt)\s+type\b)
 
     # Consumes `fib ${key} ${data}` (as `data` **MIGHT** be `type`).
     # See <https://wiki.nftables.org/wiki-nftables/index.php/Routing_information#fib>.
@@ -1140,7 +1140,7 @@ contexts:
 
   _consume-status-nat:
     # Consume `ct status` rule matches using `[ds]nat`.
-    - match: (?:\bct\b\s+\bstatus\b\s+)
+    - match: (?:\bct\s+status\s+)
       push:
         # Bits checking may be performed starting with nftables 0.9.9.
         - include: bits-checking
