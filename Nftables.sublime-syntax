@@ -326,7 +326,7 @@ contexts:
         (?x)
         \b(
           add|replace|create|
-          insert|delete|
+          insert|delete|destroy|
           get|list|
           reset|flush|
           rename|

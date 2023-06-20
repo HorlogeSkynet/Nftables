@@ -77,6 +77,10 @@ add table inet mytable { flags dormant; }
 #                              ^ constant.language.table-flag.nftables
 #                                     ^ punctuation.terminator.semi-colon.nftables
 
+destroy table ip missingtable
+# <- keyword.other.command.nftables
+#                ^ entity.name.table.nftables
+
 add chain filter input { type filter hook input priority 0; }
 # <- keyword.other.command.nftables
 #   ^ storage.type.chain.nftables
