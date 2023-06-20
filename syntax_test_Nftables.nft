@@ -506,7 +506,7 @@ chain a-strang3_Name c {
 	#                                     ^^ keyword.operator.arithmetic.nftables
 	#                                        ^^^ constant.numeric.integer.hexadecimal.nftables
 
-	tcp flags syn tcp option maxseg size 1-536 counter drop comment "TCP Maximum Segment Size"
+	tcp flags syn tcp option maxseg size 1-535 counter drop comment "TCP Maximum Segment Size"
 	#                                     ^ punctuation.separator.dash.nftables
 	#                                                       ^^^^^^^ keyword.control.rule-statement.nftables
 

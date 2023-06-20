@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `mbytes` pattern matching
+- TCP MSS rule in syntax tests
 
 ## [v2.1.0] - 2022-10-27
 ### Fixed
