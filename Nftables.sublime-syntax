@@ -843,7 +843,8 @@ contexts:
         push: _expect-numeric
       - match: ({{time_units}})
         scope: string.unquoted.time-string.nftables
-      - match: \b([bk]?bytes|packets)\b
+      - match: \b([km]?bytes|packets)\b
+        scope: string.unquoted.limit-unit.nftables
       - include: numerics
 
   limit-specs:
@@ -880,6 +881,8 @@ contexts:
       - match: \b(used)\b
         scope: constant.language.quota-used.nftables
         push: _expect-numeric
+      - match: \b([km]?bytes|packets)\b
+        scope: string.unquoted.quota-unit.nftables
 
   quota-specs:
     - match: \b({{identifier_extended}})\b

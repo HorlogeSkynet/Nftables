@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- `string.unquoted.{limit,quota}-unit.nftables` scopes for bytes and packets limit/quota units
 - nftables 1.0.7 features :
 	* `destroy` script command
+
+### Fixed
+- `mbytes` pattern matching
 
 ## [v2.1.0] - 2022-10-27
 ### Fixed
