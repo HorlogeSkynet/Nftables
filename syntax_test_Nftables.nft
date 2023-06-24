@@ -291,8 +291,12 @@ table inet filter {
 		#                                 ^^^^ - storage.type.nftables
 		#                                            ^ keyword.control.rule-statement.nftables
 
-		counter
+		counter packets 42 bytes 1764
 		# <- keyword.control.rule-statement.nftables
+		#       ^ string.unquoted.counter-unit.nftables
+		#               ^ constant.numeric.integer.decimal.nftables
+		#                  ^ string.unquoted.counter-unit.nftables
+		#                        ^ constant.numeric.integer.decimal.nftables
 	}
 }
 
@@ -455,6 +459,11 @@ table a-strang3_Name {
 		counter
 		elements = { \
 			1.1.1.4 . 22 counter packets 0 bytes 0, \
+			#            ^ storage.type.set-element-counter.nftables
+			#                    ^ string.unquoted.counter-unit.nftables
+			#                            ^ constant.numeric.integer.decimal.nftables
+			#                              ^ string.unquoted.counter-unit.nftables
+			#                                    ^ constant.numeric.integer.decimal.nftables
 			1.1.1.5 . 23 counter packets 0 bytes 0, \
 			1.1.1.6 . 24 counter packets 0 bytes 0, \
 		}

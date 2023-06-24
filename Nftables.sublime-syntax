@@ -19,6 +19,7 @@ variables:
 
   time_string: (?:(?:\d+[wdhms])+)
   time_units: \b(?:second|minute|hour|day|week)\b
+  counter_units: \b(?:[km]?bytes|packets)\b
   identifier: (?:[[:alpha:]_][[:alnum:]_]*)
   identifier_extended: (?:[[:alpha:]_][[:alnum:]_\-\.]*)
 
@@ -253,6 +254,11 @@ contexts:
     - match: \b(timeout)\b
       scope: storage.type.set-element-timeout.nftables
       push: _expect-time-string
+
+    # Elements in the set may have a `counter`.
+    - match: \b(counter)\b
+      scope: storage.type.set-element-counter.nftables
+      push: _expect-counter-info
 
     - include: rule-definitions
     - include: wildcard
@@ -832,6 +838,13 @@ contexts:
               scope: punctuation.section.braces.end.synproxy.nftables
               pop: true
 
+  _expect-counter-info:
+    - match: ({{counter_units}})
+      scope: string.unquoted.counter-unit.nftables
+      push: _expect-numeric
+
+    - include: bail-out
+
   _limit-config:
       - match: (/)
         scope: punctuation.separator.limit-rate.nftables
@@ -843,7 +856,7 @@ contexts:
         push: _expect-numeric
       - match: ({{time_units}})
         scope: string.unquoted.time-string.nftables
-      - match: \b([km]?bytes|packets)\b
+      - match: ({{counter_units}})
         scope: string.unquoted.limit-unit.nftables
       - include: numerics
 
@@ -881,7 +894,7 @@ contexts:
       - match: \b(used)\b
         scope: constant.language.quota-used.nftables
         push: _expect-numeric
-      - match: \b([km]?bytes|packets)\b
+      - match: ({{counter_units}})
         scope: string.unquoted.quota-unit.nftables
 
   quota-specs:
@@ -1052,12 +1065,17 @@ contexts:
     - match: |-
         (?x)
         \b(
-          log|reject|counter|comment|
+          log|reject|comment|
           [ds]nat|masquerade|redirect|dup|fwd|
           set|flow|notrack|
           add|update|delete
         )\b
       scope: keyword.control.rule-statement.nftables
+
+    # Handle `counter` verdict specifically as we want to scope its definition.
+    - match: \b(counter)\b
+      scope: keyword.control.rule-statement.nftables
+      push: _expect-counter-info
 
     # Handle `limit` verdict specifically as we want to scope its definition.
     - match: \b(limit)\b
