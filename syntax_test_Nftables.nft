@@ -291,6 +291,15 @@ table inet filter {
 		#                                 ^^^^ - storage.type.nftables
 		#                                            ^ keyword.control.rule-statement.nftables
 
+		last
+		# <- keyword.control.rule-statement.nftables
+		last used never
+		# <- keyword.control.rule-statement.nftables
+		#    ^ constant.language.last-used.nftables
+		#         ^ constant.language.last-never.nftables
+		last used 49m54s884ms
+		#         ^^^^^^^^^^^ string.unquoted.time-string.nftables
+
 		counter packets 42 bytes 1764
 		# <- keyword.control.rule-statement.nftables
 		#       ^ string.unquoted.counter-unit.nftables

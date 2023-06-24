@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `storage.type.set-element-counter.nftables` scope for set elements
 - `string.unquoted.{counter,limit,quota}-unit.nftables` scopes for bytes and packets counter/limit/quota units
 - nftables 1.0.7 features :
+	* `last` statement
 	* `destroy` script command
 
 ### Fixed

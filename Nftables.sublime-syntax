@@ -17,7 +17,7 @@ variables:
   decimal: (?:[[:digit:]]+)
   hexadecimal: (?:(?:0x)[[:xdigit:]]+)
 
-  time_string: (?:(?:\d+[wdhms])+)
+  time_string: (?:(?:\d+(?:[wdhms]|ms))+)
   time_units: \b(?:second|minute|hour|day|week)\b
   counter_units: \b(?:[km]?bytes|packets)\b
   identifier: (?:[[:alpha:]_][[:alnum:]_]*)
@@ -1076,6 +1076,20 @@ contexts:
     - match: \b(counter)\b
       scope: keyword.control.rule-statement.nftables
       push: _expect-counter-info
+
+    # Handle `last` verdict specifically as we want to scope its definition.
+    - match: \b(last)\b
+      scope: keyword.control.rule-statement.nftables
+      push:
+        - match: \b(used)\b
+          scope: constant.language.last-used.nftables
+          set:
+            - include: _expect-time-string
+            - match: \b(never)\b
+              scope: constant.language.last-never.nftables
+              pop: true
+
+        - include: bail-out
 
     # Handle `limit` verdict specifically as we want to scope its definition.
     - match: \b(limit)\b
