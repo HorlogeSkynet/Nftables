@@ -138,6 +138,19 @@ add rule ip filter input ip protocol vmap { tcp : jump tcp-chain, udp : jump udp
 #                                                 ^ keyword.control.rule-statement.verdict.nftables
 #                                                      ^^^^^^^^^ variable.other.readwrite.chain.nftables
 
+reset rules
+# <- keyword.other.command.nftables
+#     ^ storage.type.rules.nftables
+reset rules table inet t
+#           ^ storage.type.table.nftables
+#                 ^ constant.language.family-type.nftables
+#                      ^ variable.other.readwrite.table.nftables
+reset rules chain inet t c
+#           ^ storage.type.chain.nftables
+#                 ^ constant.language.family-type.nftables
+#                      ^ variable.other.readwrite.table.nftables
+#                        ^ variable.other.readwrite.chain.nftables
+
 add map filter ports { type inet_service : verdict ; }
 #   ^ storage.type.set.nftables keyword.declaration.set.nftables
 #       ^ variable.other.readwrite.table.nftables

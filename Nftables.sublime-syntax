@@ -382,6 +382,31 @@ contexts:
           scope: storage.type.rule.nftables keyword.declaration.rule.nftables
           set: rule-command
 
+        - match: \b(rules)\b
+          scope: storage.type.rules.nftables keyword.declaration.rules.nftables
+          set:
+            - match: \b(table)\b
+              scope: storage.type.table.nftables
+              set:
+                - include: family-types
+                - match: \b({{identifier_extended}})\b
+                  scope: variable.other.readwrite.table.nftables
+                  pop: true
+
+            - match: \b(chain)\b
+              scope: storage.type.chain.nftables
+              set:
+                - include: family-types
+                - match: \b({{identifier_extended}})\b
+                  scope: variable.other.readwrite.table.nftables
+                  set:
+                    - match: \b({{identifier_extended}})\b
+                      scope: variable.other.readwrite.chain.nftables
+                      pop: true
+
+            - include: family-types
+            - include: bail-out
+
         - match: \b(set|map)\b
           scope: storage.type.set.nftables keyword.declaration.set.nftables
           set:

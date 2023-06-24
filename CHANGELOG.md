@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `string.unquoted.{counter,limit,quota}-unit.nftables` scopes for bytes and packets counter/limit/quota units
 - nftables 1.0.7 features :
 	* `last` statement
+	* `reset rules` command
 	* `destroy` script command
 
 ### Fixed
