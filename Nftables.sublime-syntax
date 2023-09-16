@@ -793,6 +793,8 @@ contexts:
                   scope: constant.language.set-flag.nftables
                 - include: comma
                 - include: statement-separators
+            - match: \b(auto-merge)\b
+              scope: storage.type.set-automerge.nftables
             - match: \b(gc-interval)\b
               scope: storage.type.set-gcinterval.nftables
               push: _expect-time-string

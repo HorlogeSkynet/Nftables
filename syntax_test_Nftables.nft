@@ -448,6 +448,8 @@ table a-strang3_Name {
 		#                                ^ punctuation.separator.comma.nftables
 		#                                  ^ constant.language.set-flag.nftables
 		#                                          ^ punctuation.terminator.semi-colon.nftables
+		auto-merge
+		# <- storage.type.set-automerge.nftables
 		size 65535
 		# <- storage.type.set-size.nftables
 		#    ^ constant.numeric.integer.decimal.nftables
