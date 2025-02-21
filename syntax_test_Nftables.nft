@@ -572,6 +572,10 @@ chain a-strang3_Name c {
 		ip6 saddr ::1/128 accept;
 		#         ^ constant.numeric.ipv6-subnet.nftables
 		#                 ^ keyword.control.rule-statement.verdict.nftables
+		ip6 saddr { fE80::dead:beef, 1::3:4:5:6:7:8, ::ffFF:0:255.255.255.255 } accept
+		#           ^^^^^^^^^^^^^^^ constant.numeric.ipv6-address.nftables
+		#                            ^^^^^^^^^^^^^^ constant.numeric.ipv6-address.nftables
+		#                                            ^^^^^^^^^^^^^^^^^^^^^^^^ constant.numeric.ipv6-address.nftables
 
 		# <- meta.block.implicit-chain.nftables
 	}

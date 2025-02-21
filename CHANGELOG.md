@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `auto-merge` option in `set`
 
+### Fixed
+- IPv6 link-local addresses regular expression
+
 ## [v2.2.0] - 2023-07-16
 ### Added
 - `storage.type.set-element-counter.nftables` scope for set elements
