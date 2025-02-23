@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- IPv6 link-local addresses regular expression (uncompressed and semi-compressed formats)
+
+### Removed
+- Interface/Zone index support in IPv6 link-local addresses
 
 ## [v2.3.0] - 2025-02-21
 ### Added
